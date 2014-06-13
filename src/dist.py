@@ -155,3 +155,10 @@ class Dist:
         # Make Dist object and return
         return Dist(res_rand_vars, res_values)
 
+    def normalize(self, rand_vars):
+        # Get marginal
+        marg = self.marginal(rand_vars)
+
+        # Make division
+        return self.div(marg)
+
