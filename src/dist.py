@@ -122,3 +122,36 @@ class Dist:
         # Make Dist object and return
         return Dist(res_rand_vars, res_values)
 
+    def instVar(self, rand_var, inst):
+        # Get div factor
+        div = 1
+        for i in self.rand_vars:
+            if i.name == rand_var:
+                break
+            div *= len(i.domain)
+
+        # Get resulting variables and var_index
+        res_rand_vars = []
+        var_index = 0
+        for i in range(len(self.rand_vars)):
+            if self.rand_vars[i].name == rand_var:
+                res_rand_vars += self.rand_vars[i+1:]
+                var_index = i
+                break
+            res_rand_vars.append(self.rand_vars[i])
+
+        # Get inst index
+        for i in range(len(self.rand_vars[var_index].domain)):
+            if self.rand_vars[var_index].domain[i] == inst:
+                inst_index = i
+                break
+
+        # Calculate resulting
+        res_values = []
+        for i in range(len(self.values)):
+            if (i/div) % len(self.rand_vars[var_index].domain) == inst_index:
+                res_values.append(self.values[i])
+
+        # Make Dist object and return
+        return Dist(res_rand_vars, res_values)
+
