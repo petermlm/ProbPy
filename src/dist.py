@@ -8,10 +8,26 @@ class RandVar:
     def __repr__(self):
         return self.name
 
+    def __str__(self):
+        return self.name
+
 class Dist:
     def __init__(self, rand_vars, values):
         self.rand_vars = rand_vars
         self.values = values
+
+    def __repr__(self):
+        if len(self.rand_vars) == 0:
+            return "[]"
+
+        s = "["
+
+        # Place random variables
+        for i in range(len(self.rand_vars) - 1):
+            s += self.rand_vars[i].name + ", "
+        s += self.rand_vars[-1].name + "]"
+
+        return s
 
     def varInDist(self, rand_var):
         for i in self.rand_vars:
@@ -30,6 +46,12 @@ class Dist:
     def factorOp(self, dist, fun):
         res_rand_vars = []
         res_values = []
+
+        # If this is just scalar operation
+        if self.rand_vars == []:
+            return self.scalar(dist, self.values[0], fun)
+        elif dist.rand_vars ==  []:
+            return self.scalar(self, dist.values[0], fun)
 
         # Res will have every variable in self
         for i in self.rand_vars:
@@ -177,10 +199,15 @@ class Dist:
             div *= len(i.domain)
 
         # Get inst index
+        inst_index = -1
         for i in range(len(self.rand_vars[var_index].domain)):
             if self.rand_vars[var_index].domain[i] == inst:
                 inst_index = i
                 break
+
+        # If the value for instance couldn0t be found, return None
+        if inst_index == -1:
+            return None
 
         # Calculate resulting distribution
         res_values = []
@@ -192,8 +219,22 @@ class Dist:
         return Dist(res_rand_vars, res_values)
 
     def normalize(self, rand_vars):
+        marg_vars = []
+
+        # Get resulting variables for marginal
+        for i in self.rand_vars:
+            var_in_self = True
+
+            for j in rand_vars:
+                if i.name == j.name:
+                    var_in_self = False
+                    break
+
+            if var_in_self:
+                marg_vars.append(i)
+
         # Get marginal
-        marg = self.marginal(rand_vars)
+        marg = self.marginal(marg_vars)
 
         # Make division
         return self.div(marg)
@@ -203,4 +244,7 @@ class Dist:
         for i in rand_vars:
             values_size *= len(i.domain)
         return values_size
+
+    def scalar(self, dist, scalar_value, fun):
+        return Dist(dist.rand_vars, map(fun, dist.values, [scalar_value]*len(dist.values)))
 
