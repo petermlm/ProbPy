@@ -102,7 +102,7 @@ class Dist:
             index2 = 0
             for j in range(len(dist.rand_vars)):
                 dim = len(dist.rand_vars[j].domain)
-                index2 += ((i / div[j]) % dim) * mult[j]
+                index2 += (int(i / div[j]) % dim) * mult[j]
 
             # Calculate value
             res_values.append(fun(self.values[index1], dist.values[index2]))
@@ -143,7 +143,7 @@ class Dist:
 
             for j in self.rand_vars:
                 if k < len(res_rand_vars) and j.name == res_rand_vars[k].name:
-                    index += ((i / div) % len(res_rand_vars[k].domain)) * mult
+                    index += (int(i / div) % len(res_rand_vars[k].domain)) * mult
                     mult *= len(res_rand_vars[k].domain)
                     k += 1
 
@@ -246,5 +246,5 @@ class Dist:
         return values_size
 
     def scalar(self, dist, scalar_value, fun):
-        return Dist(dist.rand_vars, map(fun, dist.values, [scalar_value]*len(dist.values)))
+        return Dist(dist.rand_vars, list(map(fun, dist.values, [scalar_value]*len(dist.values))))
 

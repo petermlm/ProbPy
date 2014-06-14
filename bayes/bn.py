@@ -1,4 +1,4 @@
-from dist import *
+from bayes import dist
 
 import copy
 
@@ -6,22 +6,19 @@ class BayesianNetwork:
     def __init__(self, network):
         self.network = network
 
-    def elemination_ask(self, query_var, observed):
+    def elimination_ask(self, query_var, observed):
         factors = []
         for i in self.network:
             factors.append(self.makeFactor(i[1], observed))
-            for k in factors:
             if self.hidden(i[0], query_var.name, observed):
                 factors = self.sumOut(i[0], factors)
-                for k in factors:
 
         prod = factors[0]
         for i in factors[1:]:
             prod = prod.mult(i)
 
         res = prod.normalize([query_var])
-
-        return 0
+        return res
 
     def makeFactor(self, arg_var, observed):
         var = copy.deepcopy(arg_var)
