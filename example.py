@@ -1,5 +1,5 @@
-from bayes import dist
-from bayes import bn
+from bayes.bayes import dist
+from bayes.bayes import bn
 
 # These are the variables in the network. The first argument is the actual name
 # of the variable and the second is the domain of it
