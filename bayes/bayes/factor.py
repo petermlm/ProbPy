@@ -35,30 +35,30 @@ class Dist:
                 return True
         return False
 
-    def mult(self, dist):
+    def mult(self, factor):
         f = lambda x, y: x*y
-        return self.factorOp(dist, f)
+        return self.factorOp(factor, f)
 
-    def div(self, dist):
+    def div(self, factor):
         f = lambda x, y: x/y
-        return self.factorOp(dist, f)
+        return self.factorOp(factor, f)
 
-    def factorOp(self, dist, fun):
+    def factorOp(self, factor, fun):
         res_rand_vars = []
         res_values = []
 
         # If this is just scalar operation
         if self.rand_vars == []:
-            return self.scalar(dist, self.values[0], fun)
-        elif dist.rand_vars ==  []:
-            return self.scalar(self, dist.values[0], fun)
+            return self.scalar(factor, self.values[0], fun)
+        elif factor.rand_vars ==  []:
+            return self.scalar(self, factor.values[0], fun)
 
         # Res will have every variable in self
         for i in self.rand_vars:
             res_rand_vars.append(i)
 
-        # And the variables in dist that are not in self
-        for i in dist.rand_vars:
+        # And the variables in factor that are not in self
+        for i in factor.rand_vars:
             var_in_self = True
             for j in self.rand_vars:
                 if i.name == j.name:
@@ -72,14 +72,14 @@ class Dist:
         mult = []
         c_mult = 1
 
-        for i in dist.rand_vars:
+        for i in factor.rand_vars:
             mult.append(c_mult)
             c_mult *= len(i.domain)
 
         # Calculate div list
         div = []
 
-        for i in dist.rand_vars:
+        for i in factor.rand_vars:
             c_div = 1
 
             for j in res_rand_vars:
@@ -90,22 +90,22 @@ class Dist:
 
             div.append(c_div)
 
-        # Calculate resulting size of distribution
+        # Calculate resulting size of factor
         res_values_size = 1
         for i in res_rand_vars:
             res_values_size *= len(i.domain)
 
-        # Calculate resulting distribution
+        # Calculate resulting factor
         index1 = 0
         for i in range(res_values_size):
             # Get index 2
             index2 = 0
-            for j in range(len(dist.rand_vars)):
-                dim = len(dist.rand_vars[j].domain)
+            for j in range(len(factor.rand_vars)):
+                dim = len(factor.rand_vars[j].domain)
                 index2 += (int(i / div[j]) % dim) * mult[j]
 
             # Calculate value
-            res_values.append(fun(self.values[index1], dist.values[index2]))
+            res_values.append(fun(self.values[index1], factor.values[index2]))
 
             # Increment index 1
             index1 = (index1 + 1) % len(self.values)
@@ -128,10 +128,10 @@ class Dist:
             if var_in_self:
                 res_rand_vars.append(i)
 
-        # Calculate resulting size of distribution
+        # Calculate resulting size of factor
         res_values_size = self.getValuesListSize(res_rand_vars)
 
-        # Initialized Resulting distribution
+        # Initialized Resulting factor
         res_values = [0] * res_values_size
 
         # Calculate marginal
@@ -187,7 +187,7 @@ class Dist:
             # Add current variable to list
             res_rand_vars.append(self.rand_vars[i])
 
-        # If inst variable not in this distribution, return it unchanged
+        # If inst variable not in this factor, return it unchanged
         if var_index == -1:
             return self
 
@@ -209,7 +209,7 @@ class Dist:
         if inst_index == -1:
             return None
 
-        # Calculate resulting distribution
+        # Calculate resulting factor
         res_values = []
         for i in range(len(self.values)):
             if (i/div) % len(self.rand_vars[var_index].domain) == inst_index:
@@ -245,6 +245,6 @@ class Dist:
             values_size *= len(i.domain)
         return values_size
 
-    def scalar(self, dist, scalar_value, fun):
-        return Dist(dist.rand_vars, list(map(fun, dist.values, [scalar_value]*len(dist.values))))
+    def scalar(self, factor, scalar_value, fun):
+        return Dist(factor.rand_vars, list(map(fun, factor.values, [scalar_value]*len(factor.values))))
 

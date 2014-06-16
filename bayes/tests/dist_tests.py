@@ -1,33 +1,33 @@
-from bayes.bayes.dist import *
+from bayes.bayes.factor import *
 from bayes.bayes.bn import *
 from nose.tools import with_setup, nottest
 
 class TestDist:
     def setUp(self):
         # Scalar
-        self.scalar = dist.Dist([], [10])
+        self.scalar = factor.Dist([], [10])
 
         # Binary variables
-        self.X = dist.RandVar("X", ["T", "F"])
-        self.Y = dist.RandVar("Y", ["T", "F"])
-        self.Z = dist.RandVar("Z", ["T", "F"])
-        self.W = dist.RandVar("W", ["T", "F"])
-        self.K = dist.RandVar("K", ["T", "F"])
-        self.T = dist.RandVar("T", ["T", "F"])
+        self.X = factor.RandVar("X", ["T", "F"])
+        self.Y = factor.RandVar("Y", ["T", "F"])
+        self.Z = factor.RandVar("Z", ["T", "F"])
+        self.W = factor.RandVar("W", ["T", "F"])
+        self.K = factor.RandVar("K", ["T", "F"])
+        self.T = factor.RandVar("T", ["T", "F"])
 
         # Distributions
-        self.X_dist = dist.Dist([self.X], range(1, 3))
-        self.Y_dist = dist.Dist([self.Y], range(3, 5))
-        self.Z_dist = dist.Dist([self.Z], range(5, 7))
+        self.X_factor = factor.Dist([self.X], range(1, 3))
+        self.Y_factor = factor.Dist([self.Y], range(3, 5))
+        self.Z_factor = factor.Dist([self.Z], range(5, 7))
 
-        self.XY_dist = dist.Dist([self.X, self.Y], range(1, 5))
-        self.XZ_dist = dist.Dist([self.X, self.Z], range(5, 9))
-        self.ZW_dist = dist.Dist([self.Z, self.W], range(9, 13))
+        self.XY_factor = factor.Dist([self.X, self.Y], range(1, 5))
+        self.XZ_factor = factor.Dist([self.X, self.Z], range(5, 9))
+        self.ZW_factor = factor.Dist([self.Z, self.W], range(9, 13))
 
-        self.XYZ_dist = dist.Dist([self.X, self.Y, self.Z], range(1, 9))
-        self.XYW_dist = dist.Dist([self.X, self.Y, self.W], range(9, 17))
-        self.XKW_dist = dist.Dist([self.X, self.K, self.W], range(17, 25))
-        self.TKW_dist = dist.Dist([self.T, self.K, self.W], range(25, 33))
+        self.XYZ_factor = factor.Dist([self.X, self.Y, self.Z], range(1, 9))
+        self.XYW_factor = factor.Dist([self.X, self.Y, self.W], range(9, 17))
+        self.XKW_factor = factor.Dist([self.X, self.K, self.W], range(17, 25))
+        self.TKW_factor = factor.Dist([self.T, self.K, self.W], range(25, 33))
 
     def tearDown(self):
         pass
@@ -37,7 +37,7 @@ class TestDist:
         f(X), scalar
         """
 
-        res = self.scalar.mult(self.X_dist)
+        res = self.scalar.mult(self.X_factor)
         assert(res.rand_vars == [self.X] and \
                 res.values == [10, 20])
 
@@ -46,7 +46,7 @@ class TestDist:
         f(X, Y), scalar
         """
 
-        res = self.scalar.mult(self.XY_dist)
+        res = self.scalar.mult(self.XY_factor)
         assert(res.rand_vars == [self.X, self.Y] and \
                 res.values == [10, 20, 30, 40])
 
@@ -55,7 +55,7 @@ class TestDist:
         f(X, Y, Z), scalar
         """
 
-        res = self.scalar.mult(self.XYZ_dist)
+        res = self.scalar.mult(self.XYZ_factor)
         assert(res.rand_vars == [self.X, self.Y, self.Z] and \
                 res.values == [
                     10, 20, 30, 40,
@@ -66,7 +66,7 @@ class TestDist:
         f(X), f(X)
         """
 
-        res = self.X_dist.mult(self.X_dist)
+        res = self.X_factor.mult(self.X_factor)
         assert(res.rand_vars == [self.X] and \
                 res.values == [1, 4])
 
@@ -75,7 +75,7 @@ class TestDist:
         f(X), f(Y)
         """
 
-        res = self.X_dist.mult(self.Y_dist)
+        res = self.X_factor.mult(self.Y_factor)
         assert(res.rand_vars == [self.X, self.Y] and \
                 res.values == [3, 6, 4, 8])
 
@@ -84,7 +84,7 @@ class TestDist:
         f(X, Y) f(X)
         """
 
-        res = self.XY_dist.mult(self.X_dist)
+        res = self.XY_factor.mult(self.X_factor)
         assert(res.rand_vars == [self.X, self.Y] and \
                 res.values == [1, 4, 3, 8])
 
@@ -93,7 +93,7 @@ class TestDist:
         f(X, Y) f(Y)
         """
 
-        res = self.XY_dist.mult(self.Y_dist)
+        res = self.XY_factor.mult(self.Y_factor)
         assert(res.rand_vars == [self.X, self.Y] and \
                 res.values == [3, 6, 12, 16])
 
@@ -102,7 +102,7 @@ class TestDist:
         f(X, Y) f(Z)
         """
 
-        res = self.XY_dist.mult(self.Z_dist)
+        res = self.XY_factor.mult(self.Z_factor)
         assert(res.rand_vars == [self.X, self.Y, self.Z] and \
                 res.values == [
                     5, 10, 15, 20,
@@ -113,7 +113,7 @@ class TestDist:
         f(X, Y) f(X, Y)
         """
 
-        res = self.XY_dist.mult(self.XY_dist)
+        res = self.XY_factor.mult(self.XY_factor)
         assert(res.rand_vars == [self.X, self.Y] and \
                 res.values == [1, 4, 9, 16])
 
@@ -122,7 +122,7 @@ class TestDist:
         f(X, Y) F(X, Z)
         """
 
-        res = self.XY_dist.mult(self.XZ_dist)
+        res = self.XY_factor.mult(self.XZ_factor)
         assert(res.rand_vars == [self.X, self.Y, self.Z] and \
                 res.values == [
                     5, 12, 15, 24,
@@ -133,7 +133,7 @@ class TestDist:
         f(X, Y) f(Z, W)
         """
 
-        res = self.XY_dist.mult(self.ZW_dist)
+        res = self.XY_factor.mult(self.ZW_factor)
         assert(res.rand_vars == [self.X, self.Y, self.Z, self.W] and \
                 res.values == [
                     9, 18, 27, 36,
@@ -146,7 +146,7 @@ class TestDist:
         f(X, Y, Z) f(X, Y, Z)
         """
 
-        res = self.XYZ_dist.mult(self.XYZ_dist)
+        res = self.XYZ_factor.mult(self.XYZ_factor)
         assert(res.rand_vars == [self.X, self.Y, self.Z] and \
                 res.values == [
                     1, 4, 9, 16,
@@ -157,7 +157,7 @@ class TestDist:
         f(X, Y, Z) f(X, Y, W)
         """
 
-        res = self.XYZ_dist.mult(self.XYW_dist)
+        res = self.XYZ_factor.mult(self.XYW_factor)
         assert(res.rand_vars == [self.X, self.Y, self.Z, self.W] and \
                 res.values == [
                     9, 20, 33, 48,
@@ -170,7 +170,7 @@ class TestDist:
         f(X, Y, Z) f(X, K, W)
         """
 
-        res = self.XYZ_dist.mult(self.XKW_dist)
+        res = self.XYZ_factor.mult(self.XKW_factor)
         assert(res.rand_vars == [self.X, self.Y, self.Z, self.K, self.W] and \
                 res.values == [
                     17, 36, 51, 72,
@@ -188,7 +188,7 @@ class TestDist:
         f(X, Y, Z) f(T, K, W)
         """
 
-        res = self.XYZ_dist.mult(self.TKW_dist)
+        res = self.XYZ_factor.mult(self.TKW_factor)
         assert(res.rand_vars == [self.X, self.Y, self.Z, self.T, self.K, self.W] and \
                 res.values == [
                     25, 50, 75, 100,

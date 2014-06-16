@@ -1,3 +1,3 @@
-from bayes.bayes.dist import *
+from bayes.bayes.factor import *
 from bayes.bayes.bn import *
 

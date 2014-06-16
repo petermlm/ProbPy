@@ -1,4 +1,4 @@
-from bayes.bayes import dist
+from bayes.bayes import factor
 
 import copy
 
