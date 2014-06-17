@@ -1,5 +1,5 @@
-from bayes.bayes import factor
-from bayes.bayes import bn
+from bayes.prob import factor
+from bayes.prob import bn
 
 # These are the variables in the network. The first argument is the actual name
 # of the variable and the second is the domain of it
@@ -38,5 +38,19 @@ observed = [("john", "True"), ("mary", "True")]
 # Run the elimination_ask algorithm (Variable Elimination) for the example.
 # Result should be approximately [0.284, 0.716]
 burglary_k_john_mary = BN.elimination_ask(burglary, observed)
+
+print("P(Burglary | John=true, Mary=true)")
+print(burglary_k_john_mary.values)
+
+print("----------")
+
+# Another example with the same network. The observation and query variable
+# changed, but the order of the distributions is the same. The result should
+# be approximately [0.849, 0.150]
+
+observed = [("burglary", "True")]
+burglary_k_john_mary = BN.elimination_ask(john, observed)
+
+print("P(John | Burglary=true)")
 print(burglary_k_john_mary.values)
 
