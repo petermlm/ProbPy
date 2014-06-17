@@ -205,14 +205,14 @@ class Dist:
                 inst_index = i
                 break
 
-        # If the value for instance couldn0t be found, return None
+        # If the value for instance couldn't be found, return None
         if inst_index == -1:
             return None
 
         # Calculate resulting factor
         res_values = []
         for i in range(len(self.values)):
-            if (i/div) % len(self.rand_vars[var_index].domain) == inst_index:
+            if int(i/div) % len(self.rand_vars[var_index].domain) == inst_index:
                 res_values.append(self.values[i])
 
         # Make Dist object and return
