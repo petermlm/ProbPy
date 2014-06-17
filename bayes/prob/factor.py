@@ -11,7 +11,7 @@ class RandVar:
     def __str__(self):
         return self.name
 
-class Dist:
+class Factor:
     def __init__(self, rand_vars, values):
         self.rand_vars = rand_vars
         self.values = values
@@ -29,7 +29,7 @@ class Dist:
 
         return s
 
-    def varInDist(self, rand_var):
+    def varInFactor(self, rand_var):
         for i in self.rand_vars:
             if i.name == rand_vars.name:
                 return True
@@ -110,8 +110,8 @@ class Dist:
             # Increment index 1
             index1 = (index1 + 1) % len(self.values)
 
-        # Make Dist object and return
-        return Dist(res_rand_vars, res_values)
+        # Make Factor object and return
+        return Factor(res_rand_vars, res_values)
 
     def marginal(self, rand_vars):
         res_rand_vars = []
@@ -151,8 +151,8 @@ class Dist:
 
             res_values[index] += self.values[i]
 
-        # Make Dist object and return
-        return Dist(res_rand_vars, res_values)
+        # Make Factor object and return
+        return Factor(res_rand_vars, res_values)
 
     def instVar(self, rand_vars, insts):
         # If this is a single instantiation
@@ -215,8 +215,8 @@ class Dist:
             if int(i/div) % len(self.rand_vars[var_index].domain) == inst_index:
                 res_values.append(self.values[i])
 
-        # Make Dist object and return
-        return Dist(res_rand_vars, res_values)
+        # Make Factor object and return
+        return Factor(res_rand_vars, res_values)
 
     def normalize(self, rand_vars):
         marg_vars = []
@@ -246,5 +246,5 @@ class Dist:
         return values_size
 
     def scalar(self, factor, scalar_value, fun):
-        return Dist(factor.rand_vars, list(map(fun, factor.values, [scalar_value]*len(factor.values))))
+        return Factor(factor.rand_vars, list(map(fun, factor.values, [scalar_value]*len(factor.values))))
 

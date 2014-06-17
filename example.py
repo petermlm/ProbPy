@@ -11,11 +11,11 @@ mary     = factor.RandVar("mary", ["True", "False"])
 
 # These are the distributions. First argument are the variables, second is the
 # values in the distribution
-factor_burglary = factor.Dist([burglary], [0.001, 0.999])
-factor_earthq   = factor.Dist([earthq], [0.002, 0.998])
-factor_alarm    = factor.Dist([alarm, earthq, burglary], [0.95, 0.05, 0.94, 0.06, 0.29, 0.71, 0.001, 0.999])
-factor_john     = factor.Dist([john, alarm], [0.90, 0.10, 0.05, 0.95])
-factor_mary     = factor.Dist([mary, alarm], [0.70, 0.30, 0.01, 0.99])
+factor_burglary = factor.Factor([burglary], [0.001, 0.999])
+factor_earthq   = factor.Factor([earthq], [0.002, 0.998])
+factor_alarm    = factor.Factor([alarm, earthq, burglary], [0.95, 0.05, 0.94, 0.06, 0.29, 0.71, 0.001, 0.999])
+factor_john     = factor.Factor([john, alarm], [0.90, 0.10, 0.05, 0.95])
+factor_mary     = factor.Factor([mary, alarm], [0.70, 0.30, 0.01, 0.99])
 
 # This array has the nodes of the network. Each element is a tuple. In each
 # tuple, the first argument is the variable of that node and the second is the
