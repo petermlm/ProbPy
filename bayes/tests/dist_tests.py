@@ -1,5 +1,5 @@
-from bayes.bayes.factor import *
-from bayes.bayes.bn import *
+from bayes.prob.factor import *
+from bayes.prob.bn import *
 from nose.tools import with_setup, nottest
 
 class TestDist:

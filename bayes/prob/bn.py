@@ -1,4 +1,4 @@
-from bayes.bayes import factor
+from bayes.prob import factor
 
 import copy
 
