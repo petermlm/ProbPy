@@ -113,8 +113,14 @@ class Factor:
         # Make Factor object and return
         return Factor(res_rand_vars, res_values)
 
-    def marginal(self, rand_vars):
+    def marginal(self, arg_rand_vars):
         res_rand_vars = []
+
+        # If the argument is a single variable
+        if type(arg_rand_vars) != list:
+            rand_vars = [arg_rand_vars]
+        else:
+            rand_vars = arg_rand_vars
 
         # Get resulting variables
         for i in self.rand_vars:

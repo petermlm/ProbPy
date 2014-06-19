@@ -9,7 +9,7 @@ class TestMarginalMult(FactorBase):
         X, f(X)
         """
 
-        res = self.X_factor.marginal([self.X])
+        res = self.X_factor.marginal(self.X)
         assert(res.rand_vars == [self.X] and \
                 res.values == [1, 2])
 
@@ -18,7 +18,7 @@ class TestMarginalMult(FactorBase):
         X, f(Y)
         """
 
-        res = self.X_factor.marginal([self.X])
+        res = self.X_factor.marginal(self.X)
         assert(res.rand_vars == [self.X] and \
                 res.values == [1, 2])
 
@@ -27,7 +27,7 @@ class TestMarginalMult(FactorBase):
         X, f(X, Y)
         """
 
-        res = self.XY_factor.marginal([self.X])
+        res = self.XY_factor.marginal(self.X)
         assert(res.rand_vars == [self.X] and \
                 res.values == [4, 6])
 
@@ -36,7 +36,7 @@ class TestMarginalMult(FactorBase):
         Y, f(X, Y)
         """
 
-        res = self.XY_factor.marginal([self.Y])
+        res = self.XY_factor.marginal(self.Y)
         assert(res.rand_vars == [self.Y] and \
                 res.values == [3, 7])
 
@@ -63,7 +63,7 @@ class TestMarginalMult(FactorBase):
         X, f(X, Y, Z)
         """
 
-        res = self.XYZ_factor.marginal([self.X])
+        res = self.XYZ_factor.marginal(self.X)
         assert(res.rand_vars == [self.X] and \
                 res.values == [16, 20])
 
@@ -72,7 +72,7 @@ class TestMarginalMult(FactorBase):
         Y, f(X, Y, Z)
         """
 
-        res = self.XYZ_factor.marginal([self.Y])
+        res = self.XYZ_factor.marginal(self.Y)
         assert(res.rand_vars == [self.Y] and \
                 res.values == [14, 22])
 
@@ -81,7 +81,7 @@ class TestMarginalMult(FactorBase):
         Z, f(X, Y, Z)
         """
 
-        res = self.XYZ_factor.marginal([self.Z])
+        res = self.XYZ_factor.marginal(self.Z)
         assert(res.rand_vars == [self.Z] and \
                 res.values == [10, 26])
 
