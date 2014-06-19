@@ -218,8 +218,14 @@ class Factor:
         # Make Factor object and return
         return Factor(res_rand_vars, res_values)
 
-    def normalize(self, rand_vars):
+    def normalize(self, arg_rand_vars):
         marg_vars = []
+
+        # If the argument is a single variable
+        if type(arg_rand_vars) != list:
+            rand_vars = [arg_rand_vars]
+        else:
+            rand_vars = arg_rand_vars
 
         # Get resulting variables for marginal
         for i in self.rand_vars:
