@@ -1,5 +1,6 @@
 import copy
 
+
 class RandVar:
     def __init__(self, name, domain):
         self.name = name
@@ -10,6 +11,7 @@ class RandVar:
 
     def __str__(self):
         return self.name
+
 
 class Factor:
     def __init__(self, rand_vars, values):
@@ -50,7 +52,7 @@ class Factor:
         # If this is just scalar operation
         if self.rand_vars == []:
             return self.scalar(factor, self.values[0], fun)
-        elif factor.rand_vars ==  []:
+        elif factor.rand_vars == []:
             return self.scalar(self, factor.values[0], fun)
 
         # Res will have every variable in self
@@ -149,7 +151,7 @@ class Factor:
 
             for j in self.rand_vars:
                 if k < len(res_rand_vars) and j.name == res_rand_vars[k].name:
-                    index += (int(i / div) % len(res_rand_vars[k].domain)) * mult
+                    index += (int(i/div) % len(res_rand_vars[k].domain)) * mult
                     mult *= len(res_rand_vars[k].domain)
                     k += 1
 
@@ -184,7 +186,8 @@ class Factor:
 
         # Get resulting variables and var_index
         for i in range(len(self.rand_vars)):
-            # Store current index of variable to instantiate and add rest of variables
+            # Store current index of variable to instantiate and add rest of
+            # variables
             if self.rand_vars[i].name == rand_var:
                 var_index = i
                 res_rand_vars += self.rand_vars[i+1:]
@@ -218,7 +221,8 @@ class Factor:
         # Calculate resulting factor
         res_values = []
         for i in range(len(self.values)):
-            if int(i/div) % len(self.rand_vars[var_index].domain) == inst_index:
+            if int(i/div) % len(self.rand_vars[var_index].domain) == \
+                    inst_index:
                 res_values.append(self.values[i])
 
         # Make Factor object and return
@@ -258,5 +262,6 @@ class Factor:
         return values_size
 
     def scalar(self, factor, scalar_value, fun):
-        return Factor(factor.rand_vars, list(map(fun, factor.values, [scalar_value]*len(factor.values))))
-
+        f_values_len = len(factor.values)
+        map_res = map(fun, factor.values, [scalar_value]*f_values_len)
+        return Factor(factor.rand_vars, list(map_res))
