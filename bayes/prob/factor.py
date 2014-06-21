@@ -84,38 +84,62 @@ class RandVarDomainEx(Exception):
 
 
 class Factor:
+    """
+    Represents a Factor. A Factor has one or more random variables associated
+    with an array of values. The array of values is a vectorization of the
+    multi dimensional matrix that represents the factor.
+
+    Examples:
+        >>> # Assuming X and Y are variables
+        >>> XY_factor = Factor([X, Y], [0.2, 0.3, 0.1, 0.4])
+    """
+
     def __init__(self, rand_vars, values):
+        """
+        Arguments:
+        rand_vars -- List of Random Variables of this factor
+        values    -- Values of the factor
+        """
+
+        if type(rand_vars) != list:
+            raise FactorRandVarsEx(rand_vars)
+
+        for i in rand_vars:
+            if type(i) != RandVar:
+                raise FactorRandVarsEx(rand_vars)
+
+        if type(values) == list:
+            for i in values:
+                if type(i) != int and type(i) != float:
+                    raise FactorValuesEx(rand_vars)
+        elif type(values) != int and type(values) != float:
+            raise FactorValuesEx(rand_vars)
+
         self.rand_vars = rand_vars
         self.values = values
 
-    def __repr__(self):
-        if len(self.rand_vars) == 0:
-            return "[]"
-
-        s = "["
-
-        # Place random variables
-        for i in range(len(self.rand_vars) - 1):
-            s += self.rand_vars[i].name + ", "
-        s += self.rand_vars[-1].name + "]"
-
-        return s
-
-    def varInFactor(self, rand_var):
-        for i in self.rand_vars:
-            if i.name == rand_vars.name:
-                return True
-        return False
-
     def mult(self, factor):
-        f = lambda x, y: x*y
-        return self.factorOp(factor, f)
+        """ Multiplication operation for factorOp """
+
+        fun = lambda x, y: x*y
+        return self.factorOp(factor, fun)
 
     def div(self, factor):
-        f = lambda x, y: x/y
-        return self.factorOp(factor, f)
+        """ Division operation for factorOp """
+
+        fun = lambda x, y: x/y
+        return self.factorOp(factor, fun)
 
     def factorOp(self, factor, fun):
+        """
+        Function used by others to implement a factor operation between self
+        and another factor.
+
+        Arguments:
+        factor -- The other factor used for this operation
+        fun    -- Operation used between each element of the values
+        """
+
         res_rand_vars = []
         res_values = []
 
@@ -185,7 +209,31 @@ class Factor:
         # Make Factor object and return
         return Factor(res_rand_vars, res_values)
 
+    def scalar(self, factor, scalar_value, fun):
+        """
+        Scalar operation between factor and a scalar_value. The scalar is used
+        in an operation, defined by fun, with the values of factor.
+
+        Arguments:
+        factor       -- The factor which values are going to be used as
+                        operands with scalar
+        scalar_value -- An int or float value to serve as an operand
+        fun          -- Function used in the operation, may be a lambda
+        """
+
+        map_res = []
+        for i in factor.values:
+            map_res.append(fun(i, scalar_value))
+
+        return Factor(factor.rand_vars, list(map_res))
+
     def marginal(self, arg_rand_vars):
+        """
+        Calculates the marginal of a factor for a list of random variables.
+        For example, if XY_factor is the distribution P(X, Y). Calculating the
+        marginal of X will give P(X).
+        """
+
         res_rand_vars = []
 
         # If the argument is a single variable
@@ -232,73 +280,14 @@ class Factor:
         # Make Factor object and return
         return Factor(res_rand_vars, res_values)
 
-    def instVar(self, rand_vars, insts):
-        # If this is a single instantiation
-        if type(rand_vars) != list and type(insts) != list:
-            return self.instVarSingle(rand_vars, insts)
-
-        # If this is a multiple instantiation
-        elif type(rand_vars) == list and type(insts) == list:
-            # If the size of this lists is not the same return
-            if len(rand_vars) != len(insts):
-                return None
-
-            # Instantiate one variable at a time
-            res = copy.copy(self)
-            for i in range(len(rand_vars)):
-                res = res.instVarSingle(rand_vars[i], insts[i])
-
-            return res
-
-    def instVarSingle(self, rand_var, inst):
-        res_rand_vars = []
-        var_index = -1
-
-        # Get resulting variables and var_index
-        for i in range(len(self.rand_vars)):
-            # Store current index of variable to instantiate and add rest of
-            # variables
-            if self.rand_vars[i].name == rand_var:
-                var_index = i
-                res_rand_vars += self.rand_vars[i+1:]
-                break
-
-            # Add current variable to list
-            res_rand_vars.append(self.rand_vars[i])
-
-        # If inst variable not in this factor, return it unchanged
-        if var_index == -1:
-            return self
-
-        # Get div factor
-        div = 1
-        for i in self.rand_vars:
-            if i.name == rand_var:
-                break
-            div *= len(i.domain)
-
-        # Get inst index
-        inst_index = -1
-        for i in range(len(self.rand_vars[var_index].domain)):
-            if self.rand_vars[var_index].domain[i] == inst:
-                inst_index = i
-                break
-
-        # If the value for instance couldn't be found, return None
-        if inst_index == -1:
-            return None
-
-        # Calculate resulting factor
-        res_values = []
-        for i in range(len(self.values)):
-            if int(i/div) % len(self.rand_vars[var_index].domain) == \
-                    inst_index:
-                res_values.append(self.values[i])
-
-        # Make Factor object and return
-        return Factor(res_rand_vars, res_values)
-
     def normalize(self, arg_rand_vars):
+        """
+        Normalizes the factor for random variables in the distribution. If the
+        factor of variable X has values [1, 3], the normalization will yield
+        the [1/4, 3/4], distribution. If a factor represents the distribution
+        P(X, Y), normalizing for X will yield P(X | Y).
+        """
+
         marg_vars = []
 
         # If the argument is a single variable
@@ -325,13 +314,140 @@ class Factor:
         # Make division
         return self.div(marg)
 
+    def instVar(self, rand_vars, insts):
+        """
+        Instantiates a random variables of a factor. Instantiating variable X
+        with value vx and Y with vy would yield f(X=vx, Y=vy, Z) = f(Z).
+
+        Arguments:
+        rand_vars -- List of variables to instantiate
+        insts     -- Value for each variable
+
+        Note, the sizes of the lists must be the same. Variable rand_vars[k]
+        will be instantiated with value insts[k].
+        """
+
+        # If this is a single instantiation
+        if type(rand_vars) != list and type(insts) != list:
+            return self.instVarSingle(rand_vars, insts)
+
+        # If this is a multiple instantiation
+        elif type(rand_vars) == list and type(insts) == list:
+            # If the size of this lists is not the same return
+            if len(rand_vars) != len(insts):
+                return None
+
+            # Instantiate one variable at a time
+            res = copy.copy(self)
+            for i in range(len(rand_vars)):
+                res = res.instVarSingle(rand_vars[i], insts[i])
+
+            return res
+
+    def instVarSingle(self, rand_var, inst):
+        """
+        Same has instVar, but this method instantiates a single variable and
+        it is the one used in the implementation of instVar.
+
+        Arguments:
+        rand_var -- Variable to instantiate
+        inst     -- Value for variable
+        """
+
+        res_rand_vars = []
+        var_index = -1
+
+        # Get resulting variables and var_index
+        for i in range(len(self.rand_vars)):
+            # Store current index of variable to instantiate and add rest of
+            # variables
+            if self.rand_vars[i].name == rand_var.name:
+                var_index = i
+                res_rand_vars += self.rand_vars[i+1:]
+                break
+
+            # Add current variable to list
+            res_rand_vars.append(self.rand_vars[i])
+
+        # If inst variable not in this factor, return it unchanged
+        if var_index == -1:
+            return self
+
+        # Get div factor
+        div = 1
+        for i in self.rand_vars:
+            if i.name == rand_var.name:
+                break
+            div *= len(i.domain)
+
+        # Get inst index
+        inst_index = -1
+        for i in range(len(self.rand_vars[var_index].domain)):
+            if self.rand_vars[var_index].domain[i] == inst:
+                inst_index = i
+                break
+
+        # If the value for instance couldn't be found, return None
+        if inst_index == -1:
+            return None
+
+        # Calculate resulting factor
+        res_values = []
+        for i in range(len(self.values)):
+            if int(i/div) % len(self.rand_vars[var_index].domain) == \
+                    inst_index:
+                res_values.append(self.values[i])
+
+        # Make Factor object and return
+        return Factor(res_rand_vars, res_values)
+
+    def varInFactor(self, rand_var):
+        for i in self.rand_vars:
+            if i.name == rand_vars.name:
+                return True
+        return False
+
     def getValuesListSize(self, rand_vars):
         values_size = 1
         for i in rand_vars:
             values_size *= len(i.domain)
         return values_size
 
-    def scalar(self, factor, scalar_value, fun):
-        f_values_len = len(factor.values)
-        map_res = map(fun, factor.values, [scalar_value]*f_values_len)
-        return Factor(factor.rand_vars, list(map_res))
+    def __repr__(self):
+        if len(self.rand_vars) == 0:
+            return "[]"
+
+        s = "["
+
+        # Place random variables
+        for i in range(len(self.rand_vars) - 1):
+            s += self.rand_vars[i].name + ", "
+        s += self.rand_vars[-1].name + "]"
+
+        return s
+
+
+class FactorRandVarsEx(Exception):
+    """
+    Exception use if the list of random variables is not a list or contains
+    something other then random variables.
+    """
+
+    def __init__(self, bad_rand_vars):
+        self.bad_rand_vars = bad_rand_vars
+
+    def __str__(self):
+        return "Bad Random Variables:" + repr(self.bad_rand_vars)
+
+
+class FactorValuesEx(Exception):
+    """
+    If the list of values is not a list or contains something other then ints
+    or floats.
+    """
+
+    def __init__(self, bad_values):
+        self.bad_values = bad_values
+
+    def __str__(self):
+        return "Bad values for factor:" + repr(self.bad_values)

@@ -35,7 +35,7 @@ BN = bn.BayesianNetwork(network)
 
 # An array with observed values for some variables. In this example the
 # variable john was observed being true. Same for variable mary
-observed = [("john", "True"), ("mary", "True")]
+observed = [(john, "True"), (mary, "True")]
 
 # Run the elimination_ask algorithm (Variable Elimination) for the example.
 # Result should be approximately [0.284, 0.716]
@@ -50,7 +50,7 @@ print("----------")
 # changed, but the order of the distributions is the same. The result should
 # be approximately [0.849, 0.150]
 
-observed = [("burglary", "True")]
+observed = [(burglary, "True")]
 burglary_k_john_mary = BN.elimination_ask(john, observed)
 
 print("P(John | Burglary=true)")
