@@ -1,12 +1,51 @@
+"""
+Contain
+=======
+
+* BayesianNetwork
+"""
+
 from bayes.prob import factor
 
 import copy
 
+
 class BayesianNetwork:
+    """
+    Class that implements a Bayesian Network. It encapsulates some algorithms
+    for Bayesian inference and abstract their usage
+    """
+
     def __init__(self, network):
+        """
+        Constructor for class BayesianNetwork
+
+        Argument:
+        network -- List of tuples, where each tuple has a RandVar in the first
+                   element and a factor in the second.
+        """
+
         self.network = network
 
     def elimination_ask(self, query_var, observed):
+        """
+        Executes the Elimination Ask algorithm, receiving a query variable (q)
+        and observations (E), returning a factor which correspondes to the
+        distribution P(q | E)
+
+        Arguments:
+        query_var -- Random variable of type RandVar
+        observed  -- List of observations. Each element of the list should be
+                     a tuple, which first element is a RandVar and second
+                     element is the observed value for that variable
+
+        Example:
+            >>> # Assuming X, Y and Z as vars and vz, vy as values of X and Y
+            >>> observed = [(X, vx), (Y, vy)]
+            >>> res = BN.elimination_ask(Z, observed)
+            >>> res # P(Z | X=vx, Y=vy)
+        """
+
         factors = []
         for i in self.network:
             factors.append(self.makeFactor(i[1], observed))
@@ -25,7 +64,7 @@ class BayesianNetwork:
 
         for i in observed:
             res = var.instVar(i[0], i[1])
-            if res != None:
+            if res is not None:
                 var = res
 
         return var
@@ -53,4 +92,3 @@ class BayesianNetwork:
                 marg_vars.append(i)
 
         return [prod.marginal(marg_vars)]
-
