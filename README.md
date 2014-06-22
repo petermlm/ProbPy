@@ -64,3 +64,7 @@ TODO
 
 * The code should have tests. Every test is implemented in the `bayes/test` directory an [nosetests](https://nose.readthedocs.org/en/latest/) is used run them. The run the tests use `nosetests3 bayes/test`.
 
+# Thigns to be implemented
+
+TODO
+
