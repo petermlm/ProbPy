@@ -1,21 +1,18 @@
 A Python library for multi variable probabilistic calculus.
 
-About Bayes (Name to Change)
-============================
+# About Bayes (Name to Change)
 
 Bayes (name to change) is a Python library that aims to simplify calculations with multi variable probabilistic distributions by offering an abstraction over how the data is stored and how the operations between distributions are performed.
 
 The library can be used in the implementation of many algorithms such as Bayesian Inference algorithms, Smoothing, Filtering, among other things.
 
-Features
-========
+# Features
 
 TODO
 
-Examples
-========
+# Examples
 
-The following code creates binary random variables. The first argument of *RandVar* is the name of the variable and the second is it's domain.
+The following code creates binary random variables. The first argument of `RandVar` is the name of the variable and the second is it's domain.
 
     burglary = factor.RandVar("burglary", ["True", "False"])
     earthq = factor.RandVar("earthq", ["True", "False"])
@@ -55,13 +52,15 @@ Finally the Elimination Ask algorithm can be called with a query variable and a 
 
 The observations are a list of tuples. Each tuple is a pair between a variable and it's observation in a specific situation.
 
-Data Representation
-===================
+# Data Representation
 
 TODO
 
-Contributing
-============
+# Contributing
 
-TODO
+* This project is aimed to work with Python 3.
+
+* The project uses [PEP8](http://legacy.python.org/dev/peps/pep-0008) as a style guide. The tool [autopep8](https://pypi.python.org/pypi/autopep8/) may help in assuring the project follows the standards.
+
+* The code should have tests. Every test is implemented in the `bayes/test` directory an [nosetests](https://nose.readthedocs.org/en/latest/) is used run them. The run the tests use `nosetests3 bayes/test`.
 
