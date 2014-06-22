@@ -37,9 +37,9 @@ BN = bn.BayesianNetwork(network)
 # variable john was observed being true. Same for variable mary
 observed = [(john, "True"), (mary, "True")]
 
-# Run the elimination_ask algorithm (Variable Elimination) for the example.
+# Run the elimination ask algorithm (Variable Elimination) for the example.
 # Result should be approximately [0.284, 0.716]
-burglary_k_john_mary = BN.elimination_ask(burglary, observed)
+burglary_k_john_mary = BN.eliminationAsk(burglary, observed)
 
 print("P(Burglary | John=true, Mary=true)")
 print(burglary_k_john_mary.values)
@@ -51,7 +51,8 @@ print("----------")
 # be approximately [0.849, 0.150]
 
 observed = [(burglary, "True")]
-burglary_k_john_mary = BN.elimination_ask(john, observed)
+john_k_burglary = BN.eliminationAsk(john, observed)
 
 print("P(John | Burglary=true)")
-print(burglary_k_john_mary.values)
+print(john_k_burglary.values)
+

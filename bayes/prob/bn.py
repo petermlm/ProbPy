@@ -27,7 +27,7 @@ class BayesianNetwork:
 
         self.network = network
 
-    def elimination_ask(self, query_var, observed):
+    def eliminationAsk(self, query_var, observed):
         """
         Executes the Elimination Ask algorithm, receiving a query variable (q)
         and observations (E), returning a factor which correspondes to the
@@ -42,7 +42,7 @@ class BayesianNetwork:
         Example:
             >>> # Assuming X, Y and Z as vars and vz, vy as values of X and Y
             >>> observed = [(X, vx), (Y, vy)]
-            >>> res = BN.elimination_ask(Z, observed)
+            >>> res = BN.eliminationAsk(Z, observed)
             >>> res # P(Z | X=vx, Y=vy)
         """
 
