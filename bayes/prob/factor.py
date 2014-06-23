@@ -7,6 +7,8 @@ Contain
 * RandVarDomainEx
 
 * Factor
+* FactorRandVarsEx
+* FactorValuesEx
 """
 
 
@@ -413,7 +415,7 @@ class Factor:
             values_size *= len(i.domain)
         return values_size
 
-    def __repr__(self):
+    def __str__(self):
         if len(self.rand_vars) == 0:
             return "[]"
 
