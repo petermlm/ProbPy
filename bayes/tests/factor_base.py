@@ -37,3 +37,8 @@ class FactorBase:
         self.XY_factor_n = factor.Factor([self.X, self.Y], [1, 1, 2, 2])
         self.XYZ_factor_n = factor.Factor([self.X, self.Y, self.Z],
                                           [1, 1, 2, 2, 3, 3, 4, 4])
+
+        # Expected value functions f(x)
+        self.x_ev = [10, 20]
+        self.y_ev = [15, 25]
+        self.xy_ev = [10, 20, 30, 40]
