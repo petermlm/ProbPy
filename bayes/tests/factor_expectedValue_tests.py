@@ -43,7 +43,7 @@ class TestFactorExpectedValue(FactorBase):
         fun = self.x_ev.mult(c)
 
         res_x_c = self.X_dist.expectedValue(self.x_ev) * c
-        res_xc  = self.X_dist.expectedValue(fun)
+        res_xc = self.X_dist.expectedValue(fun)
         assert_almost_equal(res_x_c, res_xc)
 
     def expected_value_test_4(self):
@@ -55,7 +55,7 @@ class TestFactorExpectedValue(FactorBase):
         fun = self.x_ev.add(c)
 
         res_x_c = self.X_dist.expectedValue(self.x_ev) + c
-        res_xc  = self.X_dist.expectedValue(fun)
+        res_xc = self.X_dist.expectedValue(fun)
         assert_almost_equal(res_x_c, res_xc)
 
     def expected_value_test_5(self):

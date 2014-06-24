@@ -99,12 +99,14 @@ class Factor:
     def __init__(self, rand_vars, values):
         """
         Arguments:
-        rand_vars -- List of Random Variables of this factor
+        rand_vars -- List of Random Variables of this factor, or single
+                     variable
         values    -- Values of the factor
         """
 
+        # Assure the rand_vars argument is always a list
         if type(rand_vars) != list:
-            raise FactorRandVarsEx(rand_vars)
+            rand_vars = [rand_vars]
 
         for i in rand_vars:
             if type(i) != RandVar:
@@ -446,7 +448,6 @@ class Factor:
         for i in fact_vars:
             if not fun.varInFactor(i):
                 fac = fac.instVar(i, i.domain[0])
-
 
         # Make the multiplication
         mult = fac.mult(fun)

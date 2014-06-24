@@ -10,29 +10,42 @@ class TestFactorMult(FactorBase):
         f(X), scalar
         """
 
-        res = self.scalar.mult(self.X_factor)
-        assert(res.rand_vars == [self.X] and
-               res.values == [10, 20])
+        res = [0]*3
+        res[0] = self.X_factor.mult(self.scalar)
+        res[1] = self.X_factor.mult(self.scalarf)
+        res[2] = self.scalarf.mult(self.X_factor)
+
+        for i in range(3):
+            assert(res[i].rand_vars == [self.X] and
+                   res[i].values == [10, 20])
 
     def mult_test_1(self):
         """
         f(X, Y), scalar
         """
 
-        res = self.scalar.mult(self.XY_factor)
-        assert(res.rand_vars == [self.X, self.Y] and
-               res.values == [10, 20, 30, 40])
+        res = [0]*3
+        res[0] = self.XY_factor.mult(self.scalar)
+        res[1] = self.XY_factor.mult(self.scalarf)
+        res[2] = self.scalarf.mult(self.XY_factor)
+
+        for i in range(3):
+            assert(res[i].rand_vars == [self.X, self.Y] and
+                   res[i].values == [10, 20, 30, 40])
 
     def mult_test_2(self):
         """
         f(X, Y, Z), scalar
         """
 
-        res = self.scalar.mult(self.XYZ_factor)
-        assert(res.rand_vars == [self.X, self.Y, self.Z] and
-               res.values == [
-                   10, 20, 30, 40,
-                   50, 60, 70, 80])
+        res = [0]*3
+        res[0] = self.XYZ_factor.mult(self.scalar)
+        res[1] = self.XYZ_factor.mult(self.scalarf)
+        res[2] = self.scalarf.mult(self.XYZ_factor)
+
+        for i in range(3):
+            assert(res[i].rand_vars == [self.X, self.Y, self.Z] and
+                   res[i].values == [10, 20, 30, 40, 50, 60, 70, 80])
 
     def mult_test_3(self):
         """
