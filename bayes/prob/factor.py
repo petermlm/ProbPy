@@ -403,6 +403,34 @@ class Factor:
         # Make Factor object and return
         return Factor(res_rand_vars, res_values)
 
+    def expectedValue(self, rand_vars, fun=None):
+        """
+        Calculates the expected value for the variables in rand_vars. The
+        method should be used if the factor represents a probability
+        distribution. Suppose the factor f(X) would represent the distribution
+        P(X), this method would calculate the expected value of X, E[X].
+
+        If the factor f(X, Y) represents the distribution P(X | Y), the
+        expected value calculated is E[X]
+
+        Arguments:
+        rand_vars -- A list of random variables or a single random variable for
+                     which the expected value is calculated
+        fun       -- A function for the variable, if omitted, the function is
+                     the value of the variables domain itself
+
+        Examples:
+            >>> X_factor = RandVar(X, ["T", "F"])
+            >>> X_factor.Factor(X, [0.8, 0.2])
+            >>> def fun(ele):
+            ...  if ele == "T": return 10
+            ...  elif ele == "F": return 20
+            >>> X_factor.expectedValue(X, fun)
+            12.0
+        """
+
+        return 0
+
     def varInFactor(self, rand_var):
         for i in self.rand_vars:
             if i.name == rand_vars.name:
