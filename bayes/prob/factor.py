@@ -132,6 +132,18 @@ class Factor:
         fun = lambda x, y: x/y
         return self.factorOp(factor, fun)
 
+    def add(self, factor):
+        """ Addition operation for factorOp """
+
+        fun = lambda x, y: x+y
+        return self.factorOp(factor, fun)
+
+    def sub(self, factor):
+        """ Subtraction operation for factorOp """
+
+        fun = lambda x, y: x-y
+        return self.factorOp(factor, fun)
+
     def factorOp(self, factor, fun):
         """
         Function used by others to implement a factor operation between self
@@ -146,7 +158,9 @@ class Factor:
         res_values = []
 
         # If this is just scalar operation
-        if self.rand_vars == []:
+        if type(factor) == int or type(factor) == float:
+            return self.scalar(self, factor, fun)
+        elif self.rand_vars == []:
             return self.scalar(factor, self.values[0], fun)
         elif factor.rand_vars == []:
             return self.scalar(self, factor.values[0], fun)
@@ -403,7 +417,7 @@ class Factor:
         # Make Factor object and return
         return Factor(res_rand_vars, res_values)
 
-    def expectedValue(self, rand_vars, fun=None):
+    def expectedValue(self, fun):
         """
         Calculates the expected value for the variables in rand_vars. The
         method should be used if the factor represents a probability
@@ -414,26 +428,39 @@ class Factor:
         expected value calculated is E[X]
 
         Arguments:
-        rand_vars -- A list of random variables or a single random variable for
-                     which the expected value is calculated
-        fun       -- A function for the variable, if omitted, the function is
-                     the value of the variables domain itself
+        fun -- A function for the variable
 
         Examples:
             >>> X_factor = RandVar(X, ["T", "F"])
             >>> X_factor.Factor(X, [0.8, 0.2])
-            >>> def fun(ele):
-            ...  if ele == "T": return 10
-            ...  elif ele == "F": return 20
-            >>> X_factor.expectedValue(X, fun)
+            >>> X_ev.Factor(X, [10, 20])
+            >>> X_factor.expectedValue(X, X_ev)
             12.0
         """
 
-        return 0
+        # Instantiate every conditional variable with it's first value, because
+        # E[X] == E[X | Y=y], for any y
+        fac = copy.deepcopy(self)
+        fact_vars = fac.rand_vars
+
+        for i in fact_vars:
+            if not fun.varInFactor(i):
+                fac = fac.instVar(i, i.domain[0])
+
+
+        # Make the multiplication
+        mult = fac.mult(fun)
+
+        # Sum all
+        res = 0
+        for i in mult.values:
+            res += i
+
+        return res
 
     def varInFactor(self, rand_var):
         for i in self.rand_vars:
-            if i.name == rand_vars.name:
+            if i.name == rand_var.name:
                 return True
         return False
 

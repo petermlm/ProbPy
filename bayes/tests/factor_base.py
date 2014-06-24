@@ -38,7 +38,12 @@ class FactorBase:
         self.XYZ_factor_n = factor.Factor([self.X, self.Y, self.Z],
                                           [1, 1, 2, 2, 3, 3, 4, 4])
 
-        # Expected value functions f(x)
-        self.x_ev = [10, 20]
-        self.y_ev = [15, 25]
-        self.xy_ev = [10, 20, 30, 40]
+        # Distributions for expected value
+        self.X_dist = factor.Factor([self.X], [0.8, 0.2])
+        self.Y_dist = factor.Factor([self.Y], [0.1, 0.9])
+        self.XY_dist = factor.Factor([self.X, self.Y], [0.1, 0.2, 0.3, 0.4])
+
+        # Function for expected values f(X)
+        self.x_ev = factor.Factor([self.X], [10, 20])
+        self.y_ev = factor.Factor([self.Y], [15, 25])
+        self.xy_ev = factor.Factor([self.X, self.Y], [25, 35, 35, 45])
