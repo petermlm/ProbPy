@@ -23,11 +23,11 @@ factor_mary = factor.Factor([mary, alarm], [0.70, 0.30, 0.01, 0.99])
 # tuple, the first argument is the variable of that node and the second is the
 # distribution
 network = [
-    (mary,     factor_mary),
-    (john,     factor_john),
-    (alarm,    factor_alarm),
-    (earthq,   factor_earthq),
-    (burglary, factor_burglary)
+    (mary,     factor_mary,     [alarm]),
+    (john,     factor_john,     [alarm]),
+    (alarm,    factor_alarm,    [earthq,  burglary]),
+    (earthq,   factor_earthq,   []),
+    (burglary, factor_burglary, [])
 ]
 
 # The network object
@@ -55,4 +55,3 @@ john_k_burglary = BN.eliminationAsk(john, observed)
 
 print("P(John | Burglary=true)")
 print(john_k_burglary.values)
-

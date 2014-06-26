@@ -1,6 +1,6 @@
 """
-Contain
-=======
+Contains
+========
 
 * RandVar
 * RandVarNameEx
