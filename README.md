@@ -64,7 +64,21 @@ TODO
 
 * The code should have tests. Every test is implemented in the `bayes/test` directory an [nosetests](https://nose.readthedocs.org/en/latest/) is used run them. The run the tests use `nosetests3 bayes/test`.
 
-# Thigns to be implemented
+# To Do
 
-TODO
+* Add variables that change over time so implementation with them are simpler.
+
+* Allow variable domains that are not only strings.
+
+* Implement *factorOp* algorithm using a parallel approach.
+
+* Add licence.
+
+* Add simple operators for the factor operations, like the * for factor multiplication.
+
+* Make documentation out of doc strings.
+
+* Find decent name.
+
+* The elimination Ask should be allowed to have more then one query variable.
 
