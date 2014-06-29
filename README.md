@@ -68,15 +68,11 @@ TODO
 
 # To Do
 
-* Add variables that change over time so implementation with them are simpler.
+* Add variables that change over time so implementations with them are simpler.
 
 * Allow variable domains that are not only strings.
 
 * Implement *factorOp* algorithm using a parallel approach.
-
-* Add licence.
-
-* Add simple operators for the factor operations, like the * for factor multiplication.
 
 * Make documentation out of doc strings.
 
