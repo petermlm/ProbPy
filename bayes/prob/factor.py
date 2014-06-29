@@ -480,6 +480,18 @@ class Factor:
 
         return s
 
+    def __add__(self, other):
+        return self.add(other)
+
+    def __sub__(self, other):
+        return self.sub(other)
+
+    def __mul__(self, other):
+        return self.mult(other)
+
+    def __truediv__(self, other):
+        return self.div(other)
+
 
 class FactorRandVarsEx(Exception):
     """
