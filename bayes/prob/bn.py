@@ -32,6 +32,8 @@ class BayesianNetworkNode:
         self.factor = factor
         self.parents = parents
 
+        self.visited = 0
+
 
 class BayesianNetwork:
     """
@@ -72,10 +74,57 @@ class BayesianNetwork:
         W_factor -- P(W | Y, Z)
         """
 
+        """
         self.network = []
         for i in network:
             node = BayesianNetworkNode(i[0], i[1], i[2])
             self.network.append(node)
+        """
+
+        # Will have nodes after they are topologically sorted
+        self.network = []
+
+        # List of unsorted nodes
+        unsorted_net = [BayesianNetworkNode(i[0], i[1], i[2]) for i in network]
+        self.topoSortNet(unsorted_net)
+
+    def topoSortNet(self, unsorted_net):
+        # Keep number of unvisited nodes
+        self.un_num = len(unsorted_net)
+
+        # Visit procedure for the sorted algorithm
+        def visit(n):
+            # If this has temporary mark, stop. Not a DAG
+            if n.visited == 1:
+                return
+
+            # If it has not been visited
+            if n.visited == 0:
+                # Mark temporally
+                n.visited = 1
+
+                # Find node that connects with this one and visited
+                for i in unsorted_net:
+                    for j in i.parents:
+                        if n.node.name == j.name:
+                            visit(i)
+
+                # Mark this node has visited, add it to sorted network
+                self.un_num -= 1
+                n.visited = 2
+                self.network.append(n)
+
+        # Sort nodes
+        while self.un_num > 0:
+            # Select unmarked
+            n = None
+            for i in unsorted_net:
+                if i.visited == 0:
+                    n = i
+                    break
+
+            # Visited
+            visit(n)
 
     def nodeInGraph(self, node):
         """ Look for the node, if the node was not found, return None """

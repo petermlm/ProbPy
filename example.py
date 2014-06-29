@@ -20,14 +20,15 @@ factor_john = factor.Factor([john, alarm], [0.90, 0.10, 0.05, 0.95])
 factor_mary = factor.Factor([mary, alarm], [0.70, 0.30, 0.01, 0.99])
 
 # This array has the nodes of the network. Each element is a tuple. In each
-# tuple, the first argument is the variable of that node and the second is the
-# distribution
+# tuple, the first argument is the variable of that node, the second is the
+# distribution, and the third is a the list of parents of that node. Note that
+# the ndoes were place in the list at random
 network = [
-    (mary,     factor_mary,     [alarm]),
-    (john,     factor_john,     [alarm]),
-    (alarm,    factor_alarm,    [earthq,  burglary]),
     (earthq,   factor_earthq,   []),
-    (burglary, factor_burglary, [])
+    (alarm,    factor_alarm,    [earthq,  burglary]),
+    (john,     factor_john,     [alarm]),
+    (burglary, factor_burglary, []),
+    (mary,     factor_mary,     [alarm])
 ]
 
 # The network object
