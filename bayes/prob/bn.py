@@ -32,6 +32,7 @@ class BayesianNetworkNode:
         self.factor = factor
         self.parents = parents
 
+        # Used in the construction of the Bayesian Network class while sorting
         self.visited = 0
 
 
@@ -96,7 +97,7 @@ class BayesianNetwork:
         def visit(n):
             # If this has temporary mark, stop. Not a DAG
             if n.visited == 1:
-                return
+                raise BayesianNetworkArgEx()
 
             # If it has not been visited
             if n.visited == 0:
@@ -237,3 +238,14 @@ class BayesianNetwork:
 
         # Return the final factor in the form of a list
         return [prod.marginal(marg_vars)]
+
+
+class BayesianNetworkArgEx(Exception):
+    """
+    Exception used if the nodes of the Bayesian Network don't form a DAG
+    """
+
+    def __str__(self):
+        s = ("Nodes for the construction of the Bayesian Network don't form a"
+             "Direct Acyclic Graph")
+        return s

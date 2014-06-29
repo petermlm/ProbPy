@@ -62,9 +62,7 @@ class RandVar:
 
 
 class RandVarNameEx(Exception):
-    """
-    Exception use for a bad Random Variable name
-    """
+    """ Exception use for a bad Random Variable name """
 
     def __init__(self, bad_name):
         self.bad_name = bad_name
@@ -74,9 +72,7 @@ class RandVarNameEx(Exception):
 
 
 class RandVarDomainEx(Exception):
-    """
-    Exception use for a bad domain for a Variable
-    """
+    """ Exception use for a bad domain for a Variable """
 
     def __init__(self, bad_domain):
         self.bad_domain = bad_domain
