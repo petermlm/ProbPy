@@ -12,6 +12,8 @@ TODO
 
 # Examples
 
+This example is in the `example.py` file.
+
 The following code creates binary random variables. The first argument of `RandVar` is the name of the variable and the second is it's domain.
 
     burglary = factor.RandVar("burglary", ["True", "False"])
@@ -28,14 +30,14 @@ Having the variables it is now possible to create factors with them. A factor is
     factor_john = factor.Factor([john, alarm], [0.90, 0.10, 0.05, 0.95])
     factor_mary = factor.Factor([mary, alarm], [0.70, 0.30, 0.01, 0.99])
 
-In the current implementation a Bayesian network can be implemented simply with a list of tuples, where each tuple is a pair with a variable and a factor.
+In the current implementation a Bayesian network can be implemented simply with a list of tuples, where each tuple is a pair with a variable, and a factor and a list of parents.
 
     network = [
-        (mary,     factor_mary),
-        (john,     factor_john),
-        (alarm,    factor_alarm),
-        (earthq,   factor_earthq),
-        (burglary, factor_burglary)
+        (earthq,   factor_earthq,   []),
+        (alarm,    factor_alarm,    [earthq,  burglary]),
+        (john,     factor_john,     [alarm]),
+        (burglary, factor_burglary, []),
+        (mary,     factor_mary,     [alarm])
     ]
 
     BN = bn.BayesianNetwork(network)
