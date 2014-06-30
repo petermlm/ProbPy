@@ -13,6 +13,7 @@ Contains
 
 
 import copy
+import math
 
 
 class RandVar:
@@ -238,6 +239,52 @@ class Factor:
         map_res = []
         for i in factor.values:
             map_res.append(fun(i, scalar_value))
+
+        return Factor(factor.rand_vars, list(map_res))
+
+    def log(self, base):
+        """
+        Applies the logarithm function to the whole factor. The actual
+        logarithm used in the one in Python's library
+
+        Arguments:
+        base -- Base of the logarithm
+        """
+
+        fun = lambda x: math.log(x, base)
+        return self.map(fun)
+
+    def pow(self, p):
+        """
+        Calculates the power of the elements in the factor by p
+
+        Arguments:
+        p -- Values of power used
+        """
+
+        fun = lambda x: x**p
+        return self.map(fun)
+
+    def exp(self):
+        """
+        Applies the exp function to the whole factor. Exp implemented by
+        Python's library
+        """
+
+        return self.map(math.exp)
+
+    def map(self, fun):
+        """
+        Returns the result of applying a function the factor. Useful in the
+        implementation of the log function
+
+        Arguments:
+        fun -- Function used in the mapping
+        """
+
+        map_res = []
+        for i in self.values:
+            map_res.append(fun(i))
 
         return Factor(factor.rand_vars, list(map_res))
 
