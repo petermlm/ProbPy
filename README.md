@@ -1,8 +1,8 @@
 A Python library for multi variable probabilistic calculus.
 
-# About Bayes (Name to Change)
+# About ProbPy
 
-Bayes (name to change) is a Python library that aims to simplify calculations with multi variable probabilistic distributions by offering an abstraction over how the data is stored and how the operations between distributions are performed.
+ProbPy is a Python library that aims to simplify calculations with multi variable probabilistic distributions by offering an abstraction over how the data is stored and how the operations between distributions are performed.
 
 The library can be used in the implementation of many algorithms such as Bayesian Inference algorithms, Smoothing, Filtering, among other things.
 
@@ -76,7 +76,4 @@ TODO
 
 * Make documentation out of doc strings.
 
-* Find decent name.
-
 * The elimination Ask should be allowed to have more then one query variable.
-
