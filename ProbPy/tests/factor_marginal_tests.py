@@ -1,7 +1,7 @@
-from bayes.prob.bn import *
+from ProbPy.prob.bn import *
 from nose.tools import with_setup, nottest
 
-from bayes.tests.factor_base import FactorBase
+from ProbPy.tests.factor_base import FactorBase
 
 
 class TestMarginalMult(FactorBase):

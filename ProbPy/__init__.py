@@ -1,2 +1,2 @@
-from bayes.prob import *
-from bayes.tests import *
+from ProbPy.prob import *
+from ProbPy.tests import *

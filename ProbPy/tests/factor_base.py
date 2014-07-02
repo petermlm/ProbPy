@@ -1,4 +1,4 @@
-from bayes.prob import factor
+from ProbPy.prob import factor
 
 
 class FactorBase:

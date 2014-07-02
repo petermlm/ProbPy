@@ -1,2 +1,2 @@
-from bayes.prob.factor import *
-from bayes.prob.bn import *
+from ProbPy.prob.factor import *
+from ProbPy.prob.bn import *

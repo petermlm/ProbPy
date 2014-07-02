@@ -6,7 +6,7 @@ Contains
 * BayesianNetwork
 """
 
-from bayes.prob import factor
+from ProbPy.prob import factor
 
 import copy
 

@@ -1,5 +1,5 @@
-from bayes.prob import factor
-from bayes.prob import bn
+from ProbPy.prob import factor
+from ProbPy.prob import bn
 
 # These are the variables in the network. The first argument is the actual name
 # of the variable and the second is the domain of it

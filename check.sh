@@ -9,8 +9,8 @@ nosetests3
 
 # PEP8
 pep8 example.py
-pep8 bayes/prob/*.py
-pep8 bayes/tests/*.py
+pep8 ProbPy/prob/*.py
+pep8 ProbPy/tests/*.py
 
 # Examples
 python3 example.py
