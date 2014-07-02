@@ -201,25 +201,31 @@ class Factor:
 
             div.append(c_div)
 
+        # Calculate dim list
+        dim = []
+
+        for i in range(len(factor.rand_vars)):
+            dim.append(len(factor.rand_vars[i].domain))
+
         # Calculate resulting size of factor
-        res_values_size = 1
-        for i in res_rand_vars:
-            res_values_size *= len(i.domain)
+        res_values_size = self.getValuesListSize(res_rand_vars)
 
         # Calculate resulting factor
         index1 = 0
+        index2_range = range(len(factor.rand_vars))
+        len_values = len(self.values)
+
         for i in range(res_values_size):
             # Get index 2
             index2 = 0
-            for j in range(len(factor.rand_vars)):
-                dim = len(factor.rand_vars[j].domain)
-                index2 += (int(i / div[j]) % dim) * mult[j]
+            for j in index2_range:
+                index2 += (int(i / div[j]) % dim[j]) * mult[j]
 
             # Calculate value
             res_values.append(fun(self.values[index1], factor.values[index2]))
 
             # Increment index 1
-            index1 = (index1 + 1) % len(self.values)
+            index1 = (index1 + 1) % len_values
 
         # Make Factor object and return
         return Factor(res_rand_vars, res_values)
