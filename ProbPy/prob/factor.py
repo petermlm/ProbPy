@@ -460,9 +460,9 @@ class Factor:
 
         # Calculate resulting factor
         res_values = []
+        len_domain = len(self.rand_vars[var_index].domain)
         for i in range(len(self.values)):
-            if int(i/div) % len(self.rand_vars[var_index].domain) == \
-                    inst_index:
+            if int(i/div) % len_domain == inst_index:
                 res_values.append(self.values[i])
 
         # Make Factor object and return
