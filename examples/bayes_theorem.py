@@ -3,6 +3,10 @@ This is an example of the Bayes Theorem, in which to simple random variables
 are used in the calculation, X and Y.
 """
 
+
+import sys
+sys.path.append('../ProbPy')
+
 from ProbPy.prob.factor import RandVar, Factor
 
 

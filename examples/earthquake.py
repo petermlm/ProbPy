@@ -18,8 +18,13 @@ Each node of the network corresponds with the following Random Variables:
 Their distributions are bellow.
 """
 
+
+import sys
+sys.path.append('../ProbPy')
+
 from ProbPy.prob.factor import RandVar, Factor
 from ProbPy.prob import bn
+
 
 # These are the variables in the network. The first argument is the actual name
 # of the variable and the second is the domain of it
