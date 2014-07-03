@@ -1,0 +1,343 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ProbPy.prob.bn &mdash; ProbPy  documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="ProbPy  documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">ProbPy  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for ProbPy.prob.bn</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Contains</span>
+<span class="sd">========</span>
+
+<span class="sd">* BayesianNetworkNode</span>
+<span class="sd">* BayesianNetwork</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">copy</span>
+
+
+<div class="viewcode-block" id="BayesianNetworkNode"><a class="viewcode-back" href="../../../ProbPy.prob.html#ProbPy.prob.bn.BayesianNetworkNode">[docs]</a><span class="k">class</span> <span class="nc">BayesianNetworkNode</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class represents a node in a Bayesian Network. It has the notion of</span>
+<span class="sd">    it&#39;s variable, it&#39;s probability distribution represented using a factor and</span>
+<span class="sd">    it&#39;s parents.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">factor</span><span class="p">,</span> <span class="n">parents</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor for the BayesianNetworkNode</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">        node   -- A RandVar object, which is going to be this node&#39;s variable</span>
+<span class="sd">        factor -- The factor which represents the distribution of this variable</span>
+<span class="sd">                  in this node</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">node</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factor</span> <span class="o">=</span> <span class="n">factor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parents</span> <span class="o">=</span> <span class="n">parents</span>
+
+        <span class="c"># Used in the construction of the Bayesian Network class while sorting</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visited</span> <span class="o">=</span> <span class="mi">0</span>
+
+</div>
+<div class="viewcode-block" id="BayesianNetwork"><a class="viewcode-back" href="../../../ProbPy.prob.html#ProbPy.prob.bn.BayesianNetwork">[docs]</a><span class="k">class</span> <span class="nc">BayesianNetwork</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class that implements a Bayesian Network. It encapsulates some algorithms</span>
+<span class="sd">    for Bayesian inference and abstract their usage</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">network</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor for class BayesianNetwork</span>
+
+<span class="sd">        Argument:</span>
+<span class="sd">        network -- List of tuples, where each tuple represents a node. The</span>
+<span class="sd">                   variable in each Node goes in the first element of the tuple</span>
+<span class="sd">                   as a RandVar object. The factor for that variable goes into</span>
+<span class="sd">                   the second element. The parents of the node go in  a list in</span>
+<span class="sd">                   the third element of the tuple</span>
+
+<span class="sd">        For example, suppose the following network:</span>
+
+<span class="sd">         / -- Y -- \</span>
+<span class="sd">        X           W</span>
+<span class="sd">         \ -- Z -- /</span>
+
+<span class="sd">        It&#39;s representation for this constructor would be:</span>
+<span class="sd">        &gt;&gt;&gt; network = [</span>
+<span class="sd">        ...     (X, X_factor, [])</span>
+<span class="sd">        ...     (Y, Y_factor, [X])</span>
+<span class="sd">        ...     (Z, Z_factor, [X])</span>
+<span class="sd">        ...     (W, W_factor, [Y, Z])</span>
+<span class="sd">        ... ]</span>
+
+<span class="sd">        Where the factors are:</span>
+
+<span class="sd">        X_factor -- P(X)</span>
+<span class="sd">        Y_factor -- P(Y | X)</span>
+<span class="sd">        Z_factor -- P(Z | X)</span>
+<span class="sd">        W_factor -- P(W | Y, Z)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        self.network = []</span>
+<span class="sd">        for i in network:</span>
+<span class="sd">            node = BayesianNetworkNode(i[0], i[1], i[2])</span>
+<span class="sd">            self.network.append(node)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># Will have nodes after they are topologically sorted</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">network</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c"># List of unsorted nodes</span>
+        <span class="n">unsorted_net</span> <span class="o">=</span> <span class="p">[</span><span class="n">BayesianNetworkNode</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">network</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topoSortNet</span><span class="p">(</span><span class="n">unsorted_net</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BayesianNetwork.topoSortNet"><a class="viewcode-back" href="../../../ProbPy.prob.html#ProbPy.prob.bn.BayesianNetwork.topoSortNet">[docs]</a>    <span class="k">def</span> <span class="nf">topoSortNet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unsorted_net</span><span class="p">):</span>
+        <span class="c"># Keep number of unvisited nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">un_num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">unsorted_net</span><span class="p">)</span>
+
+        <span class="c"># Visit procedure for the sorted algorithm</span>
+        <span class="k">def</span> <span class="nf">visit</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="c"># If this has temporary mark, stop. Not a DAG</span>
+            <span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">visited</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">BayesianNetworkArgEx</span><span class="p">()</span>
+
+            <span class="c"># If it has not been visited</span>
+            <span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">visited</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c"># Mark temporally</span>
+                <span class="n">n</span><span class="o">.</span><span class="n">visited</span> <span class="o">=</span> <span class="mi">1</span>
+
+                <span class="c"># Find node that connects with this one and visited</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">unsorted_net</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">parents</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">j</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                            <span class="n">visit</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+                <span class="c"># Mark this node has visited, add it to sorted network</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">un_num</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="n">n</span><span class="o">.</span><span class="n">visited</span> <span class="o">=</span> <span class="mi">2</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+        <span class="c"># Sort nodes</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">un_num</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c"># Select unmarked</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">unsorted_net</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">visited</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">n</span> <span class="o">=</span> <span class="n">i</span>
+                    <span class="k">break</span>
+
+            <span class="c"># Visited</span>
+            <span class="n">visit</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="BayesianNetwork.nodeInGraph"><a class="viewcode-back" href="../../../ProbPy.prob.html#ProbPy.prob.bn.BayesianNetwork.nodeInGraph">[docs]</a>    <span class="k">def</span> <span class="nf">nodeInGraph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Look for the node, if the node was not found, return None &quot;&quot;&quot;</span>
+
+        <span class="c"># Look for the node</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">i</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">i</span>
+
+        <span class="c"># If the node was not found, return None</span>
+        <span class="k">return</span> <span class="bp">None</span>
+</div>
+<div class="viewcode-block" id="BayesianNetwork.eliminationAsk"><a class="viewcode-back" href="../../../ProbPy.prob.html#ProbPy.prob.bn.BayesianNetwork.eliminationAsk">[docs]</a>    <span class="k">def</span> <span class="nf">eliminationAsk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query_var</span><span class="p">,</span> <span class="n">observed</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Executes the Elimination Ask algorithm, receiving a query variable (q)</span>
+<span class="sd">        and observations (E), returning a factor which corresponds to the</span>
+<span class="sd">        distribution P(q | E)</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">        query_var -- Random variable of type RandVar</span>
+<span class="sd">        observed  -- List of observations. Each element of the list should be</span>
+<span class="sd">                     a tuple, which first element is a RandVar and second</span>
+<span class="sd">                     element is the observed value for that variable</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; # Assuming X, Y and Z as vars and vz, vy as values of X and Y</span>
+<span class="sd">            &gt;&gt;&gt; observed = [(X, vx), (Y, vy)]</span>
+<span class="sd">            &gt;&gt;&gt; res = BN.eliminationAsk(Z, observed)</span>
+<span class="sd">            &gt;&gt;&gt; res # P(Z | X=vx, Y=vy)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">factors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="p">:</span>
+            <span class="c"># Append factor to factors list, removing observations</span>
+            <span class="n">factors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">makeFactor</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">factor</span><span class="p">,</span> <span class="n">observed</span><span class="p">))</span>
+
+            <span class="c"># If the variable is hidden sum it out of the factors</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isHidden</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">node</span><span class="p">,</span> <span class="n">query_var</span><span class="p">,</span> <span class="n">observed</span><span class="p">):</span>
+                <span class="n">factors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sumOut</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">node</span><span class="p">,</span> <span class="n">factors</span><span class="p">)</span>
+
+        <span class="c"># Calculate the product of every last factor</span>
+        <span class="n">prod</span> <span class="o">=</span> <span class="n">factors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">factors</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">prod</span> <span class="o">=</span> <span class="n">prod</span><span class="o">.</span><span class="n">mult</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="c"># Normalize and return</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">prod</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">query_var</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span>
+</div>
+<div class="viewcode-block" id="BayesianNetwork.makeFactor"><a class="viewcode-back" href="../../../ProbPy.prob.html#ProbPy.prob.bn.BayesianNetwork.makeFactor">[docs]</a>    <span class="k">def</span> <span class="nf">makeFactor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg_factor</span><span class="p">,</span> <span class="n">observed</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes a factor and instantiates what is observed</span>
+
+<span class="sd">        arg_factor -- Factor in question</span>
+<span class="sd">        observed   -- Array with observations following the convention of</span>
+<span class="sd">                    eliminationAsk method</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">fac</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">arg_factor</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">observed</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">fac</span><span class="o">.</span><span class="n">instVar</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">res</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">fac</span> <span class="o">=</span> <span class="n">res</span>
+
+        <span class="k">return</span> <span class="n">fac</span>
+</div>
+<div class="viewcode-block" id="BayesianNetwork.isHidden"><a class="viewcode-back" href="../../../ProbPy.prob.html#ProbPy.prob.bn.BayesianNetwork.isHidden">[docs]</a>    <span class="k">def</span> <span class="nf">isHidden</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">query_var</span><span class="p">,</span> <span class="n">observed</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if the variable is the query variable or has any observation. If</span>
+<span class="sd">        it doesn&#39;t, then the variable is hidden</span>
+
+<span class="sd">        var       -- RandVar object with variable that is being tests if it&#39;s</span>
+<span class="sd">                     hidden or not</span>
+<span class="sd">        query_var -- Query variable for the algorithm</span>
+<span class="sd">        observed  -- Array with observations following the convention of</span>
+<span class="sd">                     eliminationAsk method</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># If it is the query variable</span>
+        <span class="k">if</span> <span class="n">var</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">query_var</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="c"># If it is observed</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">observed</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">var</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="k">return</span> <span class="bp">True</span>
+</div>
+<div class="viewcode-block" id="BayesianNetwork.sumOut"><a class="viewcode-back" href="../../../ProbPy.prob.html#ProbPy.prob.bn.BayesianNetwork.sumOut">[docs]</a>    <span class="k">def</span> <span class="nf">sumOut</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">arg_factors</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sums the variable in var out, meaning that this function will return</span>
+<span class="sd">        the product of the factors in arg_factors and will take var out</span>
+
+<span class="sd">        var         -- RandVar object that will be summed out</span>
+<span class="sd">        arg_factors -- Factors which will have var summed out</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># Calculate the product of factors</span>
+        <span class="n">prod</span> <span class="o">=</span> <span class="n">arg_factors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">arg_factors</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">prod</span> <span class="o">=</span> <span class="n">prod</span><span class="o">.</span><span class="n">mult</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="c"># Get variables for marginal</span>
+        <span class="n">marg_vars</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">prod</span><span class="o">.</span><span class="n">rand_vars</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">var</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="n">marg_vars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="c"># Return the final factor in the form of a list</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">prod</span><span class="o">.</span><span class="n">marginal</span><span class="p">(</span><span class="n">marg_vars</span><span class="p">)]</span>
+
+</div></div>
+<div class="viewcode-block" id="BayesianNetworkArgEx"><a class="viewcode-back" href="../../../ProbPy.prob.html#ProbPy.prob.bn.BayesianNetworkArgEx">[docs]</a><span class="k">class</span> <span class="nc">BayesianNetworkArgEx</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Exception used if the nodes of the Bayesian Network don&#39;t form a DAG</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;Nodes for the construction of the Bayesian Network don&#39;t form a&quot;</span>
+             <span class="s">&quot;Direct Acyclic Graph&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">ProbPy  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Pedro Melgueira.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
