@@ -4,9 +4,6 @@ are used in the calculation, X and Y.
 """
 
 
-import sys
-sys.path.append('../ProbPy')
-
 from ProbPy.prob.factor import RandVar, Factor
 
 

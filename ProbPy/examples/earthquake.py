@@ -19,9 +19,6 @@ Their distributions are bellow.
 """
 
 
-import sys
-sys.path.append('../ProbPy')
-
 from ProbPy.prob.factor import RandVar, Factor
 from ProbPy.prob import bn
 

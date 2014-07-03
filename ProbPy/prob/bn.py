@@ -131,9 +131,9 @@ class BayesianNetwork:
         distribution P(q | E)
 
         :param query_var: Random variable of type RandVar
-        :param observed: List of observations. Each element of the list should be
-                     a tuple, which first element is a RandVar and second
-                     element is the observed value for that variable
+        :param observed: List of observations. Each element of the list should
+                         be a tuple, which first element is a RandVar and
+                         second element is the observed value for that variable
 
         Example:
             >>> # Assuming X, Y and Z as vars and vz, vy as values of X and Y
