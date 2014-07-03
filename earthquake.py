@@ -1,23 +1,43 @@
-from ProbPy.prob import factor
+"""
+This is an example of using ProbPy to define a simple Bayesian Network and
+executing the Elimination Ask algorithm. The network is defined like so:
+
+B   E
+ \ /
+  A
+ / \
+J   M
+
+Each node of the network corresponds with the following Random Variables:
+ * Burglary - P(B)
+ * Earthq   - P(E)
+ * Alarm    - P(A | B, E)
+ * John     - P(J | A)
+ * Mary     - P(M | A)
+
+Their distributions are bellow.
+"""
+
+from ProbPy.prob.factor import RandVar, Factor
 from ProbPy.prob import bn
 
 # These are the variables in the network. The first argument is the actual name
 # of the variable and the second is the domain of it
-burglary = factor.RandVar("burglary", ["True", "False"])
-earthq = factor.RandVar("earthq", ["True", "False"])
-alarm = factor.RandVar("alarm", ["True", "False"])
-john = factor.RandVar("john", ["True", "False"])
-mary = factor.RandVar("mary", ["True", "False"])
+burglary = RandVar("burglary", ["True", "False"])
+earthq = RandVar("earthq", ["True", "False"])
+alarm = RandVar("alarm", ["True", "False"])
+john = RandVar("john", ["True", "False"])
+mary = RandVar("mary", ["True", "False"])
 
 # These are the distributions. First argument are the variables, second is the
 # values in the distribution
-factor_burglary = factor.Factor([burglary], [0.001, 0.999])
-factor_earthq = factor.Factor([earthq], [0.002, 0.998])
-factor_alarm = factor.Factor([alarm, earthq, burglary], [
+factor_burglary = Factor([burglary], [0.001, 0.999])
+factor_earthq = Factor([earthq], [0.002, 0.998])
+factor_alarm = Factor([alarm, earthq, burglary], [
     0.95, 0.05, 0.94, 0.06, 0.29, 0.71, 0.001, 0.999
 ])
-factor_john = factor.Factor([john, alarm], [0.90, 0.10, 0.05, 0.95])
-factor_mary = factor.Factor([mary, alarm], [0.70, 0.30, 0.01, 0.99])
+factor_john = Factor([john, alarm], [0.90, 0.10, 0.05, 0.95])
+factor_mary = Factor([mary, alarm], [0.70, 0.30, 0.01, 0.99])
 
 # This array has the nodes of the network. Each element is a tuple. In each
 # tuple, the first argument is the variable of that node, the second is the

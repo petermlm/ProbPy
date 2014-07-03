@@ -8,10 +8,11 @@
 nosetests3
 
 # PEP8
-pep8 example.py
+pep8 earthquake.py
+pep8 bayes_theorem.py
 pep8 ProbPy/prob/*.py
 pep8 ProbPy/tests/*.py
 
 # Examples
-python3 example.py
-
+python3 earthquake.py
+python3 bayes_theorem.py
