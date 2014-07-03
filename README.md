@@ -8,7 +8,26 @@ The library can be used in the implementation of many algorithms such as Bayesia
 
 # Features
 
-TODO
+With ProbPy you can work with probability distributions. First define the Random Variables:
+
+    X = RandVar("X", ["T", "F"])
+    Y = RandVar("Y", ["T", "F"])
+
+After that, the factors representing probability distributions can be declared.
+
+    fy = Factor(Y, [0.2, 0.8])
+    fx_y = Factor([X, Y], [0.1, 0.9, 0.5, 0.5])
+
+Above, the first factor corresponds to a distribution `P(Y)` and the second to a distribution `P(X | Y)`.
+
+Having this you can calculate the product of those distribution to get the join `P(X, Y)`, and normalize that distribution to get `P(Y | X)`.
+
+    fy_x = (fx_y * fy).normalize(Y)
+
+This was the Bayes Theorem implemented using ProbPy. For more features check the examples and the documentation. The example can be executed with the commands:
+
+    python3 -m ProbPy.examples.earthquake
+    python3 -m ProbPy.examples.bayes_theorem
 
 # Examples
 
@@ -54,10 +73,6 @@ Finally the Elimination Ask algorithm can be called with a query variable and a 
 
 The observations are a list of tuples. Each tuple is a pair between a variable and it's observation in a specific situation.
 
-# Data Representation
-
-TODO
-
 # Contributing
 
 * This project is aimed to work with Python 3.
@@ -65,6 +80,8 @@ TODO
 * The project uses [PEP8](http://legacy.python.org/dev/peps/pep-0008) as a style guide. The tool [autopep8](https://pypi.python.org/pypi/autopep8/) may help in assuring the project follows the standards.
 
 * The code should have tests. Every test is implemented in the `bayes/test` directory an [nosetests](https://nose.readthedocs.org/en/latest/) is used run them. The run the tests use `nosetests3 bayes/test`.
+
+* The code should be documented. Documentation is done using Sphinx or written by hand when needed.
 
 # To Do
 
@@ -74,6 +91,6 @@ TODO
 
 * Implement *factorOp* algorithm using a parallel approach.
 
-* Make documentation out of doc strings.
-
 * The elimination Ask should be allowed to have more then one query variable.
+
+* Implement setup.py thing.
