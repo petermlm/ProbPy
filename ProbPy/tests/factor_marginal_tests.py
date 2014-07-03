@@ -1,4 +1,3 @@
-from ProbPy.prob.bn import *
 from nose.tools import with_setup, nottest
 
 from ProbPy.tests.factor_base import FactorBase
