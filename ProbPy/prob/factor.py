@@ -1,14 +1,5 @@
 """
-Contains
-========
-
-* RandVar
-* RandVarNameEx
-* RandVarDomainEx
-
-* Factor
-* FactorRandVarsEx
-* FactorValuesEx
+File that implements classes that represent Random Variables and Factors.
 """
 
 
@@ -34,9 +25,8 @@ class RandVar:
 
     def __init__(self, name, domain):
         """
-        Arguments:
-        name   -- String with the name of this variable
-        domain -- List with the domain of this variable
+        :param name: String with the name of this variable
+        :param domain: List with the domain of this variable
         """
 
         if type(name) != str:
@@ -95,10 +85,9 @@ class Factor:
 
     def __init__(self, rand_vars, values):
         """
-        Arguments:
-        rand_vars -- List of Random Variables of this factor, or single
+        :param rand_vars: List of Random Variables of this factor, or single
                      variable
-        values    -- Values of the factor
+        :param values: Values of the factor
         """
 
         # Assure the rand_vars argument is always a list
@@ -148,9 +137,8 @@ class Factor:
         Function used by others to implement a factor operation between self
         and another factor.
 
-        Arguments:
-        factor -- The other factor used for this operation
-        fun    -- Operation used between each element of the values
+        :param factor: The other factor used for this operation
+        :param fun: Operation used between each element of the values
         """
 
         res_rand_vars = []
@@ -235,11 +223,10 @@ class Factor:
         Scalar operation between factor and a scalar_value. The scalar is used
         in an operation, defined by fun, with the values of factor.
 
-        Arguments:
-        factor       -- The factor which values are going to be used as
+        :param factor: The factor which values are going to be used as
                         operands with scalar
-        scalar_value -- An int or float value to serve as an operand
-        fun          -- Function used in the operation, may be a lambda
+        :param scalar_value: An int or float value to serve as an operand
+        :param fun: Function used in the operation, may be a lambda
         """
 
         map_res = []
@@ -253,8 +240,7 @@ class Factor:
         Applies the logarithm function to the whole factor. The actual
         logarithm used in the one in Python's library
 
-        Arguments:
-        base -- Base of the logarithm
+        :param base: Base of the logarithm
         """
 
         fun = lambda x: math.log(x, base)
@@ -264,8 +250,7 @@ class Factor:
         """
         Calculates the power of the elements in the factor by p
 
-        Arguments:
-        p -- Values of power used
+        :param p: Values of power used
         """
 
         fun = lambda x: x**p
@@ -284,8 +269,7 @@ class Factor:
         Returns the result of applying a function the factor. Useful in the
         implementation of the log function
 
-        Arguments:
-        fun -- Function used in the mapping
+        :param fun: Function used in the mapping
         """
 
         map_res = []
@@ -386,9 +370,8 @@ class Factor:
         Instantiates a random variables of a factor. Instantiating variable X
         with value vx and Y with vy would yield f(X=vx, Y=vy, Z) = f(Z).
 
-        Arguments:
-        rand_vars -- List of variables to instantiate
-        insts     -- Value for each variable
+        :param rand_vars: List of variables to instantiate
+        :param insts: Value for each variable
 
         Note, the sizes of the lists must be the same. Variable rand_vars[k]
         will be instantiated with value insts[k].
@@ -416,9 +399,8 @@ class Factor:
         Same has instVar, but this method instantiates a single variable and
         it is the one used in the implementation of instVar.
 
-        Arguments:
-        rand_var -- Variable to instantiate
-        inst     -- Value for variable
+        :param rand_var: Variable to instantiate
+        :param inst: Value for variable
         """
 
         res_rand_vars = []
@@ -478,8 +460,7 @@ class Factor:
         If the factor f(X, Y) represents the distribution P(X | Y), the
         expected value calculated is E[X]
 
-        Arguments:
-        fun -- A function for the variable
+        :param fun: A function for the variable
 
         Examples:
             >>> X_factor = RandVar(X, ["T", "F"])

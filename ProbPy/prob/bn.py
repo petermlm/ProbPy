@@ -1,9 +1,5 @@
 """
-Contains
-========
-
-* BayesianNetworkNode
-* BayesianNetwork
+Implementation of a Bayesian Network with some algorithms
 """
 
 import copy
@@ -44,8 +40,7 @@ class BayesianNetwork:
         """
         Constructor for class BayesianNetwork
 
-        Argument:
-        network -- List of tuples, where each tuple represents a node. The
+        :param network: List of tuples, where each tuple represents a node. The
                    variable in each Node goes in the first element of the tuple
                    as a RandVar object. The factor for that variable goes into
                    the second element. The parents of the node go in  a list in
@@ -71,13 +66,6 @@ class BayesianNetwork:
         Y_factor -- P(Y | X)
         Z_factor -- P(Z | X)
         W_factor -- P(W | Y, Z)
-        """
-
-        """
-        self.network = []
-        for i in network:
-            node = BayesianNetworkNode(i[0], i[1], i[2])
-            self.network.append(node)
         """
 
         # Will have nodes after they are topologically sorted
@@ -142,9 +130,8 @@ class BayesianNetwork:
         and observations (E), returning a factor which corresponds to the
         distribution P(q | E)
 
-        Arguments:
-        query_var -- Random variable of type RandVar
-        observed  -- List of observations. Each element of the list should be
+        :param query_var: Random variable of type RandVar
+        :param observed: List of observations. Each element of the list should be
                      a tuple, which first element is a RandVar and second
                      element is the observed value for that variable
 
@@ -177,8 +164,8 @@ class BayesianNetwork:
         """
         Takes a factor and instantiates what is observed
 
-        arg_factor -- Factor in question
-        observed   -- Array with observations following the convention of
+        :param arg_factor: Factor in question
+        :param observed: Array with observations following the convention of
                     eliminationAsk method
         """
 
@@ -196,10 +183,10 @@ class BayesianNetwork:
         Checks if the variable is the query variable or has any observation. If
         it doesn't, then the variable is hidden
 
-        var       -- RandVar object with variable that is being tests if it's
+        :param var: RandVar object with variable that is being tests if it's
                      hidden or not
-        query_var -- Query variable for the algorithm
-        observed  -- Array with observations following the convention of
+        :param query_var: Query variable for the algorithm
+        :param observed: Array with observations following the convention of
                      eliminationAsk method
         """
 
@@ -219,8 +206,8 @@ class BayesianNetwork:
         Sums the variable in var out, meaning that this function will return
         the product of the factors in arg_factors and will take var out
 
-        var         -- RandVar object that will be summed out
-        arg_factors -- Factors which will have var summed out
+        :param var: RandVar object that will be summed out
+        :param arg_factors: Factors which will have var summed out
         """
 
         # Calculate the product of factors

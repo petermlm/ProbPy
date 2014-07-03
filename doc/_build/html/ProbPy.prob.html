@@ -60,12 +60,7 @@
 <h1>prob Package<a class="headerlink" href="#prob-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-ProbPy.prob.bn">
 <span id="bn-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">bn</span></tt> Module<a class="headerlink" href="#module-ProbPy.prob.bn" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="contains">
-<h3>Contains<a class="headerlink" href="#contains" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li>BayesianNetworkNode</li>
-<li>BayesianNetwork</li>
-</ul>
+<p>Implementation of a Bayesian Network with some algorithms</p>
 <dl class="class">
 <dt id="ProbPy.prob.bn.BayesianNetwork">
 <em class="property">class </em><tt class="descclassname">ProbPy.prob.bn.</tt><tt class="descname">BayesianNetwork</tt><big>(</big><em>network</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/bn.html#BayesianNetwork"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.bn.BayesianNetwork" title="Permalink to this definition">¶</a></dt>
@@ -78,12 +73,20 @@ for Bayesian inference and abstract their usage</p>
 <dd><p>Executes the Elimination Ask algorithm, receiving a query variable (q)
 and observations (E), returning a factor which corresponds to the
 distribution P(q | E)</p>
-<p>Arguments:
-query_var &#8211; Random variable of type RandVar
-observed  &#8211; List of observations. Each element of the list should be</p>
-<blockquote>
-<div>a tuple, which first element is a RandVar and second
-element is the observed value for that variable</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>query_var</strong> &#8211; Random variable of type RandVar</li>
+<li><strong>observed</strong> &#8211; List of observations. Each element of the list should be
+a tuple, which first element is a RandVar and second
+element is the observed value for that variable</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="docutils">
 <dt>Example:</dt>
 <dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Assuming X, Y and Z as vars and vz, vy as values of X and Y</span>
@@ -101,24 +104,40 @@ element is the observed value for that variable</div></blockquote>
 <tt class="descname">isHidden</tt><big>(</big><em>var</em>, <em>query_var</em>, <em>observed</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/bn.html#BayesianNetwork.isHidden"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.bn.BayesianNetwork.isHidden" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if the variable is the query variable or has any observation. If
 it doesn&#8217;t, then the variable is hidden</p>
-<dl class="docutils">
-<dt>var       &#8211; RandVar object with variable that is being tests if it&#8217;s</dt>
-<dd>hidden or not</dd>
-</dl>
-<p>query_var &#8211; Query variable for the algorithm
-observed  &#8211; Array with observations following the convention of</p>
-<blockquote>
-<div>eliminationAsk method</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>var</strong> &#8211; RandVar object with variable that is being tests if it&#8217;s
+hidden or not</li>
+<li><strong>query_var</strong> &#8211; Query variable for the algorithm</li>
+<li><strong>observed</strong> &#8211; Array with observations following the convention of
+eliminationAsk method</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="ProbPy.prob.bn.BayesianNetwork.makeFactor">
 <tt class="descname">makeFactor</tt><big>(</big><em>arg_factor</em>, <em>observed</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/bn.html#BayesianNetwork.makeFactor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.bn.BayesianNetwork.makeFactor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes a factor and instantiates what is observed</p>
-<p>arg_factor &#8211; Factor in question
-observed   &#8211; Array with observations following the convention of</p>
-<blockquote>
-<div>eliminationAsk method</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>arg_factor</strong> &#8211; Factor in question</li>
+<li><strong>observed</strong> &#8211; Array with observations following the convention of
+eliminationAsk method</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -132,8 +151,18 @@ observed   &#8211; Array with observations following the convention of</p>
 <tt class="descname">sumOut</tt><big>(</big><em>var</em>, <em>arg_factors</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/bn.html#BayesianNetwork.sumOut"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.bn.BayesianNetwork.sumOut" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sums the variable in var out, meaning that this function will return
 the product of the factors in arg_factors and will take var out</p>
-<p>var         &#8211; RandVar object that will be summed out
-arg_factors &#8211; Factors which will have var summed out</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>var</strong> &#8211; RandVar object that will be summed out</li>
+<li><strong>arg_factors</strong> &#8211; Factors which will have var summed out</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -160,19 +189,9 @@ it&#8217;s parents.</p>
 </dd></dl>
 
 </div>
-</div>
 <div class="section" id="module-ProbPy.prob.factor">
 <span id="factor-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">factor</span></tt> Module<a class="headerlink" href="#module-ProbPy.prob.factor" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id1">
-<h3>Contains<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li>RandVar</li>
-<li>RandVarNameEx</li>
-<li>RandVarDomainEx</li>
-<li>Factor</li>
-<li>FactorRandVarsEx</li>
-<li>FactorValuesEx</li>
-</ul>
+<p>File that implements classes that represent Random Variables and Factors.</p>
 <dl class="class">
 <dt id="ProbPy.prob.factor.Factor">
 <em class="property">class </em><tt class="descclassname">ProbPy.prob.factor.</tt><tt class="descname">Factor</tt><big>(</big><em>rand_vars</em>, <em>values</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/factor.html#Factor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.factor.Factor" title="Permalink to this definition">¶</a></dt>
@@ -216,8 +235,14 @@ distribution. Suppose the factor f(X) would represent the distribution
 P(X), this method would calculate the expected value of X, E[X].</p>
 <p>If the factor f(X, Y) represents the distribution P(X | Y), the
 expected value calculated is E[X]</p>
-<p>Arguments:
-fun &#8211; A function for the variable</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fun</strong> &#8211; A function for the variable</td>
+</tr>
+</tbody>
+</table>
 <dl class="docutils">
 <dt>Examples:</dt>
 <dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">X_factor</span> <span class="o">=</span> <span class="n">RandVar</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="p">[</span><span class="s">&quot;T&quot;</span><span class="p">,</span> <span class="s">&quot;F&quot;</span><span class="p">])</span>
@@ -236,9 +261,18 @@ fun &#8211; A function for the variable</p>
 <tt class="descname">factorOp</tt><big>(</big><em>factor</em>, <em>fun</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/factor.html#Factor.factorOp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.factor.Factor.factorOp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function used by others to implement a factor operation between self
 and another factor.</p>
-<p>Arguments:
-factor &#8211; The other factor used for this operation
-fun    &#8211; Operation used between each element of the values</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>factor</strong> &#8211; The other factor used for this operation</li>
+<li><strong>fun</strong> &#8211; Operation used between each element of the values</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -251,9 +285,18 @@ fun    &#8211; Operation used between each element of the values</p>
 <tt class="descname">instVar</tt><big>(</big><em>rand_vars</em>, <em>insts</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/factor.html#Factor.instVar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.factor.Factor.instVar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Instantiates a random variables of a factor. Instantiating variable X
 with value vx and Y with vy would yield f(X=vx, Y=vy, Z) = f(Z).</p>
-<p>Arguments:
-rand_vars &#8211; List of variables to instantiate
-insts     &#8211; Value for each variable</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rand_vars</strong> &#8211; List of variables to instantiate</li>
+<li><strong>insts</strong> &#8211; Value for each variable</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <p>Note, the sizes of the lists must be the same. Variable rand_vars[k]
 will be instantiated with value insts[k].</p>
 </dd></dl>
@@ -263,9 +306,18 @@ will be instantiated with value insts[k].</p>
 <tt class="descname">instVarSingle</tt><big>(</big><em>rand_var</em>, <em>inst</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/factor.html#Factor.instVarSingle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.factor.Factor.instVarSingle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Same has instVar, but this method instantiates a single variable and
 it is the one used in the implementation of instVar.</p>
-<p>Arguments:
-rand_var &#8211; Variable to instantiate
-inst     &#8211; Value for variable</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rand_var</strong> &#8211; Variable to instantiate</li>
+<li><strong>inst</strong> &#8211; Value for variable</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -273,8 +325,14 @@ inst     &#8211; Value for variable</p>
 <tt class="descname">log</tt><big>(</big><em>base</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/factor.html#Factor.log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.factor.Factor.log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Applies the logarithm function to the whole factor. The actual
 logarithm used in the one in Python&#8217;s library</p>
-<p>Arguments:
-base &#8211; Base of the logarithm</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>base</strong> &#8211; Base of the logarithm</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -282,8 +340,14 @@ base &#8211; Base of the logarithm</p>
 <tt class="descname">map</tt><big>(</big><em>fun</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/factor.html#Factor.map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.factor.Factor.map" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the result of applying a function the factor. Useful in the
 implementation of the log function</p>
-<p>Arguments:
-fun &#8211; Function used in the mapping</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fun</strong> &#8211; Function used in the mapping</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -313,8 +377,14 @@ P(X, Y), normalizing for X will yield P(X | Y).</p>
 <dt id="ProbPy.prob.factor.Factor.pow">
 <tt class="descname">pow</tt><big>(</big><em>p</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/factor.html#Factor.pow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.factor.Factor.pow" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the power of the elements in the factor by p</p>
-<p>Arguments:
-p &#8211; Values of power used</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>p</strong> &#8211; Values of power used</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -322,12 +392,20 @@ p &#8211; Values of power used</p>
 <tt class="descname">scalar</tt><big>(</big><em>factor</em>, <em>scalar_value</em>, <em>fun</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/factor.html#Factor.scalar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.factor.Factor.scalar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Scalar operation between factor and a scalar_value. The scalar is used
 in an operation, defined by fun, with the values of factor.</p>
-<p>Arguments:
-factor       &#8211; The factor which values are going to be used as</p>
-<blockquote>
-<div>operands with scalar</div></blockquote>
-<p>scalar_value &#8211; An int or float value to serve as an operand
-fun          &#8211; Function used in the operation, may be a lambda</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>factor</strong> &#8211; The factor which values are going to be used as
+operands with scalar</li>
+<li><strong>scalar_value</strong> &#8211; An int or float value to serve as an operand</li>
+<li><strong>fun</strong> &#8211; Function used in the operation, may be a lambda</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -396,7 +474,6 @@ even types that are other objects.</p>
 
 </div>
 </div>
-</div>
 
 
           </div>
@@ -407,14 +484,8 @@ even types that are other objects.</p>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">prob Package</a><ul>
-<li><a class="reference internal" href="#module-ProbPy.prob.bn"><tt class="docutils literal"><span class="pre">bn</span></tt> Module</a><ul>
-<li><a class="reference internal" href="#contains">Contains</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-ProbPy.prob.factor"><tt class="docutils literal"><span class="pre">factor</span></tt> Module</a><ul>
-<li><a class="reference internal" href="#id1">Contains</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#module-ProbPy.prob.bn"><tt class="docutils literal"><span class="pre">bn</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-ProbPy.prob.factor"><tt class="docutils literal"><span class="pre">factor</span></tt> Module</a></li>
 </ul>
 </li>
 </ul>
