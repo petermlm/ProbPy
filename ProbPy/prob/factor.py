@@ -25,7 +25,7 @@ class RandVar:
 
     def __init__(self, name, domain):
         """
-        :param name: String with the name of this variable
+        :param name:   String with the name of this variable
         :param domain: List with the domain of this variable
         """
 
@@ -86,8 +86,8 @@ class Factor:
     def __init__(self, rand_vars, values):
         """
         :param rand_vars: List of Random Variables of this factor, or single
-                     variable
-        :param values: Values of the factor
+                          variable
+        :param values:    Values of the factor
         """
 
         # Assure the rand_vars argument is always a list
@@ -109,25 +109,45 @@ class Factor:
         self.values = values
 
     def mult(self, factor):
-        """ Multiplication operation for factorOp """
+        """
+        Multiplication operation for factorOp
+
+        :param factor: Other factor in operation
+        :returns: Result of operation
+        """
 
         fun = lambda x, y: x*y
         return self.factorOp(factor, fun)
 
     def div(self, factor):
-        """ Division operation for factorOp """
+        """
+        Division operation for factorOp
+
+        :param factor: Other factor in operation
+        :returns:      Result of operation
+        """
 
         fun = lambda x, y: x/y
         return self.factorOp(factor, fun)
 
     def add(self, factor):
-        """ Addition operation for factorOp """
+        """
+        Addition operation for factorOp
+
+        :param factor: Other factor in operation
+        :returns:      Result of operation
+        """
 
         fun = lambda x, y: x+y
         return self.factorOp(factor, fun)
 
     def sub(self, factor):
-        """ Subtraction operation for factorOp """
+        """
+        Subtraction operation for factorOp
+
+        :param factor: Other factor in operation
+        :returns:      Result of operation
+        """
 
         fun = lambda x, y: x-y
         return self.factorOp(factor, fun)
@@ -138,7 +158,8 @@ class Factor:
         and another factor.
 
         :param factor: The other factor used for this operation
-        :param fun: Operation used between each element of the values
+        :param fun:    Operation used between each element of the values
+        :returns:      Result of operation between self and factor using fun
         """
 
         res_rand_vars = []
@@ -223,10 +244,12 @@ class Factor:
         Scalar operation between factor and a scalar_value. The scalar is used
         in an operation, defined by fun, with the values of factor.
 
-        :param factor: The factor which values are going to be used as
-                        operands with scalar
+        :param factor:       The factor which values are going to be used as
+                             operands with scalar
         :param scalar_value: An int or float value to serve as an operand
-        :param fun: Function used in the operation, may be a lambda
+        :param fun:          Function used in the operation, may be a lambda
+        :returns:            Result of mapping scalar_value to factor's values
+                             using fun
         """
 
         map_res = []
@@ -241,6 +264,8 @@ class Factor:
         logarithm used in the one in Python's library
 
         :param base: Base of the logarithm
+        :returns:    Apply the logarithm function with base given by parameter
+                     to the values of self
         """
 
         fun = lambda x: math.log(x, base)
@@ -251,6 +276,7 @@ class Factor:
         Calculates the power of the elements in the factor by p
 
         :param p: Values of power used
+        :returns: Power of the elements in the factor by p
         """
 
         fun = lambda x: x**p
@@ -260,16 +286,19 @@ class Factor:
         """
         Applies the exp function to the whole factor. Exp implemented by
         Python's library
+
+        :returns: Exp function to the factor
         """
 
         return self.map(math.exp)
 
     def map(self, fun):
         """
-        Returns the result of applying a function the factor. Useful in the
-        implementation of the log function
+        Returns the result of applying a function the factor. Used in the
+        implementation of the log function, exp and power
 
         :param fun: Function used in the mapping
+        :returns:   Result of applying fun to the factors values
         """
 
         map_res = []
@@ -283,6 +312,17 @@ class Factor:
         Calculates the marginal of a factor for a list of random variables.
         For example, if XY_factor is the distribution P(X, Y). Calculating the
         marginal of X will give P(X).
+
+        :param arg_rand_vars: List of random variables that will make up the
+                              returning factor
+        :returns:             Marginal factor
+
+        Examples:
+            >>> # Assuming XYZ_factor as factor of P(X, Y, Z)
+            >>> XY_factor = XYZ_factor.marginal([X, Y])
+            >>> XY_factor # Will yield marginal P(X, Y)
+            >>> X_factor = XYZ_factor.marginal(X)
+            >>> X_factor # Will yield marginal P(X)
         """
 
         res_rand_vars = []
@@ -336,7 +376,19 @@ class Factor:
         Normalizes the factor for random variables in the distribution. If the
         factor of variable X has values [1, 3], the normalization will yield
         the [1/4, 3/4], distribution. If a factor represents the distribution
-        P(X, Y), normalizing for X will yield P(X | Y).
+        P(X, Y), normalizing for X will yield P(X | Y), which would be similar
+        to make the division P(X, Y) / P(Y) with the advantage that the
+        distribution P(Y) doesn't need to be known or calculated before
+
+        :param arg_rand_vars: List of random variables to normalize
+        :returns:             Normalized factor
+
+        Examples:
+            >>> # Assuming XYZ_factor as factor of P(X, Y, Z)
+            >>> XY_Z_factor = XYZ_factor.normalize([X, Y])
+            >>> XY_Z_factor # Will yield conditional distribution P(X, Y | Z)
+            >>> X_YZ_factor = XYZ_factor.normalize(X)
+            >>> X_YZ_factor # Will yield conditional distribution P(X | Y, Z)
         """
 
         marg_vars = []
@@ -371,7 +423,9 @@ class Factor:
         with value vx and Y with vy would yield f(X=vx, Y=vy, Z) = f(Z).
 
         :param rand_vars: List of variables to instantiate
-        :param insts: Value for each variable
+        :param insts:     Value for each variable
+        :returns:         Factor equivalent to self but lacking variables in
+                          rand_vars, which were initialized
 
         Note, the sizes of the lists must be the same. Variable rand_vars[k]
         will be instantiated with value insts[k].
@@ -400,7 +454,8 @@ class Factor:
         it is the one used in the implementation of instVar.
 
         :param rand_var: Variable to instantiate
-        :param inst: Value for variable
+        :param inst:     Value for variable
+        :returns:        Factor with variable in rand_var instantiated
         """
 
         res_rand_vars = []
@@ -460,7 +515,8 @@ class Factor:
         If the factor f(X, Y) represents the distribution P(X | Y), the
         expected value calculated is E[X]
 
-        :param fun: A function for the variable
+        :param fun: A function for the variable.
+        :returns:   Expected value of factor
 
         Examples:
             >>> X_factor = RandVar(X, ["T", "F"])
@@ -490,12 +546,21 @@ class Factor:
         return res
 
     def varInFactor(self, rand_var):
+        """
+        Returns true if the variable rand_var is in the factor's variables
+        """
+
         for i in self.rand_vars:
             if i.name == rand_var.name:
                 return True
         return False
 
     def getValuesListSize(self, rand_vars):
+        """
+        Calculates the size of the values list of a factor with the variables
+        in rand_vars
+        """
+
         values_size = 1
         for i in rand_vars:
             values_size *= len(i.domain)
