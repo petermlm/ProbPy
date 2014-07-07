@@ -19,7 +19,8 @@ Their distributions are bellow.
 """
 
 
-from ProbPy.prob.factor import RandVar, Factor
+from ProbPy.prob.rand_var import RandVar
+from ProbPy.prob.factor import Factor
 from ProbPy.prob import bn
 
 
