@@ -16,19 +16,33 @@ class FactorBase:
         self.K = RandVar("K", ["T", "F"])
         self.T = RandVar("T", ["T", "F"])
 
+        # Domains
+        self.X_domain = list(range(1, 3))
+        self.Y_domain = list(range(3, 5))
+        self.Z_domain = list(range(5, 7))
+
+        self.XY_domain = list(range(1, 5))
+        self.XZ_domain = list(range(5, 9))
+        self.ZW_domain = list(range(9, 13))
+
+        self.XYZ_domain = list(range(1, 9))
+        self.XYW_domain = list(range(9, 17))
+        self.XKW_domain = list(range(17, 25))
+        self.TKW_domain = list(range(25, 33))
+
         # Factors
-        self.X_factor = Factor(self.X, list(range(1, 3)))
-        self.Y_factor = Factor(self.Y, list(range(3, 5)))
-        self.Z_factor = Factor(self.Z, list(range(5, 7)))
+        self.X_factor = Factor(self.X, self.X_domain)
+        self.Y_factor = Factor(self.Y, self.Y_domain)
+        self.Z_factor = Factor(self.Z, self.Z_domain)
 
-        self.XY_factor = Factor([self.X, self.Y], list(range(1, 5)))
-        self.XZ_factor = Factor([self.X, self.Z], list(range(5, 9)))
-        self.ZW_factor = Factor([self.Z, self.W], list(range(9, 13)))
+        self.XY_factor = Factor([self.X, self.Y], self.XY_domain)
+        self.XZ_factor = Factor([self.X, self.Z], self.XZ_domain)
+        self.ZW_factor = Factor([self.Z, self.W], self.ZW_domain)
 
-        self.XYZ_factor = Factor([self.X, self.Y, self.Z], list(range(1, 9)))
-        self.XYW_factor = Factor([self.X, self.Y, self.W], list(range(9, 17)))
-        self.XKW_factor = Factor([self.X, self.K, self.W], list(range(17, 25)))
-        self.TKW_factor = Factor([self.T, self.K, self.W], list(range(25, 33)))
+        self.XYZ_factor = Factor([self.X, self.Y, self.Z], self.XYZ_domain)
+        self.XYW_factor = Factor([self.X, self.Y, self.W], self.XYW_domain)
+        self.XKW_factor = Factor([self.X, self.K, self.W], self.XKW_domain)
+        self.TKW_factor = Factor([self.T, self.K, self.W], self.TKW_domain)
 
         # Factors for normalization
         self.X_factor_n = Factor(self.X, [1, 2])
