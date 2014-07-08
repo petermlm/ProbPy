@@ -184,3 +184,24 @@ class TestFactorInstVar(FactorBase):
         assert(res_FTF.rand_vars == [] and res_FTF.values == [6])
         assert(res_TFF.rand_vars == [] and res_TFF.values == [7])
         assert(res_FFF.rand_vars == [] and res_FFF.values == [8])
+
+    def instVar_test_11(self):
+        """
+        If the argument is not well defined by having a different size of
+        variables to instantiate and vales for each variable
+        """
+
+        res = self.XY_factor.instVar([self.X], ["T", "T"])
+        assert(res == None)
+
+        res = self.XY_factor.instVar([self.Y, self.X], ["T"])
+        assert(res == None)
+
+    def instVar_test_12(self):
+        """
+        If the values is not in the domain of the variable, it should return
+        none
+        """
+
+        res = self.X_factor.instVar(self.X, "n")
+        assert(res == None)
