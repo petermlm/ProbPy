@@ -24,8 +24,8 @@ class TestFactorLPE(FactorBase):
         assert(res_10.values == list(map(math.log, self.X_domain, [10]*s)) and
                res_10.rand_vars == [self.X])
 
-        assert(res_e.values == list(map(math.log, self.X_domain, [math.e]*s)) and
-               res_e.rand_vars == [self.X])
+        assert(res_e.values == list(map(math.log, self.X_domain, [math.e]*s))
+               and res_e.rand_vars == [self.X])
 
     def lpe_test_log_1(self):
         """
@@ -46,8 +46,8 @@ class TestFactorLPE(FactorBase):
         assert(res_10.values == list(map(math.log, self.XY_domain, [10]*s)) and
                res_10.rand_vars == [self.X, self.Y])
 
-        assert(res_e.values == list(map(math.log, self.XY_domain, [math.e]*s)) and
-               res_e.rand_vars == [self.X, self.Y])
+        assert(res_e.values == list(map(math.log, self.XY_domain, [math.e]*s))
+               and res_e.rand_vars == [self.X, self.Y])
 
     def lpe_test_log_2(self):
         """
@@ -65,11 +65,11 @@ class TestFactorLPE(FactorBase):
         assert(res_2.values == list(map(math.log, self.XYZ_domain, [2]*s)) and
                res_2.rand_vars == [self.X, self.Y, self.Z])
 
-        assert(res_10.values == list(map(math.log, self.XYZ_domain, [10]*s)) and
-               res_10.rand_vars == [self.X, self.Y, self.Z])
+        assert(res_10.values == list(map(math.log, self.XYZ_domain, [10]*s))
+               and res_10.rand_vars == [self.X, self.Y, self.Z])
 
-        assert(res_e.values == list(map(math.log, self.XYZ_domain, [math.e]*s)) and
-               res_e.rand_vars == [self.X, self.Y, self.Z])
+        assert(res_e.values == list(map(math.log, self.XYZ_domain, [math.e]*s))
+               and res_e.rand_vars == [self.X, self.Y, self.Z])
 
     def lpe_test_pow_0(self):
         """
@@ -90,8 +90,8 @@ class TestFactorLPE(FactorBase):
         assert(res_10.values == list(map(math.pow, self.X_domain, [10]*s)) and
                res_10.rand_vars == [self.X])
 
-        assert(res_e.values == list(map(math.pow, self.X_domain, [math.e]*s)) and
-               res_e.rand_vars == [self.X])
+        assert(res_e.values == list(map(math.pow, self.X_domain, [math.e]*s))
+               and res_e.rand_vars == [self.X])
 
     def lpe_test_pow_1(self):
         """
@@ -112,8 +112,8 @@ class TestFactorLPE(FactorBase):
         assert(res_10.values == list(map(math.pow, self.XY_domain, [10]*s)) and
                res_10.rand_vars == [self.X, self.Y])
 
-        assert(res_e.values == list(map(math.pow, self.XY_domain, [math.e]*s)) and
-               res_e.rand_vars == [self.X, self.Y])
+        assert(res_e.values == list(map(math.pow, self.XY_domain, [math.e]*s))
+               and res_e.rand_vars == [self.X, self.Y])
 
     def lpe_test_pow_2(self):
         """
@@ -131,11 +131,11 @@ class TestFactorLPE(FactorBase):
         assert(res_2.values == list(map(math.pow, self.XYZ_domain, [2]*s)) and
                res_2.rand_vars == [self.X, self.Y, self.Z])
 
-        assert(res_10.values == list(map(math.pow, self.XYZ_domain, [10]*s)) and
-               res_10.rand_vars == [self.X, self.Y, self.Z])
+        assert(res_10.values == list(map(math.pow, self.XYZ_domain, [10]*s))
+               and res_10.rand_vars == [self.X, self.Y, self.Z])
 
-        assert(res_e.values == list(map(math.pow, self.XYZ_domain, [math.e]*s)) and
-               res_e.rand_vars == [self.X, self.Y, self.Z])
+        assert(res_e.values == list(map(math.pow, self.XYZ_domain, [math.e]*s))
+               and res_e.rand_vars == [self.X, self.Y, self.Z])
 
     def lpe_test_exp_0(self):
         """

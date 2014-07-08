@@ -192,10 +192,10 @@ class TestFactorInstVar(FactorBase):
         """
 
         res = self.XY_factor.instVar([self.X], ["T", "T"])
-        assert(res == None)
+        assert(res is None)
 
         res = self.XY_factor.instVar([self.Y, self.X], ["T"])
-        assert(res == None)
+        assert(res is None)
 
     def instVar_test_12(self):
         """
@@ -204,4 +204,4 @@ class TestFactorInstVar(FactorBase):
         """
 
         res = self.X_factor.instVar(self.X, "n")
-        assert(res == None)
+        assert(res is None)
