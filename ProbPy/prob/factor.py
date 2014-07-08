@@ -1,5 +1,5 @@
 """
-File that implements classes that represent Random Variables and Factors.
+File that implements the Factor class
 """
 
 
@@ -241,7 +241,7 @@ class Factor:
         for i in self.values:
             map_res.append(fun(i))
 
-        return Factor(factor.rand_vars, list(map_res))
+        return Factor(self.rand_vars, list(map_res))
 
     def marginal(self, arg_rand_vars):
         """
