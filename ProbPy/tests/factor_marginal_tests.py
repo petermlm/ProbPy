@@ -1,9 +1,9 @@
 from nose.tools import with_setup, nottest
 
-from ProbPy.tests.factor_base import FactorBase
+from ProbPy.tests.test_base import TestBase
 
 
-class TestMarginalMult(FactorBase):
+class TestMarginalMult(TestBase):
     def marginal_test_0(self):
         """
         X, f(X)

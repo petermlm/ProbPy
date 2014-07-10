@@ -30,9 +30,9 @@ def entropy(factor, base=2):
 
 def kullbackLeiblerDistance(fac1, fac2, base=2):
     """
-    Calculates the Kullback-Leibler Distance between fac1 and fac2. The factors should represent
-    probability distributions with the same variables, like P(X) and Q(X), or
-    P(X, Y) and Q(X, Y)
+    Calculates the Kullback-Leibler Distance between fac1 and fac2. The factors
+    should represent probability distributions with the same variables, like
+    P(X) and Q(X), or P(X, Y) and Q(X, Y)
 
     :param fac1: First factor in operation
     :param fac2: Second factor in operation

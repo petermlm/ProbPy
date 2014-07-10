@@ -2,7 +2,7 @@ from ProbPy.prob.rand_var import RandVar
 from ProbPy.prob.factor import Factor
 
 
-class FactorBase:
+class TestBase:
     def __init__(self):
         # Scalars
         self.scalar = 10

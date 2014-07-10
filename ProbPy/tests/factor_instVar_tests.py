@@ -1,9 +1,9 @@
 from nose.tools import with_setup, nottest
 
-from ProbPy.tests.factor_base import FactorBase
+from ProbPy.tests.test_base import TestBase
 
 
-class TestFactorInstVar(FactorBase):
+class TestFactorInstVar(TestBase):
     def instVar_test_0(self):
         """
         f(X=v)

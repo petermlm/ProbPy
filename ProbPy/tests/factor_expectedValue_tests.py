@@ -1,9 +1,9 @@
 from nose.tools import with_setup, nottest, assert_almost_equal
 
-from ProbPy.tests.factor_base import FactorBase
+from ProbPy.tests.test_base import TestBase
 
 
-class TestFactorExpectedValue(FactorBase):
+class TestFactorExpectedValue(TestBase):
     def expected_value_test_0(self):
         """
         E[X]

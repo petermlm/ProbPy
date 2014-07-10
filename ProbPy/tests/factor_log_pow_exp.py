@@ -1,10 +1,10 @@
 from nose.tools import with_setup, nottest
 
-from ProbPy.tests.factor_base import FactorBase
+from ProbPy.tests.test_base import TestBase
 import math
 
 
-class TestFactorLPE(FactorBase):
+class TestFactorLPE(TestBase):
     def lpe_test_log_0(self):
         """
         log(f(X), 2)

@@ -3,13 +3,13 @@ from ProbPy.prob.rand_var import RandVar
 from ProbPy.prob.factor import Factor
 from ProbPy.prob.inf_theory import *
 
-from ProbPy.tests.factor_base import FactorBase
+from ProbPy.tests.test_base import TestBase
 import math
 
 
-class TestInfTheoryValue(FactorBase):
+class TestInfTheoryValue(TestBase):
     def __init__(self):
-        FactorBase.__init__(self)
+        TestBase.__init__(self)
 
         # factors for information theory testing
         self.fX1 = Factor(self.X, [0.5, 0.5])
