@@ -62,7 +62,7 @@ def ex1():
            p
         0 --- 0
           \ / 1-p
-           \  
+           \
           / \ 1-p
         1 --- 1
            p
@@ -109,6 +109,8 @@ def ex3():
 
     print(ChannelCapacity(Input, Output, Prior, Channel))
 
-ex1()
-ex2()
-ex3()
+
+if __name__ == "__main__":
+    ex1()
+    ex2()
+    ex3()
