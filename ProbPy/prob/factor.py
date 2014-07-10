@@ -218,15 +218,22 @@ class Factor:
         fun = lambda x: x**p
         return self.map(fun)
 
-    def exp(self):
+    def exp(self, base=None):
         """
-        Applies the exp function to the whole factor. Exp implemented by
-        Python's library
+        Applies the exp function to the whole factor. The base of exp is given
+        by parameter. If omitted, the Exp implemented by Python's library is
+        used
 
-        :returns: Exp function to the factor
+        :param base: The base of the exp
+        :returns:    Exp function to the factor
         """
 
-        return self.map(math.exp)
+        if base is None:
+            fun = lambda x: math.exp(x)
+        else:
+            fun = lambda x: base ** x
+
+        return self.map(fun)
 
     def map(self, fun):
         """

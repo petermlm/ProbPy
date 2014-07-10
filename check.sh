@@ -15,3 +15,4 @@ pep8 ProbPy/examples/*.py
 # Examples
 python3 -m ProbPy.examples.earthquake
 python3 -m ProbPy.examples.bayes_theorem
+python3 -m ProbPy.examples.channel_capacity
