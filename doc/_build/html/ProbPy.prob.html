@@ -25,10 +25,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="ProbPy  documentation" href="index.html" />
-    <link rel="up" title="ProbPy Package" href="ProbPy.html" />
-    <link rel="next" title="tests Package" href="ProbPy.tests.html" />
-    <link rel="prev" title="ProbPy Package" href="ProbPy.html" /> 
+    <link rel="top" title="ProbPy  documentation" href="index.html" /> 
   </head>
   <body>
     <div class="related">
@@ -40,14 +37,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="ProbPy.tests.html" title="tests Package"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="ProbPy.html" title="ProbPy Package"
-             accesskey="P">previous</a> |</li>
-        <li><a href="index.html">ProbPy  documentation</a> &raquo;</li>
-          <li><a href="ProbPy.html" accesskey="U">ProbPy Package</a> &raquo;</li> 
+        <li><a href="index.html">ProbPy  documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -191,7 +181,7 @@ it&#8217;s parents.</p>
 </div>
 <div class="section" id="module-ProbPy.prob.factor">
 <span id="factor-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">factor</span></tt> Module<a class="headerlink" href="#module-ProbPy.prob.factor" title="Permalink to this headline">¶</a></h2>
-<p>File that implements classes that represent Random Variables and Factors.</p>
+<p>File that implements the Factor class</p>
 <dl class="class">
 <dt id="ProbPy.prob.factor.Factor">
 <em class="property">class </em><tt class="descclassname">ProbPy.prob.factor.</tt><tt class="descname">Factor</tt><big>(</big><em>rand_vars</em>, <em>values</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/factor.html#Factor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.factor.Factor" title="Permalink to this definition">¶</a></dt>
@@ -241,14 +231,17 @@ multi dimensional matrix that represents the factor.</p>
 
 <dl class="method">
 <dt id="ProbPy.prob.factor.Factor.exp">
-<tt class="descname">exp</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/factor.html#Factor.exp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.factor.Factor.exp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Applies the exp function to the whole factor. Exp implemented by
-Python&#8217;s library</p>
+<tt class="descname">exp</tt><big>(</big><em>base=None</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/factor.html#Factor.exp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.factor.Factor.exp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies the exp function to the whole factor. The base of exp is given
+by parameter. If omitted, the Exp implemented by Python&#8217;s library is
+used</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Exp function to the factor</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>base</strong> &#8211; The base of the exp</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Exp function to the factor</td>
 </tr>
 </tbody>
 </table>
@@ -556,9 +549,64 @@ something other then random variables.</p>
 or floats.</p>
 </dd></dl>
 
+</div>
+<div class="section" id="module-ProbPy.prob.inf_theory">
+<span id="inf-theory-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">inf_theory</span></tt> Module<a class="headerlink" href="#module-ProbPy.prob.inf_theory" title="Permalink to this headline">¶</a></h2>
+<p>File that implements Information Theory operations over factors</p>
+<dl class="function">
+<dt id="ProbPy.prob.inf_theory.entropy">
+<tt class="descclassname">ProbPy.prob.inf_theory.</tt><tt class="descname">entropy</tt><big>(</big><em>factor</em>, <em>base=2</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/inf_theory.html#entropy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.inf_theory.entropy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the entropy of a facto. If the factor represents the
+distribution P(X), returns entropy H(X). If the factor represents P(X, Y),
+returns the join entropy H(X, Y)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>factor</strong> &#8211; A factor for which the entropy is going to be calculated</li>
+<li><strong>base</strong> &#8211; The base of the logarithm in the operation. Default is 2</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the entropy</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ProbPy.prob.inf_theory.kullbackLeiblerDistance">
+<tt class="descclassname">ProbPy.prob.inf_theory.</tt><tt class="descname">kullbackLeiblerDistance</tt><big>(</big><em>fac1</em>, <em>fac2</em>, <em>base=2</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/inf_theory.html#kullbackLeiblerDistance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.inf_theory.kullbackLeiblerDistance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the Kullback-Leibler Distance between fac1 and fac2. The factors
+should represent probability distributions with the same variables, like
+P(X) and Q(X), or P(X, Y) and Q(X, Y)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fac1</strong> &#8211; First factor in operation</li>
+<li><strong>fac2</strong> &#8211; Second factor in operation</li>
+<li><strong>base</strong> &#8211; Base of logarithms in the operations, defaults to 2</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Kullback-Leibler Distance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ProbPy.prob.rand_var">
+<span id="rand-var-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">rand_var</span></tt> Module<a class="headerlink" href="#module-ProbPy.prob.rand_var" title="Permalink to this headline">¶</a></h2>
+<p>File that implements the RandVar (Random Variable) class</p>
 <dl class="class">
-<dt id="ProbPy.prob.factor.RandVar">
-<em class="property">class </em><tt class="descclassname">ProbPy.prob.factor.</tt><tt class="descname">RandVar</tt><big>(</big><em>name</em>, <em>domain</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/factor.html#RandVar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.factor.RandVar" title="Permalink to this definition">¶</a></dt>
+<dt id="ProbPy.prob.rand_var.RandVar">
+<em class="property">class </em><tt class="descclassname">ProbPy.prob.rand_var.</tt><tt class="descname">RandVar</tt><big>(</big><em>name</em>, <em>domain</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/rand_var.html#RandVar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.rand_var.RandVar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
 <p>Represents a Random Variable in a probability distribution. Each variable
 is identified by a string which is it&#8217;s name. If two RandVar in a script
@@ -578,15 +626,15 @@ even types that are other objects.</p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="ProbPy.prob.factor.RandVarDomainEx">
-<em class="property">exception </em><tt class="descclassname">ProbPy.prob.factor.</tt><tt class="descname">RandVarDomainEx</tt><big>(</big><em>bad_domain</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/factor.html#RandVarDomainEx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.factor.RandVarDomainEx" title="Permalink to this definition">¶</a></dt>
+<dt id="ProbPy.prob.rand_var.RandVarDomainEx">
+<em class="property">exception </em><tt class="descclassname">ProbPy.prob.rand_var.</tt><tt class="descname">RandVarDomainEx</tt><big>(</big><em>bad_domain</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/rand_var.html#RandVarDomainEx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.rand_var.RandVarDomainEx" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.Exception</span></tt></p>
 <p>Exception use for a bad domain for a Variable</p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="ProbPy.prob.factor.RandVarNameEx">
-<em class="property">exception </em><tt class="descclassname">ProbPy.prob.factor.</tt><tt class="descname">RandVarNameEx</tt><big>(</big><em>bad_name</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/factor.html#RandVarNameEx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.factor.RandVarNameEx" title="Permalink to this definition">¶</a></dt>
+<dt id="ProbPy.prob.rand_var.RandVarNameEx">
+<em class="property">exception </em><tt class="descclassname">ProbPy.prob.rand_var.</tt><tt class="descname">RandVarNameEx</tt><big>(</big><em>bad_name</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/rand_var.html#RandVarNameEx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.rand_var.RandVarNameEx" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.Exception</span></tt></p>
 <p>Exception use for a bad Random Variable name</p>
 </dd></dl>
@@ -605,16 +653,12 @@ even types that are other objects.</p>
 <li><a class="reference internal" href="#">prob Package</a><ul>
 <li><a class="reference internal" href="#module-ProbPy.prob.bn"><tt class="docutils literal"><span class="pre">bn</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-ProbPy.prob.factor"><tt class="docutils literal"><span class="pre">factor</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-ProbPy.prob.inf_theory"><tt class="docutils literal"><span class="pre">inf_theory</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-ProbPy.prob.rand_var"><tt class="docutils literal"><span class="pre">rand_var</span></tt> Module</a></li>
 </ul>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="ProbPy.html"
-                        title="previous chapter">ProbPy Package</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="ProbPy.tests.html"
-                        title="next chapter">tests Package</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/ProbPy.prob.txt"
@@ -646,14 +690,7 @@ even types that are other objects.</p>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="ProbPy.tests.html" title="tests Package"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="ProbPy.html" title="ProbPy Package"
-             >previous</a> |</li>
-        <li><a href="index.html">ProbPy  documentation</a> &raquo;</li>
-          <li><a href="ProbPy.html" >ProbPy Package</a> &raquo;</li> 
+        <li><a href="index.html">ProbPy  documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

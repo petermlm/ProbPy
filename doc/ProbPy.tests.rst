@@ -1,14 +1,6 @@
 tests Package
 =============
 
-:mod:`factor_base` Module
--------------------------
-
-.. automodule:: ProbPy.tests.factor_base
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 :mod:`factor_expectedValue_tests` Module
 ----------------------------------------
 
@@ -53,6 +45,22 @@ tests Package
 ------------------------------------
 
 .. automodule:: ProbPy.tests.factor_normalize_tests
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`inf_theory_tests` Module
+------------------------------
+
+.. automodule:: ProbPy.tests.inf_theory_tests
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`test_base` Module
+-----------------------
+
+.. automodule:: ProbPy.tests.test_base
     :members:
     :undoc-members:
     :show-inheritance:
