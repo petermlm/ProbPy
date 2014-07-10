@@ -27,9 +27,20 @@ def entropy(factor, base=2):
 
     return -res
 
-def kullbackLeiblerDistance(fac1, fac2, base=2):
 
-    log_arg = fac1*fac2
+def kullbackLeiblerDistance(fac1, fac2, base=2):
+    """
+    Calculates the Kullback-Leibler Distance between fac1 and fac2. The factors should represent
+    probability distributions with the same variables, like P(X) and Q(X), or
+    P(X, Y) and Q(X, Y)
+
+    :param fac1: First factor in operation
+    :param fac2: Second factor in operation
+    :param base: Base of logarithms in the operations, defaults to 2
+    :returns:    The Kullback-Leibler Distance
+    """
+
+    log_arg = fac1/fac2
     log_res = log_arg.log(base)
     to_sum = fac1 * log_res
 
@@ -38,4 +49,4 @@ def kullbackLeiblerDistance(fac1, fac2, base=2):
     for i in to_sum.values:
         res += i
 
-    return i
+    return res
