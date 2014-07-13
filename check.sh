@@ -10,9 +10,9 @@ nosetests3
 # PEP8
 pep8 ProbPy/prob/*.py
 pep8 ProbPy/tests/*.py
-pep8 ProbPy/examples/*.py
+pep8 examples/*.py
 
 # Examples
-python3 -m ProbPy.examples.earthquake
-python3 -m ProbPy.examples.bayes_theorem
-python3 -m ProbPy.examples.channel_capacity
+python3 examples/earthquake.py
+python3 examples/bayes_theorem.py
+python3 examples/channel_capacity.py
