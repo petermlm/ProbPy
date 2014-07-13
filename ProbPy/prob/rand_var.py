@@ -42,7 +42,7 @@ class RandVar:
         self.name = name
         self.domain = domain
 
-    def __str__(self):
+    def __repr__(self):
         list_str = "["
 
         for i in self.domain[:-1]:
@@ -50,6 +50,9 @@ class RandVar:
         list_str += self.domain[-1] + "]"
 
         return "(" + self.name + ", " + list_str + ")"
+
+    def __str__(self):
+        return self.name
 
 
 class RandVarNameEx(Exception):
