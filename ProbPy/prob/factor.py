@@ -415,7 +415,6 @@ class Factor:
         var_index = -1
 
         # Get arguments
-        print(type(args[0]), type(args[1]))
         rand_var = args[0]
         inst = args[1]
 

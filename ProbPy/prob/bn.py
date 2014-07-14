@@ -3,6 +3,7 @@ Implementation of a Bayesian Network with some algorithms
 """
 
 import copy
+import random
 
 
 class BayesianNetworkNode:
@@ -224,6 +225,40 @@ class BayesianNetwork:
         # Return the final factor in the form of a list
         return [prod.marginal(marg_vars)]
 
+    def sample(self):
+        """
+        Returns a random sample of the network in the form of a list of tuples.
+        Each tuple is a pair between a random variable and it's instance, in
+        the form:
+
+            >>> ret = [(X, "T"), (Y, "F")]
+        """
+
+        net = self.network[:]
+        inst_vars = []
+
+        for i in net:
+            t = i.factor.instVar(inst_vars)
+            var = t.rand_vars[0]
+            val = self.pickValue(var.domain, t.values, random.random())
+
+            inst_vars.append((var, val))
+
+        return inst_vars
+
+    def pickValue(self, domain, values, prob):
+        """
+        Method used with sample(). This method picks one element of the domain
+        of a random variable given it's parameters.
+        """
+
+        value = values[0]
+        for i in range(len(domain)):
+            if value > prob:
+                return domain[i]
+            value += values[i]
+
+        return domain[-1]
 
 class BayesianNetworkArgEx(Exception):
     """
