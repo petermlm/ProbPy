@@ -8,9 +8,10 @@ from ProbPy.prob.factor import Factor
 import copy
 
 
-class Dist:
+class Dist(Factor):
     def __init__(self, factor=None, left_vars=None, right_vars=None,
                  values=None):
+
         # If the argument used is a factor
         if factor is not None:
             # Check if there were any variables in left_vars argument. If there
@@ -40,7 +41,8 @@ class Dist:
                     self.right_vars = []
 
             # Copy the factor
-            self.factor = copy.deepcopy(factor)
+            # self.factor = copy.deepcopy(factor)
+            Factor.__init__(self, factor.rand_vars, factor.values)
 
             # Check if the variables are not repeating
             vars_list = self.left_vars + self.right_vars
@@ -79,7 +81,8 @@ class Dist:
                 values = self.makeValuesFromFunction(rand_vars, values)
 
             # Make factor
-            self.factor = Factor(rand_vars, values)
+            # self.factor = Factor(rand_vars, values)
+            Factor.__init__(self, rand_vars, values)
 
         else:
             raise Exception
