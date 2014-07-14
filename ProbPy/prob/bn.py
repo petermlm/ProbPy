@@ -260,6 +260,7 @@ class BayesianNetwork:
 
         return domain[-1]
 
+
 class BayesianNetworkArgEx(Exception):
     """
     Exception used if the nodes of the Bayesian Network don't form a DAG
