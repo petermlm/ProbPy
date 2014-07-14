@@ -469,9 +469,6 @@ class Factor:
         distribution. Suppose the factor f(X) would represent the distribution
         P(X), this method would calculate the expected value of X, E[X].
 
-        If the factor f(X, Y) represents the distribution P(X | Y), the
-        expected value calculated is E[X]
-
         :param fun: A function for the variable.
         :returns:   Expected value of factor
 
@@ -483,17 +480,12 @@ class Factor:
             12.0
         """
 
-        # Instantiate every conditional variable with it's first value, because
-        # E[X] == E[X | Y=y], for any y
-        fac = copy.deepcopy(self)
-        fact_vars = fac.rand_vars
-
-        for i in fact_vars:
-            if not fun.varInFactor(i):
-                fac = fac.instVar(i, i.domain[0])
+        # Check if self and the function factor have the same variables
+        if self != fun:
+            return None
 
         # Make the multiplication
-        mult = fac.mult(fun)
+        mult = self * fun
 
         # Sum all
         res = 0
@@ -523,6 +515,25 @@ class Factor:
             values_size *= len(i.domain)
         return values_size
 
+    def sameVariables(self, factor):
+        """
+        Checks if the variables in the factor are the same as the
+        variables in self.
+        """
+
+        for i in range(len(self.rand_vars)):
+            f = False
+
+            for j in range(i, len(factor.rand_vars)):
+                if self.rand_vars[i] == factor.rand_vars[j]:
+                    f = True
+                    break
+
+            if not f:
+                return False
+
+        return True
+
     def __repr__(self):
         return "(" + self.__str__() + ", " + str(self.values) + ")"
 
@@ -550,6 +561,12 @@ class Factor:
 
     def __truediv__(self, other):
         return self.div(other)
+
+    def __eq__(self, other):
+        return self.sameVariables(other)
+
+    def __ne__(self, other):
+        return not self.sameVariables(other)
 
 
 class FactorRandVarsEx(Exception):

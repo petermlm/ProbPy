@@ -22,19 +22,6 @@ class TestFactorExpectedValue(TestBase):
 
     def expected_value_test_2(self):
         """
-        E[X | Y] == E[X]
-        """
-
-        local_XY_dist = self.X_dist.mult(self.Y_dist)
-        local_X_k_Y_dist = local_XY_dist.div(self.Y_dist)
-
-        res_x_k_y = local_X_k_Y_dist.expectedValue(self.x_ev)
-        res_x = self.X_dist.expectedValue(self.x_ev)
-        assert_almost_equal(res_x_k_y, 12.0)
-        assert_almost_equal(res_x, 12.0)
-
-    def expected_value_test_3(self):
-        """
         E[X]c == E[Xc]
         """
 
@@ -45,7 +32,7 @@ class TestFactorExpectedValue(TestBase):
         res_xc = self.X_dist.expectedValue(fun)
         assert_almost_equal(res_x_c, res_xc)
 
-    def expected_value_test_4(self):
+    def expected_value_test_3(self):
         """
         E[X] + c == E[X + c]
         """
@@ -57,7 +44,7 @@ class TestFactorExpectedValue(TestBase):
         res_xc = self.X_dist.expectedValue(fun)
         assert_almost_equal(res_x_c, res_xc)
 
-    def expected_value_test_5(self):
+    def expected_value_test_4(self):
         """
         E[X + Y] == E[X] + E[Y]
         """

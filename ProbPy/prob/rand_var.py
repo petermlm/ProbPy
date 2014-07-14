@@ -42,6 +42,21 @@ class RandVar:
         self.name = name
         self.domain = domain
 
+    def equal(self, var):
+        """
+        Checks if the Random Variable in var is equal to self
+        """
+
+        # Check the name
+        if self.name != var.name:
+            return False
+
+        # Check the domain
+        if self.domain != var.domain:
+            return False
+
+        return True
+
     def __repr__(self):
         list_str = "["
 
@@ -53,6 +68,12 @@ class RandVar:
 
     def __str__(self):
         return self.name
+
+    def __eq__(self, other):
+        return self.equal(other)
+
+    def __ne__(self, other):
+        return not self.equal(other)
 
 
 class RandVarNameEx(Exception):
