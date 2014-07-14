@@ -25,7 +25,10 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="ProbPy  documentation" href="index.html" /> 
+    <link rel="top" title="ProbPy  documentation" href="index.html" />
+    <link rel="up" title="ProbPy Package" href="ProbPy.html" />
+    <link rel="next" title="prob Package" href="ProbPy.prob.html" />
+    <link rel="prev" title="ProbPy Package" href="ProbPy.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,7 +40,14 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="index.html">ProbPy  documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="ProbPy.prob.html" title="prob Package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ProbPy.html" title="ProbPy Package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">ProbPy  documentation</a> &raquo;</li>
+          <li><a href="ProbPy.html" accesskey="U">ProbPy Package</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -48,57 +58,14 @@
             
   <div class="section" id="examples-package">
 <h1>examples Package<a class="headerlink" href="#examples-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-ProbPy.examples.bayes_theorem">
-<span id="bayes-theorem-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">bayes_theorem</span></tt> Module<a class="headerlink" href="#module-ProbPy.examples.bayes_theorem" title="Permalink to this headline">¶</a></h2>
-<p>This is an example of the Bayes Theorem, in which to simple random variables
-are used in the calculation, X and Y.</p>
+<div class="section" id="bayes-theorem-module">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">bayes_theorem</span></tt> Module<a class="headerlink" href="#bayes-theorem-module" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-ProbPy.examples.channel_capacity">
-<span id="channel-capacity-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">channel_capacity</span></tt> Module<a class="headerlink" href="#module-ProbPy.examples.channel_capacity" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="ProbPy.examples.channel_capacity.ChannelCapacity">
-<tt class="descclassname">ProbPy.examples.channel_capacity.</tt><tt class="descname">ChannelCapacity</tt><big>(</big><em>Input</em>, <em>Output</em>, <em>Prior</em>, <em>Channel</em>, <em>base=2</em>, <em>delta=0.01</em><big>)</big><a class="reference internal" href="_modules/ProbPy/examples/channel_capacity.html#ChannelCapacity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.examples.channel_capacity.ChannelCapacity" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="ProbPy.examples.channel_capacity.ex1">
-<tt class="descclassname">ProbPy.examples.channel_capacity.</tt><tt class="descname">ex1</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ProbPy/examples/channel_capacity.html#ex1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.examples.channel_capacity.ex1" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="ProbPy.examples.channel_capacity.ex2">
-<tt class="descclassname">ProbPy.examples.channel_capacity.</tt><tt class="descname">ex2</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ProbPy/examples/channel_capacity.html#ex2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.examples.channel_capacity.ex2" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="ProbPy.examples.channel_capacity.ex3">
-<tt class="descclassname">ProbPy.examples.channel_capacity.</tt><tt class="descname">ex3</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ProbPy/examples/channel_capacity.html#ex3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.examples.channel_capacity.ex3" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<div class="section" id="channel-capacity-module">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">channel_capacity</span></tt> Module<a class="headerlink" href="#channel-capacity-module" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-ProbPy.examples.earthquake">
-<span id="earthquake-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">earthquake</span></tt> Module<a class="headerlink" href="#module-ProbPy.examples.earthquake" title="Permalink to this headline">¶</a></h2>
-<p>This is an example of using ProbPy to define a simple Bayesian Network and
-executing the Elimination Ask algorithm. The network is defined like so:</p>
-<dl class="docutils">
-<dt>B   E</dt>
-<dd><dl class="first docutils">
-<dt>/</dt>
-<dd>A</dd>
-</dl>
-<p class="last">/ J   M</p>
-</dd>
-<dt>Each node of the network corresponds with the following Random Variables:</dt>
-<dd><ul class="first last simple">
-<li>Burglary - P(B)</li>
-<li>Earthq   - P(E)</li>
-<li>Alarm    - P(A | B, E)</li>
-<li>John     - P(J | A)</li>
-<li>Mary     - P(M | A)</li>
-</ul>
-</dd>
-</dl>
-<p>Their distributions are bellow.</p>
+<div class="section" id="earthquake-module">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">earthquake</span></tt> Module<a class="headerlink" href="#earthquake-module" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -111,13 +78,19 @@ executing the Elimination Ask algorithm. The network is defined like so:</p>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">examples Package</a><ul>
-<li><a class="reference internal" href="#module-ProbPy.examples.bayes_theorem"><tt class="docutils literal"><span class="pre">bayes_theorem</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-ProbPy.examples.channel_capacity"><tt class="docutils literal"><span class="pre">channel_capacity</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-ProbPy.examples.earthquake"><tt class="docutils literal"><span class="pre">earthquake</span></tt> Module</a></li>
+<li><a class="reference internal" href="#bayes-theorem-module"><tt class="docutils literal"><span class="pre">bayes_theorem</span></tt> Module</a></li>
+<li><a class="reference internal" href="#channel-capacity-module"><tt class="docutils literal"><span class="pre">channel_capacity</span></tt> Module</a></li>
+<li><a class="reference internal" href="#earthquake-module"><tt class="docutils literal"><span class="pre">earthquake</span></tt> Module</a></li>
 </ul>
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ProbPy.html"
+                        title="previous chapter">ProbPy Package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ProbPy.prob.html"
+                        title="next chapter">prob Package</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/ProbPy.examples.txt"
@@ -149,7 +122,14 @@ executing the Elimination Ask algorithm. The network is defined like so:</p>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="index.html">ProbPy  documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="ProbPy.prob.html" title="prob Package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ProbPy.html" title="ProbPy Package"
+             >previous</a> |</li>
+        <li><a href="index.html">ProbPy  documentation</a> &raquo;</li>
+          <li><a href="ProbPy.html" >ProbPy Package</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

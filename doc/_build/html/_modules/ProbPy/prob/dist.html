@@ -1,0 +1,215 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ProbPy.prob.dist &mdash; ProbPy  documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="ProbPy  documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">ProbPy  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for ProbPy.prob.dist</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">TODO</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span> <span class="nn">ProbPy.prob.rand_var</span> <span class="kn">import</span> <span class="n">RandVar</span>
+<span class="kn">from</span> <span class="nn">ProbPy.prob.factor</span> <span class="kn">import</span> <span class="n">Factor</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+
+<div class="viewcode-block" id="Dist"><a class="viewcode-back" href="../../../ProbPy.prob.html#ProbPy.prob.dist.Dist">[docs]</a><span class="k">class</span> <span class="nc">Dist</span><span class="p">(</span><span class="n">Factor</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">left_vars</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">right_vars</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">values</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+
+        <span class="c"># If the argument used is a factor</span>
+        <span class="k">if</span> <span class="n">factor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c"># Check if there were any variables in left_vars argument. If there</span>
+            <span class="c"># weren&#39;t, assume every variable in factor is a left variable</span>
+            <span class="k">if</span> <span class="n">left_vars</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">left_vars</span> <span class="o">=</span> <span class="n">factor</span><span class="o">.</span><span class="n">rand_vars</span><span class="p">[:]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">right_vars</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c"># If there were variables in left</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">left_vars</span><span class="p">)</span> <span class="o">==</span> <span class="n">RandVar</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">left_vars</span> <span class="o">=</span> <span class="p">[</span><span class="n">left_vars</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">left_vars</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">left_vars</span> <span class="o">=</span> <span class="n">left_vars</span><span class="p">[:]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span>
+
+                <span class="c"># Check right variables store them if needed</span>
+                <span class="k">if</span> <span class="n">right_vars</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">right_vars</span><span class="p">)</span> <span class="o">==</span> <span class="n">RandVar</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">right_vars</span> <span class="o">=</span> <span class="p">[</span><span class="n">right_vars</span><span class="p">]</span>
+                    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">right_vars</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">right_vars</span> <span class="o">=</span> <span class="n">right_vars</span><span class="p">[:]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">Exception</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">right_vars</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c"># Copy the factor</span>
+            <span class="c"># self.factor = copy.deepcopy(factor)</span>
+            <span class="n">Factor</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="o">.</span><span class="n">rand_vars</span><span class="p">,</span> <span class="n">factor</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+            <span class="c"># Check if the variables are not repeating</span>
+            <span class="n">vars_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">left_vars</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">right_vars</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vars_list</span><span class="p">)):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">vars_list</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="n">vars_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">vars_list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">Exception</span>
+
+        <span class="c"># If there is no factor</span>
+        <span class="k">elif</span> <span class="n">left_vars</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">values</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c"># Make left vars list</span>
+            <span class="n">rand_vars</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">left_vars</span><span class="p">)</span> <span class="o">==</span> <span class="n">RandVar</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">left_vars</span> <span class="o">=</span> <span class="p">[</span><span class="n">left_vars</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">left_vars</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">left_vars</span> <span class="o">=</span> <span class="n">left_vars</span><span class="p">[:]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span>
+
+            <span class="c"># Make right vars list</span>
+            <span class="k">if</span> <span class="n">right_vars</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">right_vars</span><span class="p">)</span> <span class="o">==</span> <span class="n">RandVar</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">right_vars</span> <span class="o">=</span> <span class="p">[</span><span class="n">right_vars</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">right_vars</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">right_vars</span> <span class="o">=</span> <span class="n">right_vars</span><span class="p">[:]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">right_vars</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c"># Make rand_vars list for factor</span>
+            <span class="n">rand_vars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">left_vars</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">right_vars</span>
+
+            <span class="c"># Build values array if it is not a list</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">list</span><span class="p">:</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">makeValuesFromFunction</span><span class="p">(</span><span class="n">rand_vars</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+
+            <span class="c"># Make factor</span>
+            <span class="c"># self.factor = Factor(rand_vars, values)</span>
+            <span class="n">Factor</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rand_vars</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span>
+
+<div class="viewcode-block" id="Dist.makeValuesFromFunction"><a class="viewcode-back" href="../../../ProbPy.prob.html#ProbPy.prob.dist.Dist.makeValuesFromFunction">[docs]</a>    <span class="k">def</span> <span class="nf">makeValuesFromFunction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rand_vars</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="c"># Initialize indexes</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">domain</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">rand_vars</span><span class="p">]</span>
+        <span class="n">cind</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">rand_vars</span><span class="p">)</span>
+        <span class="n">cval</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">domain</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">rand_vars</span><span class="p">]</span>
+
+        <span class="c"># Increment cind and cval to next value</span>
+        <span class="k">def</span> <span class="nf">doInd</span><span class="p">(</span><span class="n">inc</span><span class="p">):</span>
+            <span class="c"># If inc is out of the bounds of the indexes, the end was reached</span>
+            <span class="k">if</span> <span class="n">inc</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ind</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">False</span>
+
+            <span class="c"># Move cind[inc] to next value</span>
+            <span class="n">cind</span><span class="p">[</span><span class="n">inc</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="c"># If current cind is at the end, restart it and increment next</span>
+            <span class="k">if</span> <span class="n">cind</span><span class="p">[</span><span class="n">inc</span><span class="p">]</span> <span class="o">==</span> <span class="n">ind</span><span class="p">[</span><span class="n">inc</span><span class="p">]:</span>
+                <span class="n">cind</span><span class="p">[</span><span class="n">inc</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">cval</span><span class="p">[</span><span class="n">inc</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand_vars</span><span class="p">[</span><span class="n">inc</span><span class="p">]</span><span class="o">.</span><span class="n">domain</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">return</span> <span class="n">doInd</span><span class="p">(</span><span class="n">inc</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="c"># Also move the cval index</span>
+            <span class="n">cval</span><span class="p">[</span><span class="n">inc</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand_vars</span><span class="p">[</span><span class="n">inc</span><span class="p">]</span><span class="o">.</span><span class="n">domain</span><span class="p">[</span><span class="n">cind</span><span class="p">[</span><span class="n">inc</span><span class="p">]]</span>
+
+            <span class="k">return</span> <span class="bp">True</span>
+
+        <span class="c"># Make values array</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">values</span><span class="p">(</span><span class="o">*</span><span class="n">cval</span><span class="p">)]</span>
+        <span class="k">while</span> <span class="n">doInd</span><span class="p">(</span><span class="mi">0</span><span class="p">):</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">values</span><span class="p">(</span><span class="o">*</span><span class="n">cval</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">res</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">ProbPy  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Pedro Melgueira.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

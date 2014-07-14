@@ -25,7 +25,10 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="ProbPy  documentation" href="index.html" /> 
+    <link rel="top" title="ProbPy  documentation" href="index.html" />
+    <link rel="up" title="ProbPy Package" href="ProbPy.html" />
+    <link rel="next" title="tests Package" href="ProbPy.tests.html" />
+    <link rel="prev" title="ProbPy Package" href="ProbPy.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,7 +40,14 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="index.html">ProbPy  documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="ProbPy.tests.html" title="tests Package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ProbPy.html" title="ProbPy Package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">ProbPy  documentation</a> &raquo;</li>
+          <li><a href="ProbPy.html" accesskey="U">ProbPy Package</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -137,6 +147,24 @@ eliminationAsk method</li>
 </dd></dl>
 
 <dl class="method">
+<dt id="ProbPy.prob.bn.BayesianNetwork.pickValue">
+<tt class="descname">pickValue</tt><big>(</big><em>domain</em>, <em>values</em>, <em>prob</em><big>)</big><a class="headerlink" href="#ProbPy.prob.bn.BayesianNetwork.pickValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method used with sample(). This method picks one element of the domain
+of a random variable given it&#8217;s parameters.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ProbPy.prob.bn.BayesianNetwork.sample">
+<tt class="descname">sample</tt><big>(</big><big>)</big><a class="headerlink" href="#ProbPy.prob.bn.BayesianNetwork.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a random sample of the network in the form of a list of tuples.
+Each tuple is a pair between a random variable and it&#8217;s instance, in
+the form:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ret</span> <span class="o">=</span> <span class="p">[(</span><span class="n">X</span><span class="p">,</span> <span class="s">&quot;T&quot;</span><span class="p">),</span> <span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="s">&quot;F&quot;</span><span class="p">)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
 <dt id="ProbPy.prob.bn.BayesianNetwork.sumOut">
 <tt class="descname">sumOut</tt><big>(</big><em>var</em>, <em>arg_factors</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/bn.html#BayesianNetwork.sumOut"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.bn.BayesianNetwork.sumOut" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sums the variable in var out, meaning that this function will return
@@ -176,6 +204,21 @@ the product of the factors in arg_factors and will take var out</p>
 <p>This class represents a node in a Bayesian Network. It has the notion of
 it&#8217;s variable, it&#8217;s probability distribution represented using a factor and
 it&#8217;s parents.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ProbPy.prob.dist">
+<span id="dist-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">dist</span></tt> Module<a class="headerlink" href="#module-ProbPy.prob.dist" title="Permalink to this headline">¶</a></h2>
+<p>TODO</p>
+<dl class="class">
+<dt id="ProbPy.prob.dist.Dist">
+<em class="property">class </em><tt class="descclassname">ProbPy.prob.dist.</tt><tt class="descname">Dist</tt><big>(</big><em>factor=None</em>, <em>left_vars=None</em>, <em>right_vars=None</em>, <em>values=None</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/dist.html#Dist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.dist.Dist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ProbPy.prob.factor.Factor" title="ProbPy.prob.factor.Factor"><tt class="xref py py-class docutils literal"><span class="pre">ProbPy.prob.factor.Factor</span></tt></a></p>
+<dl class="method">
+<dt id="ProbPy.prob.dist.Dist.makeValuesFromFunction">
+<tt class="descname">makeValuesFromFunction</tt><big>(</big><em>rand_vars</em>, <em>values</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/dist.html#Dist.makeValuesFromFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.dist.Dist.makeValuesFromFunction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </div>
@@ -310,16 +353,19 @@ in rand_vars</p>
 
 <dl class="method">
 <dt id="ProbPy.prob.factor.Factor.instVar">
-<tt class="descname">instVar</tt><big>(</big><em>rand_vars</em>, <em>insts</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/factor.html#Factor.instVar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.factor.Factor.instVar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Instantiates a random variables of a factor. Instantiating variable X
-with value vx and Y with vy would yield f(X=vx, Y=vy, Z) = f(Z).</p>
+<tt class="descname">instVar</tt><big>(</big><em>arg</em>, <em>value=None</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/factor.html#Factor.instVar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.factor.Factor.instVar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instantiates variables of a factor. Instantiating variable X with value
+vx and Y with vy would yield f(X=vx, Y=vy, Z) = f(Z).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>rand_vars</strong> &#8211; List of variables to instantiate</li>
-<li><strong>insts</strong> &#8211; Value for each variable</li>
+<li><strong>arg</strong> &#8211; This argument should contain a list of tuples which
+represent a pair between a variable and a value to be
+instantiated in the factor.</li>
+<li><strong>value</strong> &#8211; If the first argument is not a list and is a single
+variable, this argument should be it&#8217;s value</li>
 </ul>
 </td>
 </tr>
@@ -329,13 +375,24 @@ rand_vars, which were initialized</p>
 </tr>
 </tbody>
 </table>
-<p>Note, the sizes of the lists must be the same. Variable rand_vars[k]
-will be instantiated with value insts[k].</p>
+<dl class="docutils">
+<dt>Examples:</dt>
+<dd><div class="first highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Suppose fX is the factor f(X)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fX</span><span class="o">.</span><span class="n">instVar</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">vx</span><span class="p">)</span> <span class="c"># Would yield f(X=vx)</span>
+</pre></div>
+</div>
+<div class="last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Suppose fXYZ is the factor f(X, Y, Z)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fXYZ</span><span class="o">.</span><span class="n">instVar</span><span class="p">([(</span><span class="n">X</span><span class="p">,</span> <span class="n">vx</span><span class="p">),</span> <span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">vy</span><span class="p">),</span> <span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">vz</span><span class="p">)])</span> <span class="c"># Would yield</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># f(X=vx, Y=vy, Z) = f(Z)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="ProbPy.prob.factor.Factor.instVarSingle">
-<tt class="descname">instVarSingle</tt><big>(</big><em>rand_var</em>, <em>inst</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/factor.html#Factor.instVarSingle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.factor.Factor.instVarSingle" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">instVarSingle</tt><big>(</big><em>*args</em><big>)</big><a class="reference internal" href="_modules/ProbPy/prob/factor.html#Factor.instVarSingle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ProbPy.prob.factor.Factor.instVarSingle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Same has instVar, but this method instantiates a single variable and
 it is the one used in the implementation of instVar.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -353,6 +410,14 @@ it is the one used in the implementation of instVar.</p>
 </tr>
 </tbody>
 </table>
+<dl class="docutils">
+<dt>Examples:</dt>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Suppose fXY is the factor f(X, Y)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fX</span><span class="o">.</span><span class="n">instVar</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">vx</span><span class="p">)</span> <span class="c"># Would yield f(X=vx, Y) = f(Y)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -652,6 +717,7 @@ even types that are other objects.</p>
   <ul>
 <li><a class="reference internal" href="#">prob Package</a><ul>
 <li><a class="reference internal" href="#module-ProbPy.prob.bn"><tt class="docutils literal"><span class="pre">bn</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-ProbPy.prob.dist"><tt class="docutils literal"><span class="pre">dist</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-ProbPy.prob.factor"><tt class="docutils literal"><span class="pre">factor</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-ProbPy.prob.inf_theory"><tt class="docutils literal"><span class="pre">inf_theory</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-ProbPy.prob.rand_var"><tt class="docutils literal"><span class="pre">rand_var</span></tt> Module</a></li>
@@ -659,6 +725,12 @@ even types that are other objects.</p>
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ProbPy.html"
+                        title="previous chapter">ProbPy Package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ProbPy.tests.html"
+                        title="next chapter">tests Package</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/ProbPy.prob.txt"
@@ -690,7 +762,14 @@ even types that are other objects.</p>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="index.html">ProbPy  documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="ProbPy.tests.html" title="tests Package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ProbPy.html" title="ProbPy Package"
+             >previous</a> |</li>
+        <li><a href="index.html">ProbPy  documentation</a> &raquo;</li>
+          <li><a href="ProbPy.html" >ProbPy Package</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

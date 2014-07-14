@@ -9,6 +9,14 @@ prob Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`dist` Module
+------------------
+
+.. automodule:: ProbPy.prob.dist
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 :mod:`factor` Module
 --------------------
 
