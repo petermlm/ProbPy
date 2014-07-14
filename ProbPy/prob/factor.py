@@ -360,38 +360,44 @@ class Factor:
         # Make division
         return self.div(marg)
 
-    def instVar(self, rand_vars, insts):
+    def instVar(self, arg, value=None):
         """
-        Instantiates a random variables of a factor. Instantiating variable X
-        with value vx and Y with vy would yield f(X=vx, Y=vy, Z) = f(Z).
+        Instantiates variables of a factor. Instantiating variable X with value
+        vx and Y with vy would yield f(X=vx, Y=vy, Z) = f(Z).
 
-        :param rand_vars: List of variables to instantiate
-        :param insts:     Value for each variable
-        :returns:         Factor equivalent to self but lacking variables in
-                          rand_vars, which were initialized
+        :param arg:   This argument should contain a list of tuples which
+                      represent a pair between a variable and a value to be
+                      instantiated in the factor.
+        :param value: If the first argument is not a list and is a single
+                      variable, this argument should be it's value
+        :returns:     Factor equivalent to self but lacking variables in
+                      rand_vars, which were initialized
 
-        Note, the sizes of the lists must be the same. Variable rand_vars[k]
-        will be instantiated with value insts[k].
+        Examples:
+            >>> # Suppose fX is the factor f(X)
+            >>> fX.instVar(X, vx) # Would yield f(X=vx)
+
+            >>> # Suppose fXYZ is the factor f(X, Y, Z)
+            >>> fXYZ.instVar([(X, vx), (Y, vy), (Z, vz)]) # Would yield
+            >>> # f(X=vx, Y=vy, Z) = f(Z)
         """
 
-        # If this is a single instantiation
-        if type(rand_vars) != list and type(insts) != list:
-            return self.instVarSingle(rand_vars, insts)
-
-        # If this is a multiple instantiation
-        elif type(rand_vars) == list and type(insts) == list:
-            # If the size of this lists is not the same return
-            if len(rand_vars) != len(insts):
-                return None
+        # Check if this is an instantiation of many variables by using only the
+        # first argument as a list
+        if type(arg) is list and value is None:
+            res = copy.copy(self)
 
             # Instantiate one variable at a time
-            res = copy.copy(self)
-            for i in range(len(rand_vars)):
-                res = res.instVarSingle(rand_vars[i], insts[i])
+            for i in arg:
+                res = res.instVarSingle(i[0], i[1])
 
             return res
 
-    def instVarSingle(self, rand_var, inst):
+        # If this is actually a single variable instantiation
+        else:
+            return self.instVarSingle(arg, value)
+
+    def instVarSingle(self, *args):
         """
         Same has instVar, but this method instantiates a single variable and
         it is the one used in the implementation of instVar.
@@ -399,10 +405,19 @@ class Factor:
         :param rand_var: Variable to instantiate
         :param inst:     Value for variable
         :returns:        Factor with variable in rand_var instantiated
+
+        Examples:
+            >>> # Suppose fXY is the factor f(X, Y)
+            >>> fX.instVar(X, vx) # Would yield f(X=vx, Y) = f(Y)
         """
 
         res_rand_vars = []
         var_index = -1
+
+        # Get arguments
+        print(type(args[0]), type(args[1]))
+        rand_var = args[0]
+        inst = args[1]
 
         # Get resulting variables and var_index
         for i in range(len(self.rand_vars)):

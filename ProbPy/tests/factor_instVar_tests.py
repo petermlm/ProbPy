@@ -48,10 +48,10 @@ class TestFactorInstVar(TestBase):
         f(X=v, Y=v)
         """
 
-        res_TT = self.XY_factor.instVar([self.X, self.Y], ["T", "T"])
-        res_FT = self.XY_factor.instVar([self.X, self.Y], ["F", "T"])
-        res_TF = self.XY_factor.instVar([self.X, self.Y], ["T", "F"])
-        res_FF = self.XY_factor.instVar([self.X, self.Y], ["F", "F"])
+        res_TT = self.XY_factor.instVar([(self.X, "T"), (self.Y, "T")])
+        res_FT = self.XY_factor.instVar([(self.X, "F"), (self.Y, "T")])
+        res_TF = self.XY_factor.instVar([(self.X, "T"), (self.Y, "F")])
+        res_FF = self.XY_factor.instVar([(self.X, "F"), (self.Y, "F")])
 
         assert(res_TT.rand_vars == [] and res_TT.values == [1])
         assert(res_FT.rand_vars == [] and res_FT.values == [2])
@@ -63,8 +63,8 @@ class TestFactorInstVar(TestBase):
         f(X=v, Y,   Z)
         """
 
-        res_T = self.XYZ_factor.instVar([self.X], ["T"])
-        res_F = self.XYZ_factor.instVar([self.X], ["F"])
+        res_T = self.XYZ_factor.instVar(self.X, "T")
+        res_F = self.XYZ_factor.instVar(self.X, "F")
 
         assert(res_T.rand_vars == [self.Y, self.Z] and
                res_T.values == [1, 3, 5, 7])
@@ -76,8 +76,8 @@ class TestFactorInstVar(TestBase):
         f(X,   Y=v, Z)
         """
 
-        res_T = self.XYZ_factor.instVar([self.Y], ["T"])
-        res_F = self.XYZ_factor.instVar([self.Y], ["F"])
+        res_T = self.XYZ_factor.instVar(self.Y, "T")
+        res_F = self.XYZ_factor.instVar(self.Y, "F")
 
         assert(res_T.rand_vars == [self.X, self.Z] and
                res_T.values == [1, 2, 5, 6])
@@ -89,8 +89,8 @@ class TestFactorInstVar(TestBase):
         f(X,   Y,   Z=v)
         """
 
-        res_T = self.XYZ_factor.instVar([self.Z], ["T"])
-        res_F = self.XYZ_factor.instVar([self.Z], ["F"])
+        res_T = self.XYZ_factor.instVar(self.Z, "T")
+        res_F = self.XYZ_factor.instVar(self.Z, "F")
 
         assert(res_T.rand_vars == [self.X, self.Y] and
                res_T.values == [1, 2, 3, 4])
@@ -102,10 +102,10 @@ class TestFactorInstVar(TestBase):
         f(X=v, Y=v, Z)
         """
 
-        res_TT = self.XYZ_factor.instVar([self.X, self.Y], ["T", "T"])
-        res_TF = self.XYZ_factor.instVar([self.X, self.Y], ["T", "F"])
-        res_FT = self.XYZ_factor.instVar([self.X, self.Y], ["F", "T"])
-        res_FF = self.XYZ_factor.instVar([self.X, self.Y], ["F", "F"])
+        res_TT = self.XYZ_factor.instVar([(self.X, "T"), (self.Y, "T")])
+        res_TF = self.XYZ_factor.instVar([(self.X, "T"), (self.Y, "F")])
+        res_FT = self.XYZ_factor.instVar([(self.X, "F"), (self.Y, "T")])
+        res_FF = self.XYZ_factor.instVar([(self.X, "F"), (self.Y, "F")])
 
         assert(res_TT.rand_vars == [self.Z] and
                res_TT.values == [1, 5])
@@ -121,10 +121,10 @@ class TestFactorInstVar(TestBase):
         f(X=v, Y,   Z=v)
         """
 
-        res_TT = self.XYZ_factor.instVar([self.X, self.Z], ["T", "T"])
-        res_TF = self.XYZ_factor.instVar([self.X, self.Z], ["T", "F"])
-        res_FT = self.XYZ_factor.instVar([self.X, self.Z], ["F", "T"])
-        res_FF = self.XYZ_factor.instVar([self.X, self.Z], ["F", "F"])
+        res_TT = self.XYZ_factor.instVar([(self.X, "T"), (self.Z, "T")])
+        res_TF = self.XYZ_factor.instVar([(self.X, "T"), (self.Z, "F")])
+        res_FT = self.XYZ_factor.instVar([(self.X, "F"), (self.Z, "T")])
+        res_FF = self.XYZ_factor.instVar([(self.X, "F"), (self.Z, "F")])
 
         assert(res_TT.rand_vars == [self.Y] and
                res_TT.values == [1, 3])
@@ -140,10 +140,10 @@ class TestFactorInstVar(TestBase):
         f(X,   Y=v, Z=v)
         """
 
-        res_TT = self.XYZ_factor.instVar([self.Y, self.Z], ["T", "T"])
-        res_TF = self.XYZ_factor.instVar([self.Y, self.Z], ["T", "F"])
-        res_FT = self.XYZ_factor.instVar([self.Y, self.Z], ["F", "T"])
-        res_FF = self.XYZ_factor.instVar([self.Y, self.Z], ["F", "F"])
+        res_TT = self.XYZ_factor.instVar([(self.Y, "T"), (self.Z, "T")])
+        res_TF = self.XYZ_factor.instVar([(self.Y, "T"), (self.Z, "F")])
+        res_FT = self.XYZ_factor.instVar([(self.Y, "F"), (self.Z, "T")])
+        res_FF = self.XYZ_factor.instVar([(self.Y, "F"), (self.Z, "F")])
 
         assert(res_TT.rand_vars == [self.X] and
                res_TT.values == [1, 2])
@@ -159,22 +159,46 @@ class TestFactorInstVar(TestBase):
         f(X=v, Y=v,   Z=v)
         """
 
-        res_TTT = self.XYZ_factor.instVar([self.X, self.Y, self.Z],
-                                          ["T", "T", "T"])
-        res_FTT = self.XYZ_factor.instVar([self.X, self.Y, self.Z],
-                                          ["F", "T", "T"])
-        res_TFT = self.XYZ_factor.instVar([self.X, self.Y, self.Z],
-                                          ["T", "F", "T"])
-        res_FFT = self.XYZ_factor.instVar([self.X, self.Y, self.Z],
-                                          ["F", "F", "T"])
-        res_TTF = self.XYZ_factor.instVar([self.X, self.Y, self.Z],
-                                          ["T", "T", "F"])
-        res_FTF = self.XYZ_factor.instVar([self.X, self.Y, self.Z],
-                                          ["F", "T", "F"])
-        res_TFF = self.XYZ_factor.instVar([self.X, self.Y, self.Z],
-                                          ["T", "F", "F"])
-        res_FFF = self.XYZ_factor.instVar([self.X, self.Y, self.Z],
-                                          ["F", "F", "F"])
+        res_TTT = self.XYZ_factor.instVar([
+            (self.X, "T"),
+            (self.Y, "T"),
+            (self.Z, "T")
+        ])
+        res_FTT = self.XYZ_factor.instVar([
+            (self.X, "F"),
+            (self.Y, "T"),
+            (self.Z, "T")
+        ])
+        res_TFT = self.XYZ_factor.instVar([
+            (self.X, "T"),
+            (self.Y, "F"),
+            (self.Z, "T")
+        ])
+        res_FFT = self.XYZ_factor.instVar([
+            (self.X, "F"),
+            (self.Y, "F"),
+            (self.Z, "T")
+        ])
+        res_TTF = self.XYZ_factor.instVar([
+            (self.X, "T"),
+            (self.Y, "T"),
+            (self.Z, "F")
+        ])
+        res_FTF = self.XYZ_factor.instVar([
+            (self.X, "F"),
+            (self.Y, "T"),
+            (self.Z, "F")
+        ])
+        res_TFF = self.XYZ_factor.instVar([
+            (self.X, "T"),
+            (self.Y, "F"),
+            (self.Z, "F")
+        ])
+        res_FFF = self.XYZ_factor.instVar([
+            (self.X, "F"),
+            (self.Y, "F"),
+            (self.Z, "F")
+        ])
 
         assert(res_TTT.rand_vars == [] and res_TTT.values == [1])
         assert(res_FTT.rand_vars == [] and res_FTT.values == [2])
@@ -186,18 +210,6 @@ class TestFactorInstVar(TestBase):
         assert(res_FFF.rand_vars == [] and res_FFF.values == [8])
 
     def instVar_test_11(self):
-        """
-        If the argument is not well defined by having a different size of
-        variables to instantiate and vales for each variable
-        """
-
-        res = self.XY_factor.instVar([self.X], ["T", "T"])
-        assert(res is None)
-
-        res = self.XY_factor.instVar([self.Y, self.X], ["T"])
-        assert(res is None)
-
-    def instVar_test_12(self):
         """
         If the values is not in the domain of the variable, it should return
         none
