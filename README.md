@@ -85,12 +85,30 @@ The observations are a list of tuples. Each tuple is a pair between a variable a
 
 # To Do
 
-* Add variables that change over time so implementations with them are simpler.
+* Implement indexed random variables to represent distributions like P(X\_t | X\_{t-1}).
 
-* Allow variable domains that are not only strings.
+* Allow integer variable domains.
 
-* Implement *factorOp* algorithm using a parallel approach.
+* Implemented algorithm Elimination Ask should allow more then one query variable.
 
-* The elimination Ask should be allowed to have more then one query variable.
+* Implement Rejection Sampling algorithm.
 
-* Implement setup.py thing.
+* Implement Likelihood Weighting algorithm.
+
+* Implement Gibbs Sampling algorithm. (MCMC)
+
+* Implement product rule for Dist class. (Where P(X | Y) P(Y) will yield P(X, Y))
+
+* Implement construction of factor from Function, not distribution from function.
+
+* Distribution class should check if it is a distribution if after it's construction the sum of it's values is equal to one. Note that with a distribution P(X | Y), the sum of every P(X | Y = y) should sum 1 for every values of y.
+
+* Make method to create a distribution where the user only inputs part of the information and the rest is created automatically, like, with a binary variable X, the user would input P(X = True) = 0.8, and the P(X = False) = 0.2 would automatically be generated.
+
+* Make method where a user makes a new factor but only puts part of the information. The values for the elements that were not inputed would remain with some default value. Like 0.
+
+* Strings should use the % operator like: "a: %, b:%" % 1, 2
+
+* The factorOp method in the Factor class:
+ * Could be implemented using a parallel approach.
+ * Shouldn't take a function as an argument. It should be equal everywhere instead of the last cycle, where it should implement a function for each operation.
