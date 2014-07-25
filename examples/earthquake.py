@@ -19,9 +19,9 @@ Their distributions are bellow.
 """
 
 
-from ProbPy.prob.rand_var import RandVar
-from ProbPy.prob.factor import Factor
-from ProbPy.prob import bn
+from ProbPy.rand_var import RandVar
+from ProbPy.factor import Factor
+from ProbPy import bn
 
 
 if __name__ == "__main__":

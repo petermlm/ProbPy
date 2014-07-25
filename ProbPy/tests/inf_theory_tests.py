@@ -1,7 +1,7 @@
 from nose.tools import with_setup, nottest, assert_almost_equal
-from ProbPy.prob.rand_var import RandVar
-from ProbPy.prob.factor import Factor
-from ProbPy.prob.inf_theory import *
+from ProbPy.rand_var import RandVar
+from ProbPy.factor import Factor
+from ProbPy.inf_theory import *
 
 from ProbPy.tests.test_base import TestBase
 import math

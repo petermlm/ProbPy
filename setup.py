@@ -8,5 +8,5 @@ setup(name="ProbPy",
       author="Pedro Melgueira",
       author_email="pedromelgueira@gmail.com",
       url="https://github.com/petermlm/ProbPy",
-      packages=["ProbPy.prob"],
+      packages=["ProbPy"],
       )

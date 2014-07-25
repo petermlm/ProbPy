@@ -4,9 +4,9 @@ The algorithm calculates the channel capacity for a given channel and is
 implemented using ProbPy
 """
 
-from ProbPy.prob.rand_var import RandVar
-from ProbPy.prob.factor import Factor
-from ProbPy.prob.inf_theory import *
+from ProbPy.rand_var import RandVar
+from ProbPy.factor import Factor
+from ProbPy.inf_theory import *
 
 import math
 import random

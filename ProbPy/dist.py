@@ -3,8 +3,8 @@ TODO
 """
 
 
-from ProbPy.prob.rand_var import RandVar
-from ProbPy.prob.factor import Factor
+from ProbPy.rand_var import RandVar
+from ProbPy.factor import Factor
 import copy
 
 

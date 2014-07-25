@@ -4,8 +4,8 @@ are used in the calculation, X and Y.
 """
 
 
-from ProbPy.prob.rand_var import RandVar
-from ProbPy.prob.factor import Factor
+from ProbPy.rand_var import RandVar
+from ProbPy.factor import Factor
 
 
 if __name__ == "__main__":

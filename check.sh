@@ -8,7 +8,7 @@
 nosetests3
 
 # PEP8
-pep8 ProbPy/prob/*.py
+pep8 ProbPy/*.py
 pep8 ProbPy/tests/*.py
 pep8 examples/*.py
 
