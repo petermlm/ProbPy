@@ -87,8 +87,6 @@ The observations are a list of tuples. Each tuple is a pair between a variable a
 
 * Implement indexed random variables to represent distributions like P(X\_t | X\_{t-1}).
 
-* Allow integer variable domains.
-
 * Implemented algorithm Elimination Ask should allow more then one query variable.
 
 * Implement Rejection Sampling algorithm.
@@ -106,8 +104,6 @@ The observations are a list of tuples. Each tuple is a pair between a variable a
 * Make method to create a distribution where the user only inputs part of the information and the rest is created automatically, like, with a binary variable X, the user would input P(X = True) = 0.8, and the P(X = False) = 0.2 would automatically be generated.
 
 * Make method where a user makes a new factor but only puts part of the information. The values for the elements that were not inputed would remain with some default value. Like 0.
-
-* Strings should use the % operator like: "a: %, b:%" % 1, 2
 
 * The factorOp method in the Factor class:
  * Could be implemented using a parallel approach.

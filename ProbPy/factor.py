@@ -536,7 +536,7 @@ class Factor:
         return True
 
     def __repr__(self):
-        return "(" + self.__str__() + ", " + str(self.values) + ")"
+        return "(%s, %s)" % (self.__str__(), str(self.values))
 
     def __str__(self):
         if len(self.rand_vars) == 1:

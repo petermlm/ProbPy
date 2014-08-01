@@ -66,7 +66,7 @@ class RandVar:
             list_str += str(i) + ", "
         list_str += str(self.domain[-1]) + "]"
 
-        return "(" + str(self.name) + ", " + str(list_str) + ")"
+        return "(%s, %s)" % str(self.name), str(list_str)
 
     def __str__(self):
         return str(self.name)
@@ -85,7 +85,7 @@ class RandVarNameEx(Exception):
         self.bad_name = bad_name
 
     def __str__(self):
-        return "Bad Random Variable name: " + repr(self.bad_name)
+        return "Bad Random Variable name: %s" % repr(self.bad_name)
 
 
 class RandVarDomainEx(Exception):
@@ -95,4 +95,4 @@ class RandVarDomainEx(Exception):
         self.bad_domain = bad_domain
 
     def __str__(self):
-        return "Bad Random Variable domain:" + repr(self.bad_domain)
+        return "Bad Random Variable domain: %s" % repr(self.bad_domain)
