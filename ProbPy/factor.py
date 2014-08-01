@@ -539,15 +539,15 @@ class Factor:
         return "(" + self.__str__() + ", " + str(self.values) + ")"
 
     def __str__(self):
-        if len(self.rand_vars) == 0:
-            return "[]"
+        if len(self.rand_vars) == 1:
+            return str(self.rand_vars[0].name)
 
         s = "["
 
         # Place random variables
         for i in range(len(self.rand_vars) - 1):
-            s += self.rand_vars[i].name + ", "
-        s += self.rand_vars[-1].name + "]"
+            s += str(self.rand_vars[i].name) + ", "
+        s += str(self.rand_vars[-1].name) + "]"
 
         return s
 

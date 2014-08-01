@@ -21,22 +21,24 @@ class RandVar:
     Examples:
         >>> coin = RandVar("Coin", ["Head", "Tail"])
         >>> ball = RandVar("Ball", ["Red", "Green", "Blue"])
+        >>> generic = RandVar(10, list(range(10)))
     """
 
     def __init__(self, name, domain):
         """
-        :param name:   String with the name of this variable
-        :param domain: List with the domain of this variable
+        :param name:   String or Int with the name of this variable
+        :param domain: List with the domain of this variable. The elements in
+                       the domain should be strings or ints.
         """
 
-        if type(name) != str:
+        if type(name) not in [str, int]:
             raise RandVarNameEx(name)
 
         if type(domain) != list or len(domain) == 0:
             raise RandVarDomainEx(domain)
 
         for i in domain:
-            if type(i) != str:
+            if type(i) not in [str, int]:
                 raise RandVarDomainEx(domain)
 
         self.name = name
@@ -61,13 +63,13 @@ class RandVar:
         list_str = "["
 
         for i in self.domain[:-1]:
-            list_str += i + ", "
-        list_str += self.domain[-1] + "]"
+            list_str += str(i) + ", "
+        list_str += str(self.domain[-1]) + "]"
 
-        return "(" + self.name + ", " + list_str + ")"
+        return "(" + str(self.name) + ", " + str(list_str) + ")"
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def __eq__(self, other):
         return self.equal(other)
