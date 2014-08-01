@@ -3,7 +3,8 @@ File that implements the Factor class
 """
 
 
-from ProbPy.rand_var import RandVar
+from ProbPy import RandVar
+
 import copy
 import math
 
