@@ -114,8 +114,6 @@ Only the following files should go in the repository:
 
 * Implement product rule for Dist class. (Where P(X | Y) P(Y) will yield P(X, Y))
 
-* Implement construction of factor from multidimensional matrix
-
 * Distribution class should check if it is a distribution if after it's construction the sum of it's values is equal to one. Note that with a distribution P(X | Y), the sum of every P(X | Y = y) should sum 1 for every values of y.
 
 * Make method to create a distribution where the user only inputs part of the information and the rest is created automatically, like, with a binary variable X, the user would input P(X = True) = 0.8, and the P(X = False) = 0.2 would automatically be generated.

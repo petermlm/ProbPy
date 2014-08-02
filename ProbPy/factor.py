@@ -35,19 +35,41 @@ class Factor:
             if type(i) != RandVar:
                 raise FactorRandVarsEx(rand_vars)
 
+        # Store variables
+        self.rand_vars = rand_vars
+
         if type(values) == list:
-            for i in values:
-                if type(i) != int and type(i) != float:
-                    raise FactorValuesEx(rand_vars)
+            if type(values[0]) == list:
+                self.values = self.flattenList(values)
+
+            else:
+                for i in values:
+                    if type(i) != int and type(i) != float:
+                        raise FactorValuesEx(rand_vars)
+
+                self.values = values
+
+        elif type(values) == int or type(values) == float:
+            self.values = values
+
         elif callable(values):
             self.rand_vars = rand_vars
-            self.makeValuesFromFunction(values)
-            return
-        elif type(values) != int and type(values) != float:
+            self.values = self.makeValuesFromFunction(values)
+
+        else:
             raise FactorValuesEx(rand_vars)
 
-        self.rand_vars = rand_vars
-        self.values = values
+    def flattenList(self, values):
+        if type(values) in [int, float]:
+            return [values]
+
+        elif type(values) == list:
+            res = []
+            for i in values:
+                res += self.flattenList(i)
+            return res
+
+        raise FactorValuesEx(rand_vars)
 
     def makeValuesFromFunction(self, values):
         # Initialize indexes.
@@ -80,7 +102,7 @@ class Factor:
         while doInd(0):
             res.append(values(*cval))
 
-        self.values = res
+        return res
 
     def mult(self, factor):
         """
