@@ -97,7 +97,7 @@ The observations are a list of tuples. Each tuple is a pair between a variable a
 
 * Implement product rule for Dist class. (Where P(X | Y) P(Y) will yield P(X, Y))
 
-* Implement construction of factor from Function, not distribution from function.
+* Implement construction of factor from multidimensional matrix
 
 * Distribution class should check if it is a distribution if after it's construction the sum of it's values is equal to one. Note that with a distribution P(X | Y), the sum of every P(X | Y = y) should sum 1 for every values of y.
 
