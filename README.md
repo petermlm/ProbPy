@@ -83,6 +83,23 @@ The observations are a list of tuples. Each tuple is a pair between a variable a
 
 * The code should be documented. Documentation is done using Sphinx or written by hand when needed.
 
+# Documentation
+
+Documentation is handled with Sphinx. To make the documentation in html execute the following inside the `doc` directory:
+
+    make html
+
+The built result will be in the following directory:
+
+    doc/_build/html/index.html
+
+Only the following files should go in the repository:
+
+    docs/Makefile
+    docs/conf.py
+    docs/*.rst
+    docs/make.bat
+
 # To Do
 
 * Implement indexed random variables to represent distributions like P(X\_t | X\_{t-1}).
