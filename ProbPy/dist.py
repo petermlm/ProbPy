@@ -86,36 +86,3 @@ class Dist(Factor):
 
         else:
             raise Exception
-
-    def makeValuesFromFunction(self, rand_vars, values):
-        # Initialize indexes
-        ind = [len(i.domain) for i in rand_vars]
-        cind = [0] * len(rand_vars)
-        cval = [i.domain[0] for i in rand_vars]
-
-        # Increment cind and cval to next value
-        def doInd(inc):
-            # If inc is out of the bounds of the indexes, the end was reached
-            if inc >= len(ind):
-                return False
-
-            # Move cind[inc] to next value
-            cind[inc] += 1
-
-            # If current cind is at the end, restart it and increment next
-            if cind[inc] == ind[inc]:
-                cind[inc] = 0
-                cval[inc] = rand_vars[inc].domain[0]
-                return doInd(inc+1)
-
-            # Also move the cval index
-            cval[inc] = rand_vars[inc].domain[cind[inc]]
-
-            return True
-
-        # Make values array
-        res = [values(*cval)]
-        while doInd(0):
-            res.append(values(*cval))
-
-        return res

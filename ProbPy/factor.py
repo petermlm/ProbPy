@@ -39,11 +39,48 @@ class Factor:
             for i in values:
                 if type(i) != int and type(i) != float:
                     raise FactorValuesEx(rand_vars)
+        elif callable(values):
+            self.rand_vars = rand_vars
+            self.makeValuesFromFunction(values)
+            return
         elif type(values) != int and type(values) != float:
             raise FactorValuesEx(rand_vars)
 
         self.rand_vars = rand_vars
         self.values = values
+
+    def makeValuesFromFunction(self, values):
+        # Initialize indexes.
+        ind = [len(i.domain) for i in self.rand_vars]
+        cind = [0] * len(self.rand_vars)
+        cval = [i.domain[0] for i in self.rand_vars]
+
+        # Increment cind and cval to next value
+        def doInd(inc):
+            # If inc is out of the bounds of the indexes, the end was reached
+            if inc >= len(ind):
+                return False
+
+            # Move cind[inc] to next value
+            cind[inc] += 1
+
+            # If current cind is at the end, restart it and increment next
+            if cind[inc] == ind[inc]:
+                cind[inc] = 0
+                cval[inc] = self.rand_vars[inc].domain[0]
+                return doInd(inc+1)
+
+            # Also move the cval index
+            cval[inc] = self.rand_vars[inc].domain[cind[inc]]
+
+            return True
+
+        # Make values array
+        res = [values(*cval)]
+        while doInd(0):
+            res.append(values(*cval))
+
+        self.values = res
 
     def mult(self, factor):
         """
