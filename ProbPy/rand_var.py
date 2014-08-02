@@ -66,7 +66,7 @@ class RandVar:
             list_str += str(i) + ", "
         list_str += str(self.domain[-1]) + "]"
 
-        return "(%s, %s)" % str(self.name), str(list_str)
+        return "(%s, %s)" % (str(self.name), str(list_str))
 
     def __str__(self):
         return str(self.name)
