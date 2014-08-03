@@ -18,6 +18,10 @@ class RandVar:
     be of the string type. In later versions other types will be allowed. Maybe
     even types that are other objects.
 
+    :param name:   String or Int with the name of this variable
+    :param domain: List with the domain of this variable. The elements in the
+                   domain should be strings or ints.
+
     Examples:
         >>> coin = RandVar("Coin", ["Head", "Tail"])
         >>> ball = RandVar("Ball", ["Red", "Green", "Blue"])
@@ -25,12 +29,6 @@ class RandVar:
     """
 
     def __init__(self, name, domain):
-        """
-        :param name:   String or Int with the name of this variable
-        :param domain: List with the domain of this variable. The elements in
-                       the domain should be strings or ints.
-        """
-
         if type(name) not in [str, int]:
             raise RandVarNameEx(name)
 

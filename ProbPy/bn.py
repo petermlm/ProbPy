@@ -14,19 +14,14 @@ class BayesianNetworkNode:
     This class represents a node in a Bayesian Network. It has the notion of
     it's variable, it's probability distribution represented using a factor and
     it's parents.
+
+    Arguments:
+    :param node:   A RandVar object, which is going to be this node's variable
+    :param factor: The factor which represents the distribution of this
+                   variable in this node
     """
 
     def __init__(self, node, factor, parents):
-        """
-        Constructor for the BayesianNetworkNode
-
-        Arguments:
-        :param node:   A RandVar object, which is going to be this node's
-                       variable
-        :param factor: The factor which represents the distribution of this
-                       variable in this node
-        """
-
         self.node = node
         self.factor = factor
         self.parents = parents
@@ -39,25 +34,20 @@ class BayesianNetwork:
     """
     Class that implements a Bayesian Network. It encapsulates some algorithms
     for Bayesian inference and abstract their usage
-    """
 
-    def __init__(self, network):
-        """
-        Constructor for class BayesianNetwork
+    :param network: List of tuples, where each tuple represents a node. The
+                    variable in each Node goes in the first element of the
+                    tuple as a RandVar object. The factor for that variable
+                    goes into the second element. The parents of the node go in
+                    a list in the third element of the tuple
 
-        :param network: List of tuples, where each tuple represents a node. The
-                        variable in each Node goes in the first element of the
-                        tuple as a RandVar object. The factor for that variable
-                        goes into the second element. The parents of the node
-                        go in  a list in the third element of the tuple
+    For example, suppose the following network::
 
-        For example, suppose the following network:
+        X --- Y --- W
+         \ -- Z -- /
 
-             / -- Y -- \
-            X           W
-             \ -- Z -- /
+    It's representation for this constructor would be:
 
-        It's representation for this constructor would be:
         >>> network = [
         ...     (X, X_factor, [])
         ...     (Y, Y_factor, [X])
@@ -65,14 +55,15 @@ class BayesianNetwork:
         ...     (W, W_factor, [Y, Z])
         ... ]
 
-        Where the factors are:
+    Where the factors are::
 
         X_factor -- P(X)
         Y_factor -- P(Y | X)
         Z_factor -- P(Z | X)
         W_factor -- P(W | Y, Z)
-        """
+    """
 
+    def __init__(self, network):
         # Will have nodes after they are topologically sorted
         self.network = []
 

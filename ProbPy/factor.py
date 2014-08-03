@@ -15,18 +15,16 @@ class Factor:
     with an array of values. The array of values is a vectorization of the
     multi dimensional matrix that represents the factor.
 
+    :param rand_vars: List of Random Variables of this factor, or single
+                      variable
+    :param values:    Values of the factor
+
     Examples:
         >>> # Assuming X and Y are variables
         >>> XY_factor = Factor([X, Y], [0.2, 0.3, 0.1, 0.4])
     """
 
     def __init__(self, rand_vars, values):
-        """
-        :param rand_vars: List of Random Variables of this factor, or single
-                          variable
-        :param values:    Values of the factor
-        """
-
         # Assure the rand_vars argument is always a list
         if type(rand_vars) != list:
             rand_vars = [rand_vars]

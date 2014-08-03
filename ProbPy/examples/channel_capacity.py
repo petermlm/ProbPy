@@ -56,12 +56,12 @@ def ex1():
 
         C = 1 - H(p),
 
-    where p is the probability of error in the channel:
+    where p is the probability of error in the channel::
 
            p
         0 --- 0
           \ / 1-p
-           \
+           /
           / \ 1-p
         1 --- 1
            p

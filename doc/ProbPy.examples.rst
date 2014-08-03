@@ -33,3 +33,11 @@ examples Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`wet_grass` Module
+-----------------------
+
+.. automodule:: ProbPy.examples.wet_grass
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
