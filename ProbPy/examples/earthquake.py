@@ -1,12 +1,12 @@
 """
 This is an example of using ProbPy to define a simple Bayesian Network and
-executing the Elimination Ask algorithm. The network is defined like so:
+executing the Elimination Ask algorithm. The network is defined like so::
 
-B   E
- \ /
-  A
- / \
-J   M
+     B  E
+      \ |
+        A
+      / |
+     J  M
 
 Each node of the network corresponds with the following Random Variables:
  * Burglary - P(B)
@@ -44,14 +44,13 @@ if __name__ == "__main__":
 
     # This array has the nodes of the network. Each element is a tuple. In each
     # tuple, the first argument is the variable of that node, the second is the
-    # distribution, and the third is the list of parents of that node. Note
-    # that the nodes were place in the list at random
+    # distribution. Note that the nodes were place in the list at random
     network = [
-        (earthq,   factor_earthq,   []),
-        (alarm,    factor_alarm,    [earthq,  burglary]),
-        (john,     factor_john,     [alarm]),
-        (burglary, factor_burglary, []),
-        (mary,     factor_mary,     [alarm])
+        (earthq,   factor_earthq),
+        (alarm,    factor_alarm),
+        (john,     factor_john),
+        (burglary, factor_burglary),
+        (mary,     factor_mary)
     ]
 
     # The network object

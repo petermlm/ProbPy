@@ -17,10 +17,10 @@ if __name__ == "__main__":
 
     # Actual network representation
     network = [
-        (cloudy,    factor_cloudy,    []),
-        (sprinkler, factor_sprinkler, [cloudy]),
-        (rain,      factor_rain,      [cloudy]),
-        (wet_grass, factor_wet_grass, [rain, sprinkler])
+        (cloudy,    factor_cloudy),
+        (sprinkler, factor_sprinkler),
+        (rain,      factor_rain),
+        (wet_grass, factor_wet_grass)
     ]
 
     # Create a Bayesian Network

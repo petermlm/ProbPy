@@ -16,15 +16,15 @@ class BayesianNetworkNode:
     it's parents.
 
     Arguments:
-    :param node:   A RandVar object, which is going to be this node's variable
-    :param factor: The factor which represents the distribution of this
-                   variable in this node
+    :param node:    A RandVar object, which is going to be this node's variable
+    :param factor:  The factor which represents the distribution of this
+                    variable in this node
     """
 
-    def __init__(self, node, factor, parents):
+    def __init__(self, node, factor):
         self.node = node
         self.factor = factor
-        self.parents = parents
+        self.parents = [i for i in factor.rand_vars if i.name != node.name]
 
         # Used in the construction of the Bayesian Network class while sorting
         self.visited = 0
@@ -38,8 +38,7 @@ class BayesianNetwork:
     :param network: List of tuples, where each tuple represents a node. The
                     variable in each Node goes in the first element of the
                     tuple as a RandVar object. The factor for that variable
-                    goes into the second element. The parents of the node go in
-                    a list in the third element of the tuple
+                    goes into the second element.
 
     For example, suppose the following network::
 
@@ -49,10 +48,10 @@ class BayesianNetwork:
     It's representation for this constructor would be:
 
         >>> network = [
-        ...     (X, X_factor, [])
-        ...     (Y, Y_factor, [X])
-        ...     (Z, Z_factor, [X])
-        ...     (W, W_factor, [Y, Z])
+        ...     (X, X_factor)
+        ...     (Y, Y_factor)
+        ...     (Z, Z_factor)
+        ...     (W, W_factor)
         ... ]
 
     Where the factors are::
@@ -68,7 +67,7 @@ class BayesianNetwork:
         self.network = []
 
         # List of unsorted nodes
-        unsorted_net = [BayesianNetworkNode(i[0], i[1], i[2]) for i in network]
+        unsorted_net = [BayesianNetworkNode(i[0], i[1]) for i in network]
         self.topoSortNet(unsorted_net)
 
     def topoSortNet(self, unsorted_net):
