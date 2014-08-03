@@ -104,10 +104,6 @@ Only the following files should go in the repository:
 
 * Implement indexed random variables to represent distributions like P(X\_t | X\_{t-1}).
 
-* Implemented algorithm Elimination Ask should allow more then one query variable.
-
-* Implement Rejection Sampling algorithm.
-
 * Implement Likelihood Weighting algorithm.
 
 * Implement Gibbs Sampling algorithm. (MCMC)
