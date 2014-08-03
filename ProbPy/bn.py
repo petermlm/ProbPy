@@ -2,6 +2,9 @@
 Implementation of a Bayesian Network with some algorithms
 """
 
+
+from ProbPy import Factor
+
 import copy
 import random
 
@@ -18,9 +21,10 @@ class BayesianNetworkNode:
         Constructor for the BayesianNetworkNode
 
         Arguments:
-        node   -- A RandVar object, which is going to be this node's variable
-        factor -- The factor which represents the distribution of this variable
-                  in this node
+        :param node:   A RandVar object, which is going to be this node's
+                       variable
+        :param factor: The factor which represents the distribution of this
+                       variable in this node
         """
 
         self.node = node
@@ -42,16 +46,16 @@ class BayesianNetwork:
         Constructor for class BayesianNetwork
 
         :param network: List of tuples, where each tuple represents a node. The
-                   variable in each Node goes in the first element of the tuple
-                   as a RandVar object. The factor for that variable goes into
-                   the second element. The parents of the node go in  a list in
-                   the third element of the tuple
+                        variable in each Node goes in the first element of the
+                        tuple as a RandVar object. The factor for that variable
+                        goes into the second element. The parents of the node
+                        go in  a list in the third element of the tuple
 
         For example, suppose the following network:
 
-         / -- Y -- \
-        X           W
-         \ -- Z -- /
+             / -- Y -- \
+            X           W
+             \ -- Z -- /
 
         It's representation for this constructor would be:
         >>> network = [
@@ -100,7 +104,7 @@ class BayesianNetwork:
                 # Mark this node has visited, add it to sorted network
                 self.un_num -= 1
                 n.visited = 2
-                self.network.append(n)
+                self.network.insert(0, n)
 
         # Sort nodes
         while self.un_num > 0:
@@ -132,9 +136,10 @@ class BayesianNetwork:
         distribution P(q | E)
 
         :param query_var: Random variable of type RandVar
-        :param observed: List of observations. Each element of the list should
-                         be a tuple, which first element is a RandVar and
-                         second element is the observed value for that variable
+        :param observed:  List of observations. Each element of the list should
+                          be a tuple, which first element is a RandVar and
+                          second element is the observed value for that
+                          variable
 
         Example:
             >>> # Assuming X, Y and Z as vars and vz, vy as values of X and Y
@@ -143,8 +148,11 @@ class BayesianNetwork:
             >>> res # P(Z | X=vx, Y=vy)
         """
 
+        rev_network = self.network[:]
+        rev_network.reverse()
+
         factors = []
-        for i in self.network:
+        for i in rev_network:
             # Append factor to factors list, removing observations
             factors.append(self.makeFactor(i.factor, observed))
 
@@ -166,8 +174,8 @@ class BayesianNetwork:
         Takes a factor and instantiates what is observed
 
         :param arg_factor: Factor in question
-        :param observed: Array with observations following the convention of
-                    eliminationAsk method
+        :param observed:   Array with observations following the convention of
+                           eliminationAsk method
         """
 
         fac = copy.deepcopy(arg_factor)
@@ -184,11 +192,11 @@ class BayesianNetwork:
         Checks if the variable is the query variable or has any observation. If
         it doesn't, then the variable is hidden
 
-        :param var: RandVar object with variable that is being tests if it's
-                     hidden or not
+        :param var:       RandVar object with variable that is being tests if
+                          it's hidden or not
         :param query_var: Query variable for the algorithm
-        :param observed: Array with observations following the convention of
-                     eliminationAsk method
+        :param observed:  Array with observations following the convention of
+                          eliminationAsk method
         """
 
         # If it is the query variable
@@ -207,7 +215,7 @@ class BayesianNetwork:
         Sums the variable in var out, meaning that this function will return
         the product of the factors in arg_factors and will take var out
 
-        :param var: RandVar object that will be summed out
+        :param var:         RandVar object that will be summed out
         :param arg_factors: Factors which will have var summed out
         """
 
@@ -259,6 +267,53 @@ class BayesianNetwork:
             value += values[i]
 
         return domain[-1]
+
+    def rejectionSample(self, query_var, observed, samples_num):
+        """
+        Implementation of the rejection sample algorithm. This algorithms
+        estimates a distribution P(X | e), where X is a query variable and e
+        are observations made in the network.
+
+        :param query_var:   Random variable of type RandVar
+        :param observed:    List of observations. Each element of the list
+                            should be a tuple, which first element is a RandVar
+                            and second element is the observed value for that
+                            variable
+        :param samples_num: Number of samples the algorithm is going to take to
+                            calculate the estimative
+        """
+
+        # List of counts for each value of the domain. Initialized with 0
+        count = {i: 0 for i in query_var.domain}
+
+        # The samples_num of samples
+        for i in range(samples_num):
+            # Take a sample
+            sample = self.sample()
+
+            # Check if it should be rejected
+            rejected = False
+            for j in observed:
+                for k in sample:
+                    # If the value of the sampled variable is different from
+                    # the value of the observed one, rejected
+                    if j[0].name == k[0].name and j[1] != k[1]:
+                        rejected = True
+                        break
+
+                # If the sample was already rejected, get out of the cycle
+                if rejected:
+                    break
+
+            # If the sample is not rejected, increment the counts
+            if not rejected:
+                for j in sample:
+                    if j[0].name == query_var.name:
+                        count[j[1]] += 1
+
+        # Make resulting factor
+        values = [count[i] for i in query_var.domain]
+        return Factor([query_var], values).normalize(query_var)
 
 
 class BayesianNetworkArgEx(Exception):
