@@ -223,28 +223,42 @@ class BayesianNetwork:
         # Return the final factor in the form of a list
         return [prod.marginal(marg_vars)]
 
-    def sample(self):
+    def sample(self, pre_inst=None):
         """
         Returns a random sample of the network in the form of a list of tuples.
         Each tuple is a pair between a random variable and it's instance, in
         the form:
 
             >>> ret = [(X, "T"), (Y, "F")]
+
+        :param pre_inst: Default=None. Should be a list of tuples. Each tuple
+                         is a pair between a random variable and a value of
+                         it's domain. That value will be the value in the
+                         sample instead of leaving it to random chance.
         """
 
         net = self.network[:]
         inst_vars = []
 
         for i in net:
-            t = i.factor.instVar(inst_vars)
-            var = t.rand_vars[0]
-            val = self.pickValue(var.domain, t.values, random.random())
+            insted = i.factor.instVar(inst_vars)
+            var = insted.rand_vars[0]
+
+            in_pre_inst = False
+            for j in pre_inst:
+                if i.node.name == j[0].name:
+                    val = j[1]
+                    in_pre_inst = True
+
+            if not in_pre_inst:
+                val = self.pickRandomValue(var.domain, insted.values,
+                                           random.random())
 
             inst_vars.append((var, val))
 
         return inst_vars
 
-    def pickValue(self, domain, values, prob):
+    def pickRandomValue(self, domain, values, prob):
         """
         Method used with sample(). This method picks one element of the domain
         of a random variable given it's parameters.
