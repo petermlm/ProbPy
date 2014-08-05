@@ -108,14 +108,6 @@ Only the following files should go in the repository:
 
 * Implement Gibbs Sampling algorithm. (MCMC)
 
-* Implement product rule for Dist class. (Where P(X | Y) P(Y) will yield P(X, Y))
-
-* Distribution class should check if it is a distribution if after it's construction the sum of it's values is equal to one. Note that with a distribution P(X | Y), the sum of every P(X | Y = y) should sum 1 for every values of y.
-
-* Make method to create a distribution where the user only inputs part of the information and the rest is created automatically, like, with a binary variable X, the user would input P(X = True) = 0.8, and the P(X = False) = 0.2 would automatically be generated.
-
-* Make method where a user makes a new factor but only puts part of the information. The values for the elements that were not inputed would remain with some default value. Like 0.
-
 * The factorOp method in the Factor class:
  * Could be implemented using a parallel approach.
  * Shouldn't take a function as an argument. It should be equal everywhere instead of the last cycle, where it should implement a function for each operation.
