@@ -27,7 +27,7 @@ if __name__ == "__main__":
     BN = bn.BayesianNetwork(network)
 
     # Run Rejection Sample with the following observations
-    observed = Event([(sprinkler, "True")])
+    observed = Event(var=sprinkler, val="True")
     estimate = BN.rejectionSample(rain, observed, 1000)
 
     print("P(Rain | Sprinkler=true)")

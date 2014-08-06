@@ -3,7 +3,7 @@ Implementation of a Bayesian Network with some algorithms
 """
 
 
-from ProbPy import Factor
+from ProbPy import Factor, Event
 
 import copy
 import random
@@ -126,14 +126,26 @@ class BayesianNetwork:
         distribution P(q | E)
 
         :param query_var: Random variable of type RandVar
-        :param observed:  List of observations. Each element of the list should
-                          be a tuple, which first element is a RandVar and
-                          second element is the observed value for that
-                          variable
+        :param observed:  Instance of Event class, or a list of tuples
 
-        Example:
+        The Event class can be used to make the observations, but it is also
+        possible to use a list of observations like the ones used to define an
+        Event.
+
+        Example using the event class and the list or observations:
+
             >>> # Assuming X, Y and Z as vars and vz, vy as values of X and Y
             >>> observed = [(X, vx), (Y, vy)]
+            >>> res = BN.eliminationAsk(Z, observed)
+            >>> res # P(Z | X=vx, Y=vy)
+
+            >>> observed = Event(tlist=[(X, vx), (Y, vy)])
+            >>> res = BN.eliminationAsk(Z, observed)
+            >>> res # P(Z | X=vx, Y=vy)
+
+            >>> observed = Event()
+            >>> observed.setValue(X, vx)
+            >>> observed.setValue(Y, vy)
             >>> res = BN.eliminationAsk(Z, observed)
             >>> res # P(Z | X=vx, Y=vy)
         """
@@ -225,9 +237,9 @@ class BayesianNetwork:
 
     def sample(self, pre_inst=None):
         """
-        Returns a random sample of the network in the form of a list of tuples.
-        Each tuple is a pair between a random variable and it's instance, in
-        the form:
+        Returns a random sample of the network in the form of an Event. An
+        event will contain a list of tuples. Each tuple is a pair between a
+        random variable and it's instance, in the form:
 
             >>> ret = [(X, "T"), (Y, "F")]
 
@@ -238,7 +250,7 @@ class BayesianNetwork:
         """
 
         net = self.network[:]
-        inst_vars = []
+        inst_vars = Event()
 
         for i in net:
             insted = i.factor.instVar(inst_vars)
@@ -251,7 +263,7 @@ class BayesianNetwork:
                 val = self.pickRandomValue(var.domain, insted.values,
                                            random.random())
 
-            inst_vars.append((var, val))
+            inst_vars.setValue(var, val)
 
         return inst_vars
 

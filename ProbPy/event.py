@@ -4,8 +4,13 @@ TODO documentation
 
 
 class Event:
-    def __init__(self, event=[]):
-        self.event = event
+    def __init__(self, tlist=None, var=None, val=None):
+        if tlist is not None and type(tlist) is list:
+            self.event = tlist
+        elif var is not None or val is not None:
+            self.event = [(var, val)]
+        else:
+            self.event = []
 
     def varInEvent(self, var):
         for i in self.event:

@@ -56,9 +56,11 @@ if __name__ == "__main__":
     # The network object
     BN = bn.BayesianNetwork(network)
 
-    # An array with observed values for some variables. In this example the
-    # variable john was observed being true. Same for variable mary
-    observed = Event([(john, "True"), (mary, "True")])
+    # An event with the observations In this example the variable john was
+    # observed being true. Same for variable mary
+    observed = Event()
+    observed.setValue(john, "True")
+    observed.setValue(mary, "True")
 
     # Run the elimination ask algorithm (Variable Elimination) for the example.
     # Result should be approximately [0.284, 0.716]
@@ -67,13 +69,10 @@ if __name__ == "__main__":
     print("P(Burglary | John=true, Mary=true)")
     print(burglary_k_john_mary.values)
 
-    print("----------")
-
     # Another example with the same network. The observation and query variable
     # changed, but the order of the distributions is the same. The result
     # should be approximately [0.849, 0.150]
-
-    observed = [(burglary, "True")]
+    observed = Event(var=burglary, val="True")
     john_k_burglary = BN.eliminationAsk(john, observed)
 
     print("P(John | Burglary=true)")

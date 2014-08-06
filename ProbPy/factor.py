@@ -3,7 +3,7 @@ File that implements the Factor class
 """
 
 
-from ProbPy import RandVar
+from ProbPy import RandVar, Event
 
 import copy
 import math
@@ -423,26 +423,39 @@ class Factor:
         Instantiates variables of a factor. Instantiating variable X with value
         vx and Y with vy would yield f(X=vx, Y=vy, Z) = f(Z).
 
-        :param arg:   This argument should contain a list of tuples which
-                      represent a pair between a variable and a value to be
-                      instantiated in the factor.
+        :param arg:   This argument should be an Event object or contain a list
+                      of tuples which represent a pair between a variable and a
+                      value to be instantiated in the factor.
         :param value: If the first argument is not a list and is a single
                       variable, this argument should be it's value
         :returns:     Factor equivalent to self but lacking variables in
                       rand_vars, which were initialized
 
-        Examples:
+        The method may be used in three ways. First way is single var with
+        single value:
+
             >>> # Suppose fX is the factor f(X)
             >>> fX.instVar(X, vx) # Would yield f(X=vx)
 
+        Second is with an Event object:
+
             >>> # Suppose fXYZ is the factor f(X, Y, Z)
-            >>> fXYZ.instVar([(X, vx), (Y, vy), (Z, vz)]) # Would yield
-            >>> # f(X=vx, Y=vy, Z) = f(Z)
+            >>> event = Event(tlist=[(X, vx), (Y, vy)])
+            >>> fXYZ.instVar(event)
+            >>> # Would yield f(X=vx, Y=vy, Z) = f(Z)
+
+        Third is with a list of tuple where each tuple is a pair between a
+        variable and value. This list is similar to the kind of list used in
+        the definition of an event.
+
+            >>> # Suppose fXYZ is the factor f(X, Y, Z)
+            >>> fXYZ.instVar([(X, vx), (Y, vy)])
+            >>> # Would yield f(X=vx, Y=vy, Z) = f(Z)
         """
 
         # Check if this is an instantiation of many variables by using only the
         # first argument as a list
-        if type(arg) is list and value is None:
+        if type(arg) in [list, Event] and value is None:
             res = copy.copy(self)
 
             # Instantiate one variable at a time
