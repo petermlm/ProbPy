@@ -8,8 +8,10 @@ from ProbPy import RandVar
 
 class EventEle:
     def __init__(self, var, val):
-        if type(var) is not RandVar or val is None:
-            raise Exception
+        if type(var) is not RandVar:
+            raise EventEleEx("var")
+        elif val is None:
+            raise EventEleEx("val")
 
         self.var = var
         self.val = val
@@ -52,3 +54,14 @@ class Event:
             ele = self.event[cindex]
             yield (ele.var, ele.val)
             cindex += 1
+
+
+class EventEleEx(Exception):
+    def __init__(self, op):
+        if op is "var":
+            self.txt = "Bad value for var argument of Event element."
+        elif op is "val":
+            self.txt = "Bad value for val argument of Event element."
+
+    def __str__(self):
+        return self.txt
