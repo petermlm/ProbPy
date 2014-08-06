@@ -19,7 +19,7 @@ Their distributions are bellow.
 """
 
 
-from ProbPy import RandVar, Factor
+from ProbPy import RandVar, Factor, Event
 from ProbPy import bn
 
 
@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
     # An array with observed values for some variables. In this example the
     # variable john was observed being true. Same for variable mary
-    observed = [(john, "True"), (mary, "True")]
+    observed = Event([(john, "True"), (mary, "True")])
 
     # Run the elimination ask algorithm (Variable Elimination) for the example.
     # Result should be approximately [0.284, 0.716]

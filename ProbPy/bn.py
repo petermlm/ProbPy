@@ -242,15 +242,12 @@ class BayesianNetwork:
 
         for i in net:
             insted = i.factor.instVar(inst_vars)
-            var = insted.rand_vars[0]
+            var = i.node
 
-            in_pre_inst = False
-            for j in pre_inst:
-                if i.node.name == j[0].name:
-                    val = j[1]
-                    in_pre_inst = True
+            if pre_inst is not None:
+                val = pre_inst.value(i.node)
 
-            if not in_pre_inst:
+            if pre_inst is None or val is None:
                 val = self.pickRandomValue(var.domain, insted.values,
                                            random.random())
 

@@ -1,4 +1,4 @@
-from ProbPy import RandVar, Factor
+from ProbPy import RandVar, Factor, Event
 from ProbPy import bn
 
 if __name__ == "__main__":
@@ -27,7 +27,7 @@ if __name__ == "__main__":
     BN = bn.BayesianNetwork(network)
 
     # Run Rejection Sample with the following observations
-    observed = [(sprinkler, "True")]
+    observed = Event([(sprinkler, "True")])
     estimate = BN.rejectionSample(rain, observed, 1000)
 
     print("P(Rain | Sprinkler=true)")

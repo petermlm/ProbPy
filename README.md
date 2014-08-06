@@ -108,6 +108,12 @@ Only the following files should go in the repository:
 
 * Implement Gibbs Sampling algorithm. (MCMC)
 
+* Make documentation for new Event class.
+
+* Make unit tests for new Event class.
+
+* Remove usage of list of tuples methodology [(var1, val1), (var2, val2), ...] and replace it with Event methodology.
+
 * The factorOp method in the Factor class:
  * Could be implemented using a parallel approach.
  * Shouldn't take a function as an argument. It should be equal everywhere instead of the last cycle, where it should implement a function for each operation.
