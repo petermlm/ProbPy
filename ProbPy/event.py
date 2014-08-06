@@ -3,36 +3,52 @@ TODO documentation
 """
 
 
+from ProbPy import RandVar
+
+
+class EventEle:
+    def __init__(self, var, val):
+        if type(var) is not RandVar or val is None:
+            raise Exception
+
+        self.var = var
+        self.val = val
+
+
 class Event:
     def __init__(self, tlist=None, var=None, val=None):
         if tlist is not None and type(tlist) is list:
-            self.event = tlist
+            self.event = [EventEle(i[0], i[1]) for i in tlist]
         elif var is not None or val is not None:
-            self.event = [(var, val)]
+            self.event = [EventEle(var, val)]
         else:
             self.event = []
 
     def varInEvent(self, var):
         for i in self.event:
-            if i[0].name == var.name:
+            if i.var.name == var.name:
                 return True
+
         return False
 
     def value(self, var):
         for i in self.event:
-            if i[0].name == var.name:
-                return i[1]
+            if i.var.name == var.name:
+                return i.val
+
         return None
 
-    def setValue(self, var, value):
+    def setValue(self, var, val):
         for i in range(len(self.event)):
-            if self.event[i][0].name == var.name:
-                self.event[i][1] = value
+            if self.event[i].var.name == var.name:
+                self.event[i].val = val
                 return
-        self.event.append((var, value))
+
+        self.event.append(EventEle(var, val))
 
     def __iter__(self):
         cindex = 0
         while cindex < len(self.event):
-            yield self.event[cindex]
+            ele = self.event[cindex]
+            yield (ele.var, ele.val)
             cindex += 1
