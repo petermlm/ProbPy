@@ -17,10 +17,10 @@ ProbPy Package
     :undoc-members:
     :show-inheritance:
 
-:mod:`dist` Module
-------------------
+:mod:`event` Module
+-------------------
 
-.. automodule:: ProbPy.dist
+.. automodule:: ProbPy.event
     :members:
     :undoc-members:
     :show-inheritance:

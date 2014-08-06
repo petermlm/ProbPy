@@ -132,16 +132,22 @@ class BayesianNetwork:
         possible to use a list of observations like the ones used to define an
         Event.
 
-        Example using the event class and the list or observations:
+        Example using the event class and the list or observations.
+
+        Without Event class:
 
             >>> # Assuming X, Y and Z as vars and vz, vy as values of X and Y
             >>> observed = [(X, vx), (Y, vy)]
             >>> res = BN.eliminationAsk(Z, observed)
             >>> res # P(Z | X=vx, Y=vy)
 
+        With Event class:
+
             >>> observed = Event(tlist=[(X, vx), (Y, vy)])
             >>> res = BN.eliminationAsk(Z, observed)
             >>> res # P(Z | X=vx, Y=vy)
+
+        Another with Event class:
 
             >>> observed = Event()
             >>> observed.setValue(X, vx)

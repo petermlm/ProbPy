@@ -1,6 +1,14 @@
 tests Package
 =============
 
+:mod:`event_tests` Module
+-------------------------
+
+.. automodule:: ProbPy.tests.event_tests
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 :mod:`factor_expectedValue_tests` Module
 ----------------------------------------
 
