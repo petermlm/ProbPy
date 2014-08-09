@@ -9,6 +9,11 @@ import copy
 import random
 
 
+TS_Unvisited = 0
+TS_Processing = 1
+TS_Visited = 2
+
+
 class BayesianNetworkNode:
     """
     This class represents a node in a Bayesian Network. It has the notion of
@@ -22,12 +27,14 @@ class BayesianNetworkNode:
     """
 
     def __init__(self, node, factor):
+        # Attributes of network node
         self.node = node
         self.factor = factor
-        self.parents = [i for i in factor.rand_vars if i.name != node.name]
+        self.parents = []
 
-        # Used in the construction of the Bayesian Network class while sorting
-        self.visited = 0
+        # Used in the construction of the Bayesian Network class
+        self.visited = TS_Unvisited
+        self.parent_vars = [i for i in factor.rand_vars if i.name != node.name]
 
 
 class BayesianNetwork:
@@ -71,42 +78,34 @@ class BayesianNetwork:
         self.topoSortNet(unsorted_net)
 
     def topoSortNet(self, unsorted_net):
-        # Keep number of unvisited nodes
-        self.un_num = len(unsorted_net)
-
-        # Visit procedure for the sorted algorithm
-        def visit(n):
+        # Visit procedure for the sort algorithm
+        def visit(cnode):
             # If this has temporary mark, stop. Not a DAG
-            if n.visited == 1:
+            if cnode.visited == TS_Processing:
                 raise BayesianNetworkArgEx()
 
             # If it has not been visited
-            if n.visited == 0:
+            if cnode.visited == TS_Unvisited:
                 # Mark temporally
-                n.visited = 1
+                cnode.visited = TS_Processing
 
-                # Find node that connects with this one and visited
+                # Find node that connects with this one and visit them
                 for i in unsorted_net:
-                    for j in i.parents:
-                        if n.node.name == j.name:
+                    for j in i.parent_vars:
+                        if cnode.node.name == j.name:
+                            # Add current node to parents of found node and
+                            # visit it
+                            i.parents.append(cnode)
                             visit(i)
 
-                # Mark this node has visited, add it to sorted network
-                self.un_num -= 1
-                n.visited = 2
-                self.network.insert(0, n)
+                # Mark node as visited and add it to sorted list network
+                cnode.visited = TS_Visited
+                self.network.insert(0, cnode)
 
         # Sort nodes
-        while self.un_num > 0:
-            # Select unmarked
-            n = None
-            for i in unsorted_net:
-                if i.visited == 0:
-                    n = i
-                    break
-
-            # Visited
-            visit(n)
+        for i in unsorted_net:
+            if i.visited == TS_Unvisited:
+                visit(i)
 
     def nodeInGraph(self, node):
         """ Look for the node, if the node was not found, return None """
