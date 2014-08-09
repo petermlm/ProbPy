@@ -15,7 +15,7 @@ echo ""
 echo "PEP8 Checking:"
 pep8 ProbPy/*.py
 pep8 ProbPy/tests/*.py
-pep8 ProbPy/examples/*.py
+pep8 examples/*.py
 echo "Done"
 
 echo ""
@@ -23,16 +23,16 @@ echo ""
 
 # Examples
 echo "Bayesian Theorem Example:"
-python3 ProbPy/examples/bayes_theorem.py
+python3 examples/bayes_theorem.py
 
 echo ""
 echo "Earthquake Script Example:"
-python3 ProbPy/examples/earthquake.py
+python3 examples/earthquake.py
 
 echo ""
 echo "Wet Grass Example:"
-python3 ProbPy/examples/wet_grass.py
+python3 examples/wet_grass.py
 
 echo ""
 echo "Channel Capacity Example:"
-python3 ProbPy/examples/channel_capacity.py
+python3 examples/channel_capacity.py
