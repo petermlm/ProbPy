@@ -333,6 +333,33 @@ class BayesianNetwork:
         values = [count[i] for i in query_var.domain]
         return Factor([query_var], values).normalize(query_var)
 
+    def markovBlanket(self, node):
+        """
+        Returns a list containing the nodes that make up the Markov Blanket to
+        the node in the argument.
+
+        :paran node: The node for which the Markov Blanket is to be
+                     calculated. Should be an instance of
+                     BayesianNetworkNode
+        :return:     A list with nodes that make up the Markov Blanket
+        """
+
+        # Get parents
+        parents = node.parents
+
+        # Get Children
+        children = []
+        for i in self.network:
+            if node in i.parents:
+                children.append(i)
+
+        # Get children's parents
+        child_parents = []
+        for i in children:
+            child_parents += [j for j in i.parents if j != node]
+
+        return parents + children + child_parents
+
 
 class BayesianNetworkArgEx(Exception):
     """
