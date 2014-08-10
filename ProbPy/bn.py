@@ -361,6 +361,53 @@ class BayesianNetwork:
 
         return parents + children + child_parents
 
+    def gibbsAsk(self, query_var, observed, samples_num):
+        # Result is a list of counts for each value in the domain of the query
+        # variable. Initialized with 0
+        res = {i: 0 for i in query_var.domain}
+
+        # Assure the observed argument is an Event
+        if type(observed) != Event:
+            observed = Event(observed)
+
+        # Create non evidence variable list, which are all the variables not
+        # present in the observations
+        non_evidence_vars = [i for i in self.network \
+                             if not observed.varInEvent(i.node)]
+
+        # Get markov blankets for each non evidence variable
+        mbs = dict()
+        for i in non_evidence_vars:
+            mbs[i.node.name] = self.markovBlanket(i)
+
+        # Make an initial sample
+        sample = self.sample(observed)
+
+        # Execute for samples_num samples
+        for i in range(samples_num):
+            for j in non_evidence_vars:
+                # Get distribution P(j | mb(j))
+                dist = j.factor
+                for k in mbs[j.node.name]:
+                    dist *= k.factor
+
+                # Instantiate with previous sample, except for current j
+                # variable
+                sample.removeVar(j.node)
+                dist = dist.instVar(sample)
+
+                # Set new random value of current variable in sample
+                rvalue = self.pickRandomValue(dist.rand_vars[0].domain,
+                                              dist.values, random.random())
+                sample.setValue(j.node, rvalue)
+
+                # Increment count
+                res[rvalue] += 1
+
+        # Return the count list normalized
+        values = [res[i] for i in query_var.domain]
+        return Factor(query_var, values).normalize(query_var)
+
 
 class BayesianNetworkArgEx(Exception):
     """

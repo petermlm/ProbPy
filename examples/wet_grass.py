@@ -31,9 +31,15 @@ if __name__ == "__main__":
     # Create a Bayesian Network
     BN = bn.BayesianNetwork(network)
 
-    # Run Rejection Sample with the following observations
+    # Set one observation
     observed = Event(var=sprinkler, val="True")
-    estimate = BN.rejectionSample(rain, observed, 1000)
 
+    # Run Rejection Sample algorithm
+    estimate = BN.rejectionSample(rain, observed, 10000)
+    print("P(Rain | Sprinkler=true)")
+    print(estimate.values)
+
+    # Run Gibbs Ask algorithm
+    estimate = BN.gibbsAsk(rain, observed, 10000)
     print("P(Rain | Sprinkler=true)")
     print(estimate.values)
