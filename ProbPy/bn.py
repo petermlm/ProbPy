@@ -356,7 +356,8 @@ class BayesianNetwork:
         # Get children's parents
         child_parents = []
         for i in children:
-            child_parents += [j for j in i.parents if j != node]
+            child_parents += [j for j in i.parents \
+                              if j != node and j not in parents+children]
 
         return parents + children + child_parents
 
