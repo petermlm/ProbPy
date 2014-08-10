@@ -98,6 +98,18 @@ class Event:
 
         self.event[var] = val
 
+    def removeVar(self, var):
+        """
+        Removes variable from the event, if it exists
+
+        :param var: Variable to be removed from event
+        """
+
+        if not self.varInEvent(var):
+            return
+
+        self.event.pop(var)
+
     def __iter__(self):
         """
         Allows iteration of an event. The following:

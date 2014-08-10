@@ -82,7 +82,18 @@ class TestEvent(TestBase):
         assert(event.value(self.X) == self.X.domain[1])
         assert(event.value(self.Y) == self.Y.domain[1])
 
-    def eventIter_test_7(self):
+    def eventRemoveVar_test_7(self):
+        """
+        Test setValue method
+        """
+
+        event = Event(var=self.X, val=self.X.domain[0])
+        event.removeVar(self.X)
+        event.removeVar(self.Y)  # Already not in event
+        assert(not event.varInEvent(self.X))
+        assert(not event.varInEvent(self.Y))
+
+    def eventIter_test_8(self):
         tlist = [(self.X, self.X.domain[0]),
                  (self.Y, self.Y.domain[0]),
                  (self.Z, self.Z.domain[0])]
