@@ -75,6 +75,9 @@ class RandVar:
     def __ne__(self, other):
         return not self.equal(other)
 
+    def __hash__(self):
+        return self.name.__hash__()
+
 
 class RandVarNameEx(Exception):
     """ Exception use for a bad Random Variable name """

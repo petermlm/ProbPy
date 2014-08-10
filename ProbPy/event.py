@@ -20,25 +20,6 @@ The EventEle class is a tuple in the list.
 from ProbPy import RandVar
 
 
-class EventEle:
-    """
-    Element of an event. It's simply a pair between a Random Variable and a
-    value from it's domain.
-
-    :param var: Random Variable, of type RandVar
-    :param val: Value from domain of variable
-    """
-
-    def __init__(self, var, val):
-        if type(var) is not RandVar:
-            raise EventEleEx("var")
-        elif val is None:
-            raise EventEleEx("val")
-
-        self.var = var
-        self.val = val
-
-
 class Event:
     """
     The Event class specifies an event in order of a set of random variables.
@@ -75,11 +56,13 @@ class Event:
 
     def __init__(self, tlist=None, var=None, val=None):
         if tlist is not None and type(tlist) is list:
-            self.event = [EventEle(i[0], i[1]) for i in tlist]
+            self.event = {i[0]: i[1] for i in tlist}
+
         elif var is not None or val is not None:
-            self.event = [EventEle(var, val)]
+            self.event = {var: val}
+
         else:
-            self.event = []
+            self.event = dict()
 
     def varInEvent(self, var):
         """
@@ -89,11 +72,7 @@ class Event:
         :param var: Variable which is checked.
         """
 
-        for i in self.event:
-            if i.var.name == var.name:
-                return True
-
-        return False
+        return var in self.event.keys()
 
     def value(self, var):
         """
@@ -103,11 +82,10 @@ class Event:
         :param var: Variable from which the value is checked.
         """
 
-        for i in self.event:
-            if i.var.name == var.name:
-                return i.val
+        if not self.varInEvent(var):
+            return None
 
-        return None
+        return self.event[var]
 
     def setValue(self, var, val):
         """
@@ -118,12 +96,7 @@ class Event:
         :param val: Value to be assign to the variable
         """
 
-        for i in range(len(self.event)):
-            if self.event[i].var.name == var.name:
-                self.event[i].val = val
-                return
-
-        self.event.append(EventEle(var, val))
+        self.event[var] = val
 
     def __iter__(self):
         """
@@ -139,19 +112,5 @@ class Event:
             >>>  (varn, valn)]
         """
 
-        cindex = 0
-        while cindex < len(self.event):
-            ele = self.event[cindex]
-            yield (ele.var, ele.val)
-            cindex += 1
-
-
-class EventEleEx(Exception):
-    def __init__(self, op):
-        if op is "var":
-            self.txt = "Bad value for var argument of Event element."
-        elif op is "val":
-            self.txt = "Bad value for val argument of Event element."
-
-    def __str__(self):
-        return self.txt
+        for i in self.event:
+            yield (i, self.event[i])
