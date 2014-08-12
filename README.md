@@ -1,87 +1,69 @@
-A Python library for multi variable probabilistic calculus.
+A Python library for discrete multi variable probabilistic calculus.
 
 # About ProbPy
 
-ProbPy is a Python library that aims to simplify calculations with multi variable probabilistic distributions by offering an abstraction over how the data is stored and how the operations between distributions are performed.
+ProbPy is a Python library that aims to simplify calculations with discrete multi variable probabilistic distributions by offering an abstraction over how the data is stored and how the operations between distributions are performed.
 
-The library can be used in the implementation of many algorithms such as Bayesian Inference algorithms, Smoothing, Filtering, among other things.
+The library can be used in the implementation of many algorithms such as Bayes Theorem, Bayesian Inference algorithms like Variable Elimination, Gibbs Ask (MCMC), HMMs implementations, Information Theory, etc.
 
-# Features
+# Example and Features
 
-With ProbPy you can work with probability distributions. First define the Random Variables:
+With ProbPy you can work with factors that represent probability distributions. First define the Random Variables:
 
-    X = RandVar("X", ["T", "F"])
-    Y = RandVar("Y", ["T", "F"])
+    X = RandVar("X", ["A", "B", "C"])
+    Y = RandVar("Y", ["True", "False"])
 
-After that, the factors representing probability distributions can be declared.
+The first argument of the constructor is the name of the variable and the second is its domain. After that, the factors representing probability distributions can be declared.
 
     fy = Factor(Y, [0.2, 0.8])
-    fx_y = Factor([X, Y], [0.1, 0.9, 0.5, 0.5])
+    fx_y = Factor([X, Y], [[0.1, 0.4, 0.5],
+                           [0.5, 0.1, 0.4]])
 
-Above, the first factor corresponds to a distribution `P(Y)` and the second to a distribution `P(X | Y)`.
+Above, the first factor corresponds to a distribution `P(Y)` and the second to a distribution `P(X | Y)`. The first argument is the list of variables, or single vairable, indexing the factor. The second argument are the values of that factor. Note that the values of second factor `fx_y`, are inserted using a list of lists. The rightmost variable `Y` indexes the outer list, variable `X` indexes the inner list.
 
-Having this you can calculate the product of those distribution to get the join `P(X, Y)`, and normalize that distribution to get `P(Y | X)`.
+Having this, you can calculate the product of those distribution to get the join `P(X, Y)`. This can be done either using a method of one of the factors or using the `*` operator, which will yield the same result:
+
+    fyx = fx_y * fy
+    fyx = fx_y.mult(fy)
+
+These operations and others can be used to implement more complex operations, for example, the Bayes theorem:
 
     fy_x = (fx_y * fy).normalize(Y)
 
-This was the Bayes Theorem implemented using ProbPy. For more features check the examples and the documentation. The example can be executed with the commands:
+The line above first calculates the factor `P(X, Y)` and normalize it to Y to yield `P(Y | X)`. Another way to calculate the same result would be to do:
 
-    python3 -m ProbPy.examples.earthquake
-    python3 -m ProbPy.examples.bayes_theorem
+    fyx = fx_y * fy
+    fy_x = fyx / fyx.marginal(X)
 
-# Examples
+The `marginal` method calculates the marginal distribution `P(X)` from `P(X, Y)`.
 
-This example is in the `example.py` file.
+Among other features, factors can also have some variables initialized. Suppose the factor `P(X, Y, Z)` in which every variable is binary and an event `X=True`, `Z=False`. You can initialize this variables to get a factor only over `Y`.
 
-The following code creates binary random variables. The first argument of `RandVar` is the name of the variable and the second is it's domain.
+    X = RandVar("X", ["T", "F"])
+    Y = RandVar("Y", ["T", "F"])
+    Z = RandVar("Z", ["T", "F"])
 
-    burglary = factor.RandVar("burglary", ["True", "False"])
-    earthq = factor.RandVar("earthq", ["True", "False"])
-    alarm = factor.RandVar("alarm", ["True", "False"])
-    john = factor.RandVar("john", ["True", "False"])
-    mary = factor.RandVar("mary", ["True", "False"])
+    fxyz = Factor([X, Y, Z], [
+        # Z = True
+        [[10, 20],
+         [30, 40]],
 
-Having the variables it is now possible to create factors with them. A factor is basically the information of a probability distribution, like P(X, Y | Z), but the notion of dependency just isn't shown, hence the corresponding factor would be f(X, Y, Z).
+        # Z = False
+        [[50, 60],
+         [70, 80]]])
 
-    factor_burglary = factor.Factor([burglary], [0.001, 0.999])
-    factor_earthq = factor.Factor([earthq], [0.002, 0.998])
-    factor_alarm = factor.Factor([alarm, earthq, burglary], [0.95, 0.05, 0.94, 0.06, 0.29, 0.71, 0.001, 0.999])
-    factor_john = factor.Factor([john, alarm], [0.90, 0.10, 0.05, 0.95])
-    factor_mary = factor.Factor([mary, alarm], [0.70, 0.30, 0.01, 0.99])
+    e = Event()
+    e.setValue(X, "T")
+    e.setValue(Z, "F")
 
-In the current implementation a Bayesian network can be implemented simply with a list of tuples, where each tuple is a pair with a variable, and a factor and a list of parents.
+    fy = fxyz.instVar(e)
+    print(fy.values)  # [50, 70]
 
-    network = [
-        (earthq,   factor_earthq,   []),
-        (alarm,    factor_alarm,    [earthq,  burglary]),
-        (john,     factor_john,     [alarm]),
-        (burglary, factor_burglary, []),
-        (mary,     factor_mary,     [alarm])
-    ]
+In the code above you will see the Event class being used to create an event. The factor `fxyz` has it's variables `x` and `z` instantiated yielding another factor that only has the `y` variable.
 
-    BN = bn.BayesianNetwork(network)
+The library has the `RandVar` and `Factor` classes as seen above. It also has the `BayesianNetwork` class that represents a Bayesian Network and has a few inference algorithms implemented, like the Gibbs Ask algorithm.
 
-Finally the Elimination Ask algorithm can be called with a query variable and a few observations.
-
-    # Calculates: P(Burglary | John=true, Mary=true)
-    observed = [(john, "True"), (mary, "True")]
-    burglary_k_john_mary = BN.eliminationAsk(burglary, observed)
-
-    # Calculates: P(John | Burglary=true)
-    observed = [(burglary, "True")]
-    john_k_burglary = BN.eliminationAsk(john, observed)
-
-The observations are a list of tuples. Each tuple is a pair between a variable and it's observation in a specific situation.
-
-# Contributing
-
-* This project is aimed to work with Python 3.
-
-* The project uses [PEP8](http://legacy.python.org/dev/peps/pep-0008) as a style guide. The tool [autopep8](https://pypi.python.org/pypi/autopep8/) may help in assuring the project follows the standards.
-
-* The code should have tests. Every test is implemented in the `bayes/test` directory an [nosetests](https://nose.readthedocs.org/en/latest/) is used run them. The run the tests use `nosetests3 bayes/test`.
-
-* The code should be documented. Documentation is done using Sphinx or written by hand when needed.
+**To see examples check the examples directory. To get a full list of features of this library check the documentation provided in this repository.**
 
 # Documentation
 
@@ -100,14 +82,60 @@ Only the following files should go in the repository:
     docs/*.rst
     docs/make.bat
 
-# To Do
+# Contributing
 
-* Implement indexed random variables to represent distributions like P(X\_t | X\_{t-1}).
+* This project is implemented using Python 3.2. Earlier version of python are not supported.
+
+* The project uses [PEP8](http://legacy.python.org/dev/peps/pep-0008) as a style guide. The tool [autopep8](https://pypi.python.org/pypi/autopep8/) may help in assuring the project follows the standards.
+
+* The code should have tests. Every test is implemented in the `ProbPy/test` directory an [nosetests](https://nose.readthedocs.org/en/latest/) is used run them. The run the tests use `nosetests3 ProbPy/test`.
+
+* The code should be documented. Documentation is done using Sphinx or written by hand when needed.
+
+# FAQ
+
+**Q: What is the main problem that ProbPy tries to solve? Why was it developed?**
+
+The aim of ProbPy is to offer a simple way to work with random variables, discrete probability distributions and factors of the form `P(X, Y, Z | W)`, `f(A, B, C)`, and use them to implement probabilistic calculations like Bayes Theorem, Graphical Models such as Bayesian Networks, Bayesian Inference algorithms, Fuzzy Logic operations, Information Theory calculations, among other things.
+
+The library provides an abstraction that makes it possible for the user to work with the distributions, factors, algorithms, etc, without having to know how they are implemented.
+
+**Q: Who is developing ProbPy and why did development started?**
+
+The original author, and current administrator, started developing ProbPy to implement a few probabilistic algorithms for his Master's Degree Thesis. The project started growing and it was made into an Open Source Project.
+
+**Q: Is this project comparable in any way to Numpy?**
+
+No. Numpy can represent multidimensional matrices and implements a lot of algebraic operations using them. But this library uses its own representation of factors and such representation makes it simple to have factors with an arbitrary number of random variables (dimensions) and makes it easy to implement operations between them. Numpy could not be simple 
+
+**Q: Does the project use any other library in its implementation?**
+
+No. Pretty much every operations and algorithms implemented in ProbPy comes down to the ability of relating an arbitrarily big factor with another, that is, doing multiplication between factors like `f(X, Y, i, j) f(A, B, i, j) = f(X, Y, A, B, i, j)`. The data structure and algorithms that allows this are implemented directly in Python and no other library is used because.
+
+**Q: What are the dependencies of ProbPy?**
+
+For usage, just Python 3.2. For development, see the *Contributing* section.
+
+**Q: Can ProbPy be used for very large quantities of data? Is it efficient in doing so?**
+
+ProbPy is of course built to be as efficient as possible, but being a project that is still in it's infancy there are a lot of details that were made to be more maintainable then efficient. With this in mind note that there are a lot of improvements that can be made in regards to efficiency, like implementing certain operations using a parallel approach, implementing certain operations in C, rewriting some methods to be more efficient, among others.
+
+If execution time and resource consumption is crucial for your project, you might be better off implementing your specific data structures and algorithms instead of using a general purpose library such as ProbPy. If an implementation is done for a specific problem it's bound to be more efficient then a library.
+
+# To Do List
+
+* A tutorial in the documentation!!
 
 * Implement Likelihood Weighting algorithm.
 
-* Implement Gibbs Sampling algorithm. (MCMC)
+* Implement Undirected Graphical Models and inference algorithms.
+
+* Implement fuzzy logic operations.
+
+* Missing documentation that is anything other then what comes out of docstrings.
 
 * The factorOp method in the Factor class:
  * Could be implemented using a parallel approach.
  * Shouldn't take a function as an argument. It should be equal everywhere instead of the last cycle, where it should implement a function for each operation.
+
+* Implement indexed random variables to represent distributions like P(X\_t | X\_{t-1}) make operations with these distributions simpler to implement (Forward algorithm with HMMs, and similar operations)
