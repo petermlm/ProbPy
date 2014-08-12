@@ -13,5 +13,5 @@ setup(name="ProbPy",
 
       url="https://github.com/petermlm/ProbPy",
 
-      packages=["ProbPy", "ProbPy.tests", "ProbPy.examples"],
+      packages=["ProbPy"],
       )
