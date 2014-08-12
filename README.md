@@ -19,7 +19,7 @@ The first argument of the constructor is the name of the variable and the second
     fx_y = Factor([X, Y], [[0.1, 0.4, 0.5],
                            [0.5, 0.1, 0.4]])
 
-Above, the first factor corresponds to a distribution `P(Y)` and the second to a distribution `P(X | Y)`. The first argument is the list of variables, or single vairable, indexing the factor. The second argument are the values of that factor. Note that the values of second factor `fx_y`, are inserted using a list of lists. The rightmost variable `Y` indexes the outer list, variable `X` indexes the inner list.
+Above, the first factor corresponds to a distribution `P(Y)` and the second to a distribution `P(X | Y)`. The first argument is the list of variables, or single variable, indexing the factor. The second argument are the values of that factor. Note that the values of second factor `fx_y`, are inserted using a list of lists. The rightmost variable `Y` indexes the outer list, variable `X` indexes the inner list.
 
 Having this, you can calculate the product of those distribution to get the join `P(X, Y)`. This can be done either using a method of one of the factors or using the `*` operator, which will yield the same result:
 
