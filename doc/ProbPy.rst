@@ -49,11 +49,3 @@ ProbPy Package
     :undoc-members:
     :show-inheritance:
 
-Subpackages
------------
-
-.. toctree::
-
-    ProbPy.examples
-    ProbPy.tests
-
