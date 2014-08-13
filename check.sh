@@ -14,8 +14,9 @@ echo ""
 # PEP8
 echo "PEP8 Checking:"
 pep8 ProbPy/*.py
-pep8 ProbPy/tests/*.py
+pep8 tests/*.py
 pep8 examples/*.py
+pep8 setup.py
 echo "Done"
 
 echo ""
