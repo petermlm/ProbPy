@@ -10,7 +10,6 @@ setup(name="ProbPy",
       version="1.0",
       description="Multi Variable Probability Calculus Library",
       long_description=open('README.md').read(),
-      license='LICENSE',
 
       author="Pedro Melgueira",
       author_email="pedromelgueira@gmail.com",
@@ -18,12 +17,12 @@ setup(name="ProbPy",
       url="https://github.com/petermlm/ProbPy",
 
       package_dir={"": "ProbPy"},
-      py_modules['ProbPy']
-      provides['ProbPy']
+      py_modules=['ProbPy'],
+      provides=['ProbPy'],
 
       keywords='probability calculus random variable bayes bayesian network \
-               information theory'
-      license="MIT License"
+               information theory',
+      license="MIT License",
       classifiers=['Development Status :: 4 - Beta',
                    'Environment :: Console',
                    'Intended Audience :: Developers',
