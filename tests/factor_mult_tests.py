@@ -1,6 +1,6 @@
 from nose.tools import with_setup, nottest
 
-from ProbPy.tests.test_base import TestBase
+from tests.test_base import TestBase
 
 
 class TestFactorMult(TestBase):

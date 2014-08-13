@@ -63,7 +63,9 @@ In the code above you will see the Event class being used to create an event. Th
 
 The library has the `RandVar` and `Factor` classes as seen above. It also has the `BayesianNetwork` class that represents a Bayesian Network and has a few inference algorithms implemented, like the Gibbs Ask algorithm.
 
-**To see examples check the examples directory. To get a full list of features of this library check the documentation provided in this repository.**
+**To see examples check the examples directory. To get a full list of features of this library check the documentation provided in this repository. Remeber to execute the examples from the parent directory if ProbPy is not installed, like the following:**
+
+    python3 examples/earthquake.py
 
 # Documentation
 

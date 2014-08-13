@@ -1,9 +1,7 @@
 from nose.tools import with_setup, nottest, assert_almost_equal
 
-from ProbPy.tests.test_base import TestBase
-
+from tests.test_base import TestBase
 from ProbPy import RandVar, Factor, entropy
-
 import math
 
 
