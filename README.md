@@ -108,11 +108,15 @@ The original author, and current administrator, started developing ProbPy to imp
 
 **Q: Is this project comparable in any way to Numpy?**
 
-No. Numpy can represent multidimensional matrices and implements a lot of algebraic operations using them. But this library uses its own representation of factors and such representation makes it simple to have factors with an arbitrary number of random variables (dimensions) and makes it easy to implement operations between them. Numpy could not be simple 
+No. Numpy can represent multidimensional matrices and implements a lot of algebraic operations using them. But this library uses its own representation of factors and such representation makes it simple to have factors with an arbitrary number of random variables (dimensions) and makes it easy to implement operations between them. Numpy could not be simply used to implement those operations, and hence, would not bring anything helpful to this project.
+
+**Q: Can I use Numpy and ProbPy in the same project.**
+
+Yes but not directly, meaning that a ProbPy factor can't be directly multiplied with a NumPy array, or a NumPy function cannot be directly used with a ProbPy object, and vice versa. Both library can be use without any conflicts.
 
 **Q: Does the project use any other library in its implementation?**
 
-No. Pretty much every operations and algorithms implemented in ProbPy comes down to the ability of relating an arbitrarily big factor with another, that is, doing multiplication between factors like `f(X, Y, i, j) f(A, B, i, j) = f(X, Y, A, B, i, j)`. The data structure and algorithms that allows this are implemented directly in Python and no other library is used because.
+No. Pretty much every operations and algorithms implemented in ProbPy comes down to the ability of relating an arbitrarily big factor with another, that is, doing multiplication between factors, like `f(X, Y, i, j) f(A, B, i, j) = f(X, Y, A, B, i, j)`. The data structure and algorithms that allows this are implemented directly in Python and no other library is used because they would not help in this specific representation.
 
 **Q: What are the dependencies of ProbPy?**
 
