@@ -606,20 +606,20 @@ class Factor:
         return True
 
     def __repr__(self):
-        return "(%s, %s)" % (self.__str__(), str(self.values))
+        var_list = ""
 
-    def __str__(self):
         if len(self.rand_vars) == 1:
-            return str(self.rand_vars[0].name)
+            var_list = self.rand_vars[0].name
 
-        s = "["
+        else:
+            var_list = "["
 
-        # Place random variables
-        for i in range(len(self.rand_vars) - 1):
-            s += str(self.rand_vars[i].name) + ", "
-        s += str(self.rand_vars[-1].name) + "]"
+            # Place random variables
+            for i in range(len(self.rand_vars) - 1):
+                var_list += str(self.rand_vars[i].name) + ", "
+            var_list += str(self.rand_vars[-1].name) + "]"
 
-        return s
+        return "(%s, %s)" % (var_list, str(self.values))
 
     def __add__(self, other):
         return self.add(other)

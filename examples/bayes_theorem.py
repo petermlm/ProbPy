@@ -32,7 +32,7 @@ if __name__ == "__main__":
     fy_x = (fx_y * fy).normalize(Y)
 
     print("P(X | Y) P(Y) 1/P(X) = P(Y | X)")
-    print(fy_x.values)
+    print(fy_x)
 
     # Alternative way of getting P(Y | X) without using the normalize() method
     fxy = fx_y * fy
@@ -40,4 +40,4 @@ if __name__ == "__main__":
     fx_y = fxy / fx
 
     print("P(X | Y) P(Y) 1/P(X) = P(Y | X)")
-    print(fx_y.values)
+    print(fx_y)

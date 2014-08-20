@@ -37,9 +37,9 @@ if __name__ == "__main__":
     # Run Rejection Sample algorithm
     estimate = BN.rejectionSample(rain, observed, 100)
     print("P(Rain | Sprinkler=true)")
-    print(estimate.values)
+    print(estimate)
 
     # Run Gibbs Ask algorithm
     estimate = BN.gibbsAsk(rain, observed, 100)
     print("P(Rain | Sprinkler=true)")
-    print(estimate.values)
+    print(estimate)

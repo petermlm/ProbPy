@@ -72,7 +72,7 @@ if __name__ == "__main__":
     burglary_k_john_mary = BN.eliminationAsk(burglary, observed)
 
     print("P(Burglary | John=true, Mary=true)")
-    print(burglary_k_john_mary.values)
+    print(burglary_k_john_mary)
 
     # Another example with the same network. The observation and query variable
     # changed, but the order of the distributions is the same. The result
@@ -81,4 +81,4 @@ if __name__ == "__main__":
     john_k_burglary = BN.eliminationAsk(john, observed)
 
     print("P(John | Burglary=true)")
-    print(john_k_burglary.values)
+    print(john_k_burglary)
