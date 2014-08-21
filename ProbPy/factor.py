@@ -219,6 +219,9 @@ class Factor:
         len_values = len(self.values)
 
         for i in range(res_values_size):
+            # Get index 1
+            index1 = i % len_values
+
             # Get index 2
             index2 = 0
             for j in index2_range:
@@ -226,9 +229,6 @@ class Factor:
 
             # Calculate value
             res_values.append(fun(self.values[index1], factor.values[index2]))
-
-            # Increment index 1
-            index1 = (index1 + 1) % len_values
 
         # Make Factor object and return
         return Factor(res_rand_vars, res_values)
