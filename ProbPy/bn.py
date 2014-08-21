@@ -279,9 +279,9 @@ class BayesianNetwork:
         """
 
         value = values[0]
-        for i in range(len(domain)):
+        for i, dom in enumerate(domain):
             if value > prob:
-                return domain[i]
+                return dom
             value += values[i]
 
         return domain[-1]

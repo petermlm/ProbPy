@@ -207,15 +207,14 @@ class Factor:
         # Calculate dim list
         dim = []
 
-        for i in range(len(factor.rand_vars)):
-            dim.append(len(factor.rand_vars[i].domain))
+        for i in factor.rand_vars:
+            dim.append(len(i.domain))
 
         # Calculate resulting size of factor
         res_values_size = self.getValuesListSize(res_rand_vars)
 
         # Calculate resulting factor
         index1 = 0
-        index2_range = range(len(factor.rand_vars))
         len_values = len(self.values)
 
         for i in range(res_values_size):
@@ -224,7 +223,7 @@ class Factor:
 
             # Get index 2
             index2 = 0
-            for j in index2_range:
+            for j, _ in enumerate(factor.rand_vars):
                 index2 += (int(i / div[j]) % dim[j]) * mult[j]
 
             # Calculate value
@@ -353,7 +352,7 @@ class Factor:
         res_values = [0] * res_values_size
 
         # Calculate marginal
-        for i in range(len(self.values)):
+        for i, value in enumerate(self.values):
             index = 0
             div = 1
             mult = 1
@@ -367,7 +366,7 @@ class Factor:
 
                 div *= len(j.domain)
 
-            res_values[index] += self.values[i]
+            res_values[index] += value
 
         # Make Factor object and return
         return Factor(res_rand_vars, res_values)
@@ -490,16 +489,16 @@ class Factor:
         inst = args[1]
 
         # Get resulting variables and var_index
-        for i in range(len(self.rand_vars)):
+        for i, rv in enumerate(self.rand_vars):
             # Store current index of variable to instantiate and add rest of
             # variables
-            if self.rand_vars[i].name == rand_var.name:
+            if rv.name == rand_var.name:
                 var_index = i
                 res_rand_vars += self.rand_vars[i+1:]
                 break
 
             # Add current variable to list
-            res_rand_vars.append(self.rand_vars[i])
+            res_rand_vars.append(rv)
 
         # If inst variable not in this factor, return it unchanged
         if var_index == -1:
@@ -514,8 +513,8 @@ class Factor:
 
         # Get inst index
         inst_index = -1
-        for i in range(len(self.rand_vars[var_index].domain)):
-            if self.rand_vars[var_index].domain[i] == inst:
+        for i, dom in enumerate(self.rand_vars[var_index].domain):
+            if dom == inst:
                 inst_index = i
                 break
 
@@ -526,9 +525,9 @@ class Factor:
         # Calculate resulting factor
         res_values = []
         len_domain = len(self.rand_vars[var_index].domain)
-        for i in range(len(self.values)):
+        for i, val in enumerate(self.values):
             if int(i/div) % len_domain == inst_index:
-                res_values.append(self.values[i])
+                res_values.append(val)
 
         # Make Factor object and return
         return Factor(res_rand_vars, res_values)
@@ -592,11 +591,11 @@ class Factor:
         variables in self.
         """
 
-        for i in range(len(self.rand_vars)):
+        for i, rv in enumerate(self.rand_vars):
             f = False
 
-            for j in range(i, len(factor.rand_vars)):
-                if self.rand_vars[i] == factor.rand_vars[j]:
+            for f_rv in factor.rand_vars[i:]:
+                if rv == f_rv:
                     f = True
                     break
 
@@ -615,8 +614,8 @@ class Factor:
             var_list = "["
 
             # Place random variables
-            for i in range(len(self.rand_vars) - 1):
-                var_list += str(self.rand_vars[i].name) + ", "
+            for i in self.rand_vars[:-1]:
+                var_list += str(i) + ", "
             var_list += str(self.rand_vars[-1].name) + "]"
 
         return "(%s, %s)" % (var_list, str(self.values))
