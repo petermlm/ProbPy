@@ -9,44 +9,48 @@ class TestFactorMult(TestBase):
         f(X), scalar
         """
 
-        res = [0]*3
-        res[0] = self.X_factor.div(self.scalar)
-        res[1] = self.X_factor.div(self.scalarf)
-        res[2] = self.scalarf.div(self.X_factor)
+        res = [self.X_factor.div(self.scalar),
+               self.X_factor.div(self.scalarf)]
 
-        for i in range(3):
-            print(res[i].rand_vars)
-            print(res[i])
-            assert(res[i].rand_vars == [self.X] and
-                   res[i].values == [0.1, 0.2])
+        for i in res:
+            assert(i.rand_vars == [self.X] and
+                   i.values == [0.1, 0.2])
+
+        res = self.scalarf.div(self.X_factor)
+        assert(res.rand_vars == [self.X] and
+               res.values == [10/1, 10/2])
 
     def div_test_1(self):
         """
         f(X, Y), scalar
         """
 
-        res = [0]*3
-        res[0] = self.XY_factor.div(self.scalar)
-        res[1] = self.XY_factor.div(self.scalarf)
-        res[2] = self.scalarf.div(self.XY_factor)
+        res = [self.XY_factor.div(self.scalar),
+               self.XY_factor.div(self.scalarf)]
 
-        for i in range(3):
-            assert(res[i].rand_vars == [self.X, self.Y] and
-                   res[i].values == [0.1, 0.2, 0.3, 0.4])
+        for i in res:
+            assert(i.rand_vars == [self.X, self.Y] and
+                   i.values == [0.1, 0.2, 0.3, 0.4])
+
+        res = self.scalarf.div(self.XY_factor)
+        assert(res.rand_vars == [self.X, self.Y] and
+               res.values == [10/1, 10/2, 10/3, 10/4])
 
     def div_test_2(self):
         """
         f(X, Y, Z), scalar
         """
 
-        res = [0]*3
-        res[0] = self.XYZ_factor.div(self.scalar)
-        res[1] = self.XYZ_factor.div(self.scalarf)
-        res[2] = self.scalarf.div(self.XYZ_factor)
+        res = [self.XYZ_factor.div(self.scalar),
+               self.XYZ_factor.div(self.scalarf)]
 
-        for i in range(3):
-            assert(res[i].rand_vars == [self.X, self.Y, self.Z] and
-                   res[i].values == [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8])
+        for i in res:
+            assert(i.rand_vars == [self.X, self.Y, self.Z] and
+                   i.values == [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8])
+
+        res = self.scalarf.div(self.XYZ_factor)
+        assert(res.rand_vars == [self.X, self.Y, self.Z] and
+               res.values == [10/1, 10/2, 10/3, 10/4, 10/5, 10/6, 10/7, 10/8])
 
     def div_test_3(self):
         """

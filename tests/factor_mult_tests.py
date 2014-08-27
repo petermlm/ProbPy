@@ -9,44 +9,39 @@ class TestFactorMult(TestBase):
         f(X), scalar
         """
 
-        res = [0]*3
-        res[0] = self.X_factor.mult(self.scalar)
-        res[1] = self.X_factor.mult(self.scalarf)
-        res[2] = self.scalarf.mult(self.X_factor)
+        res = [self.X_factor.mult(self.scalar),
+               self.X_factor.mult(self.scalarf),
+               self.scalarf.mult(self.X_factor)]
 
-        for i in range(3):
-            print(res[i].rand_vars)
-            print(res[i])
-            assert(res[i].rand_vars == [self.X] and
-                   res[i].values == [10, 20])
+        for i in res:
+            assert(i.rand_vars == [self.X] and
+                   i.values == [10, 20])
 
     def mult_test_1(self):
         """
         f(X, Y), scalar
         """
 
-        res = [0]*3
-        res[0] = self.XY_factor.mult(self.scalar)
-        res[1] = self.XY_factor.mult(self.scalarf)
-        res[2] = self.scalarf.mult(self.XY_factor)
+        res = [self.XY_factor.mult(self.scalar),
+               self.XY_factor.mult(self.scalarf),
+               self.scalarf.mult(self.XY_factor)]
 
-        for i in range(3):
-            assert(res[i].rand_vars == [self.X, self.Y] and
-                   res[i].values == [10, 20, 30, 40])
+        for i in res:
+            assert(i.rand_vars == [self.X, self.Y] and
+                   i.values == [10, 20, 30, 40])
 
     def mult_test_2(self):
         """
         f(X, Y, Z), scalar
         """
 
-        res = [0]*3
-        res[0] = self.XYZ_factor.mult(self.scalar)
-        res[1] = self.XYZ_factor.mult(self.scalarf)
-        res[2] = self.scalarf.mult(self.XYZ_factor)
+        res = [self.XYZ_factor.mult(self.scalar),
+               self.XYZ_factor.mult(self.scalarf),
+               self.scalarf.mult(self.XYZ_factor)]
 
-        for i in range(3):
-            assert(res[i].rand_vars == [self.X, self.Y, self.Z] and
-                   res[i].values == [10, 20, 30, 40, 50, 60, 70, 80])
+        for i in res:
+            assert(i.rand_vars == [self.X, self.Y, self.Z] and
+                   i.values == [10, 20, 30, 40, 50, 60, 70, 80])
 
     def mult_test_3(self):
         """

@@ -161,11 +161,9 @@ class Factor:
 
         # If this is just scalar operation
         if type(factor) == int or type(factor) == float:
-            return self.scalar(self, factor, fun)
-        elif self.rand_vars == []:
-            return self.scalar(factor, self.values[0], fun)
+            return self.scalar(factor, fun)
         elif factor.rand_vars == []:
-            return self.scalar(self, factor.values[0], fun)
+            return self.scalar(factor.values[0], fun)
 
         # Res will have every variable in self
         for i in self.rand_vars:
@@ -232,24 +230,19 @@ class Factor:
         # Make Factor object and return
         return Factor(res_rand_vars, res_values)
 
-    def scalar(self, factor, scalar_value, fun):
+    def scalar(self, scalar_value, fun):
         """
-        Scalar operation between factor and a scalar_value. The scalar is used
-        in an operation, defined by fun, with the values of factor.
+        Scalar operation between the factor and a scalar_value. The scalar is
+        used in an operation, defined by fun, with the values of the factor.
 
-        :param factor:       The factor which values are going to be used as
-                             operands with scalar
         :param scalar_value: An int or float value to serve as an operand
         :param fun:          Function used in the operation, may be a lambda
         :returns:            Result of mapping scalar_value to factor's values
                              using fun
         """
 
-        map_res = []
-        for i in factor.values:
-            map_res.append(fun(i, scalar_value))
-
-        return Factor(factor.rand_vars, list(map_res))
+        fun2 = lambda x: fun(x, scalar_value)
+        return self.map(fun2)
 
     def log(self, base):
         """
@@ -301,10 +294,7 @@ class Factor:
         :returns:   Result of applying fun to the factors values
         """
 
-        map_res = []
-        for i in self.values:
-            map_res.append(fun(i))
-
+        map_res = map(fun, self.values)
         return Factor(self.rand_vars, list(map_res))
 
     def marginal(self, arg_rand_vars):
