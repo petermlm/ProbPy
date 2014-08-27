@@ -162,15 +162,48 @@ Note how the operation is not binary. Also note that op_res does not hold the re
 Marginal
 ++++++++
 
-TODO
+When working with probability distributions it is quite common that at some point a marginal distribution must be calculated. To ilustrate what a marginal is, suppose the following join distribution P(X, Y) with X and Y being binary variables:
+
++---------+--------+---------+
+| P(X, Y) | X=True | X=False |
++---------+--------+---------+
+| Y=True  | 0.2    | 0.1     |
++---------+--------+---------+
+| Y=False | 0.3    | 0.4     |
++---------+--------+---------+
+
+The marginal distribution P(X) is calculated by summing every value of Y for each X::
+
+    P(X=True)  = P(X=True, Y=True)  + P(X=True, Y=False)  = 0.5
+    P(X=False) = P(X=False, Y=True) + P(X=False, Y=False) = 0.5
+
+The above example would look like the following in ProbPy::
+
+    X = RandVar("X", ["True", "False"])
+    Y = RandVar("Y", ["True", "False"])
+
+    fxy = Factor([X, Y], [[0.2, 0.1],
+                          [0.3, 0.4]])
+
+    fx = fxy.marginal(X)
+
+The fx factor will be a factor index only by X with the values [0.5, 0.5].
+
+ProbPy implements factor marginalization in a more general way, meaning that for any factor with a set of variables S, a marginal with a set of variables T can be calculated, given that T is contained in S. Supposing the following factor with five variables. The values of the factor are not displayed because they would be too big::
+
+    fac = Factor([X, Y, Z, W, K], values)
+
+    fx = fac.marginal(X)                  # Marginal of X from fac
+    fxy = fac.marginal([X, Y])            # Marginal of X and Y from fac
+    f_not_k = fac.marginal([X, Y, Z, W])  # Marginal of every variable except K
 
 Normalization
 +++++++++++++
 
 TODO
 
-Events
-------
+Events and Factor Instantiation
+-------------------------------
 
 TODO
 
