@@ -1,7 +1,10 @@
 from nose.tools import with_setup, nottest, assert_almost_equal
 
 from tests.test_base import TestBase
-from ProbPy import RandVar, Factor, entropy, kullbackLeiblerDistance
+from ProbPy import RandVar, Factor
+from ProbPy import entropy
+from ProbPy import kullbackLeiblerDistance
+from ProbPy import mutualInformation
 import math
 
 
@@ -109,3 +112,36 @@ class TestInfTheoryValue(TestBase):
         assert_almost_equal(res[0], 2.4527, places=4)
         assert_almost_equal(res[1], 0.73834, places=5)
         assert_almost_equal(res[2], 1.7001, places=4)
+
+    def inf_theory_test_6(self):
+        """
+        I(X ; Y)
+        """
+
+        fac1 = self.fXY1.marginal(self.X)
+        fac2 = self.fXY1.marginal(self.Y)
+
+        res = [mutualInformation(self.fXY1, fac1, fac2),
+               mutualInformation(self.fXY1, fac1, fac2, 10),
+               mutualInformation(self.fXY1, fac1, fac2, math.e)]
+
+        assert_almost_equal(res[0], 0.0, places=1)
+        assert_almost_equal(res[1], 0.0, places=1)
+        assert_almost_equal(res[2], 0.0, places=1)
+
+    def inf_theory_test_7(self):
+        """
+        I(X ; Y)
+        """
+
+        joint = Factor([self.X, self.Y], [0.8, 0.05, 0.05, 0.8])
+        fac1 = self.fXY1.marginal(self.X)
+        fac2 = self.fXY1.marginal(self.Y)
+
+        res = [mutualInformation(joint, fac1, fac2),
+               mutualInformation(joint, fac1, fac2, 10),
+               mutualInformation(joint, fac1, fac2, math.e)]
+
+        assert_almost_equal(res[0], 2.4527, places=4)
+        assert_almost_equal(res[1], 0.73834, places=5)
+        assert_almost_equal(res[2], 1.7001, places=5)
