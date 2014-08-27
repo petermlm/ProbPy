@@ -97,7 +97,67 @@ Defining a list like this may be more confusing for a user, but it may be better
 Factor Operation
 ++++++++++++++++
 
-TODO
+Factor operations are the cornerstone of ProbPy and the main reason for its development. An operation between factors can be, for example, a multiplication. Supposing the situation where there are two factors that both represent probability distribution::
+
+    P(X | Y)
+    P(Y)
+
+To represent the probability distributions in ProbPy::
+
+    X = RandVar("X", ["a", "b", "c"])
+    Y = RandVar("Y", ["T", "F"])
+
+    fy = Factor(Y, [0.9, 0.1])
+    fx_y = Factor([X, Y], [[0.2, 0.3, 0.5],
+                           [0.6, 0.2, 0.2]])
+
+
+According to the known rules of probability, the following is true::
+
+    P(X, Y) = P(X | Y) P(Y)
+
+Most people will understand this as the simple situation where multiplying a conditional distribution by a marginal distribution will yield the joint distribution. Having the two factors tha represent the distribution it is possible to do the following to get the marginal::
+
+    fxy = fx_y * fx
+
+In the line above ProbPy will take the two factors and calculate a third factor that represents the join distribution. The multiplication is done following the usual definition of factor product.
+
+Like there is multiplication there are all kinds of operations that can be made using ProbPy. Like the following::
+
+    op_res = fx_y + fx
+    op_res = fx_y - fx
+    op_res = fx_y * fx
+    op_res = fx_y / fx
+
+The operators above are the ones defined by default with ProbPy. Each operator is just a wrapper for other methods which, respectively, are::
+
+    op_res = fx_y.add(fx)
+    op_res = fx_y.sub(fx)
+    op_res = fx_y.mult(fx)
+    op_res = fx_y.div(fx)
+
+These methods are, in turn, also wrappers to another method of the Factor class called factorOp(). This method is the one where every operation is implemented. Calling the factorOp() method for factor multiplication would have to be done like the following line::
+
+    lmult = lambda x, y: x*y
+    op_res = fx_y.factorOp(fx, lmult)
+
+By defining factorOp() like this, the method gains a lot of flexibility because the user can implement any operation between factors, so long as the operation relates both factors element by element. The x and y in the lambda defined above are one element from the first factor and its related element from the second.
+
+As an example of the factorOp() method in use, suppose that you have two factor, fa and fb, and you want to calculate the remainder of the integer division of fa by fb. You would do::
+
+    idiv = lambda x, y: x%y
+    op_res = fa.factorOp(fb, idiv)
+
+Of course the context in which such an operation is used depends only on the user.
+
+As another example, suppose that the operation is not a simple binary operator. The following example is part of the implementation of the Kullback-Leibler Distance, don't worry if you don't know what that is::
+
+    op = lambda x, y: x * (log(x/y) / log(2))
+    op_res = fa.factorOp(fb, op)
+
+Note how the operation is not binary. Also note that op_res does not hold the result of the Kullback-Leibler Distance operation. The final result of that operation can be obtain with the following line::
+
+    kld = sum(op_res.values)
 
 Marginal
 ++++++++
