@@ -4,7 +4,9 @@ File that implements Information Theory operations over factors
 
 
 import copy
-import math
+from math import log
+
+from ProbPy import Factor
 
 
 def entropy(factor, base=2):
@@ -18,14 +20,8 @@ def entropy(factor, base=2):
     :returns:      Returns the entropy
     """
 
-    res = 0
-
-    for i in factor.values:
-        # If i = 0 this would be 0 * log(0)
-        if i != 0:
-            res += i * math.log(i, base)
-
-    return -res
+    ent = lambda x: x * log(x) / log(base) if x != 0 else 0
+    return -sum(factor.map(ent).values)
 
 
 def kullbackLeiblerDistance(fac1, fac2, base=2):
@@ -40,13 +36,5 @@ def kullbackLeiblerDistance(fac1, fac2, base=2):
     :returns:    The Kullback-Leibler Distance
     """
 
-    log_arg = fac1/fac2
-    log_res = log_arg.log(base)
-    to_sum = fac1 * log_res
-
-    res = 0
-
-    for i in to_sum.values:
-        res += i
-
-    return res
+    kld = lambda f1, f2: f1 * log(f1/f2) / log(base)
+    return sum(Factor.factorOp(fac1, fac2, kld).values)
