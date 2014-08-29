@@ -361,7 +361,7 @@ class Factor:
         # Make Factor object and return
         return Factor(res_rand_vars, res_values)
 
-    def normalize(self, arg_rand_vars):
+    def normalize(self, arg_rand_vars=None):
         """
         Normalizes the factor for random variables in the distribution. If the
         factor of variable X has values [1, 3], the normalization will yield
@@ -370,7 +370,10 @@ class Factor:
         to make the division P(X, Y) / P(Y) with the advantage that the
         distribution P(Y) doesn't need to be known or calculated before
 
-        :param arg_rand_vars: List of random variables to normalize
+        :param arg_rand_vars: List of random variables to normalize. Default is
+                              None. If the value is default, the list of
+                              variables normalized will be equal to the factors
+                              variables
         :returns:             Normalized factor
 
         Examples:
@@ -379,12 +382,20 @@ class Factor:
             >>> XY_Z_factor # Will yield conditional distribution P(X, Y | Z)
             >>> X_YZ_factor = XYZ_factor.normalize(X)
             >>> X_YZ_factor # Will yield conditional distribution P(X | Y, Z)
+
+
+            >>> # Assuming fac to be a factor with an arbitrary number of
+            >>> # variables, the following will make all values of the factor
+            >>> # sum to 1
+            >>> fac.normalize()
         """
 
         marg_vars = []
 
         # If the argument is a single variable
-        if type(arg_rand_vars) != list:
+        if arg_rand_vars is None:
+            rand_vars = self.rand_vars
+        elif type(arg_rand_vars) != list:
             rand_vars = [arg_rand_vars]
         else:
             rand_vars = arg_rand_vars

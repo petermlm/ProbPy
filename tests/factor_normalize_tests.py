@@ -13,6 +13,10 @@ class TestFactorNormalize(TestBase):
         assert(res.rand_vars == [self.X] and
                res.values == [1/3, 2/3])
 
+        res = self.X_factor_n.normalize()
+        assert(res.rand_vars == [self.X] and
+               res.values == [1/3, 2/3])
+
     def normalize_test_1(self):
         """
         X, f(X, Y)
@@ -37,6 +41,10 @@ class TestFactorNormalize(TestBase):
         """
 
         res = self.XY_factor_n.normalize([self.X, self.Y])
+        assert(res.rand_vars == [self.X, self.Y] and
+               res.values == [1/6, 1/6, 2/6, 2/6])
+
+        res = self.XY_factor_n.normalize()
         assert(res.rand_vars == [self.X, self.Y] and
                res.values == [1/6, 1/6, 2/6, 2/6])
 
@@ -100,5 +108,9 @@ class TestFactorNormalize(TestBase):
         """
 
         res = self.XYZ_factor_n.normalize([self.X, self.Y, self.Z])
+        assert(res.rand_vars == [self.X, self.Y, self.Z] and
+               res.values == [1/20, 1/20, 2/20, 2/20, 3/20, 3/20, 4/20, 4/20])
+
+        res = self.XYZ_factor_n.normalize()
         assert(res.rand_vars == [self.X, self.Y, self.Z] and
                res.values == [1/20, 1/20, 2/20, 2/20, 3/20, 3/20, 4/20, 4/20])
