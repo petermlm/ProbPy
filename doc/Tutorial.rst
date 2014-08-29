@@ -200,7 +200,37 @@ ProbPy implements factor marginalization in a more general way, meaning that for
 Normalization
 +++++++++++++
 
-TODO
+Normalization is a simple operation in which we take a factor and rearrange its values so some of them, or all of them, sum to 1. A simple example happens in most algorithms in which we deal with factor and probability distributions. In the middle of the calculations many factor are generated but they don't represent probability distributions because they don't sum to 1. To make them sum to 1 we normalize the factors. Suppose the following factor::
+
+    v = [100, 900]
+    fac = Factor(X, v)
+
+To normalize, each value needs to be divided by the sum of all values::
+
+    v = [100 / (100+900), 900 / (100+900)] = [0.1, 0.9]
+
+Like this the factor sums to 1. ProbPy has a simple way to do this operation::
+
+    fac.normalize()
+
+But there are more complicated situations. Suppose you have a factor which represents a joint probability distribution of X and Y and you want to calculate the condition X knowing Y. Normally this would happens::
+
+    P(X | Y) = P(X, Y) / P(Y)
+
+Where P(Y) is the marginal of Y in P(X, Y).
+
+If we were to calculate this in ProbPy, the following code would have to be necessary::
+
+    fy = fxy.marginal(Y)
+    fx_y = fxy / fy
+
+Alternatively, using the normalize() method, we can do::
+
+    fx_y = fxy.normalize(X)
+
+For factors with more variable, for example, from P(X, Y, Z, W), calculate P(X, Y | Z, W) do::
+
+    fxy_zw = fxyzw.normalize([X, Y])
 
 Events and Factor Instantiation
 -------------------------------

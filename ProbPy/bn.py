@@ -20,7 +20,6 @@ class BayesianNetworkNode:
     it's variable, it's probability distribution represented using a factor and
     it's parents.
 
-    Arguments:
     :param node:    A RandVar object, which is going to be this node's variable
     :param factor:  The factor which represents the distribution of this
                     variable in this node
