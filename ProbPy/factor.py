@@ -605,6 +605,74 @@ class Factor:
 
         return True
 
+    def max(self):
+        """
+        Returns maximum values in factor
+        """
+
+        return max(self.values)
+
+    def min(self):
+        """
+        Returns minimum values in factor
+        """
+
+        return min(self.values)
+
+    def argmax(self):
+        """
+        Returns event with the greatest value
+
+        :returns: Returns an Event object with the event that maximizes the
+                  value of this factor
+        """
+
+        # Find the maximum value
+        maxval = self.values[0]
+        index = 0
+        for i, value in enumerate(self.values, 1):
+            if value > maxval:
+                maxval = value
+                index = i-1
+
+        # Make the event
+        event = []
+        div = 1
+        for i, var in enumerate(self.rand_vars):
+            doml = len(var.domain)
+            val = int(index / div) % doml
+            event.append((var, var.domain[val]))
+            div *= len(var.domain)
+
+        return Event(event)
+
+    def argmin(self):
+        """
+        Returns event with the lesser value
+
+        :returns: Returns an Event object with the event that minimizes the
+                  value of this factor
+        """
+
+        # Find the maximum value
+        minval = self.values[0]
+        index = 0
+        for i, value in enumerate(self.values, 1):
+            if value < minval:
+                minval = value
+                index = i-1
+
+        # Make the event
+        event = []
+        div = 1
+        for i, var in enumerate(self.rand_vars):
+            doml = len(var.domain)
+            val = int(index / div) % doml
+            event.append((var, var.domain[val]))
+            div *= len(var.domain)
+
+        return Event(event)
+
     def __repr__(self):
         var_list = ""
 
