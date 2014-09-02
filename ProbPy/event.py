@@ -110,6 +110,19 @@ class Event:
 
         self.event.pop(var)
 
+    def equal(self, other_event):
+        # If the sizes of the events are not the same, they are not the same
+        if len(self.event) != len(other_event.event):
+            return False
+
+        # Check if each variable is the same
+        for i in self.event:
+            if i not in other_event.event.keys() or\
+                    self.event[i] != other_event.event[i]:
+                return False
+
+        return True
+
     def __iter__(self):
         """
         Allows iteration of an event. The following:
@@ -126,3 +139,6 @@ class Event:
 
         for i in self.event:
             yield (i, self.event[i])
+
+    def __eq__(self, other):
+        return self.equal(other)

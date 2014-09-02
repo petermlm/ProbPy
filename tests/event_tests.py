@@ -93,6 +93,10 @@ class TestEvent(TestBase):
         assert(not event.varInEvent(self.Y))
 
     def eventIter_test_8(self):
+        """
+        Test iteration
+        """
+
         tlist = [(self.X, self.X.domain[0]),
                  (self.Y, self.Y.domain[0]),
                  (self.Z, self.Z.domain[0])]
@@ -106,3 +110,85 @@ class TestEvent(TestBase):
                 assert(False)
 
         assert(True)
+
+    def eventEqual_test_9(self):
+        """
+        Test if two equal event are actually equal
+        """
+
+        tlist1 = [(self.X, self.X.domain[0])]
+        tlist2 = [(self.X, self.X.domain[0]),
+                  (self.Y, self.Y.domain[0])]
+        tlist3 = [(self.Y, self.Y.domain[0]),
+                  (self.X, self.X.domain[0])]
+
+        event1a = Event(tlist=tlist1)
+        event1b = Event(tlist=tlist1)
+
+        event2a = Event(tlist=tlist2)
+        event2b = Event(tlist=tlist2)
+        event2c = Event(tlist=tlist3)
+
+        assert(event1a == event1b)
+        assert(event2a == event2b)
+        assert(event2a == event2c)
+
+    def eventEqual_test_10(self):
+        """
+        Test when two event are different in their values, one variable
+        """
+
+        tlist1 = [(self.X, self.X.domain[0])]
+        tlist2 = [(self.X, self.X.domain[1])]
+
+        event1 = Event(tlist=tlist1)
+        event2 = Event(tlist=tlist2)
+
+        assert(event1 != event2)
+
+    def eventNotEqual_test_11(self):
+        """
+        Test when two event are different in their values, two variables
+        """
+
+        tlist1 = [(self.X, self.X.domain[0]),
+                  (self.Y, self.Y.domain[0])]
+        tlist2 = [(self.X, self.X.domain[1]),
+                  (self.Y, self.Y.domain[0])]
+        tlist3 = [(self.Y, self.Y.domain[0]),
+                  (self.X, self.X.domain[1])]
+
+        event1 = Event(tlist=tlist1)
+        event2 = Event(tlist=tlist2)
+        event3 = Event(tlist=tlist3)
+
+        assert(event1 != event2)
+        assert(event1 != event3)
+
+    def eventNotEqual_test_12(self):
+        """
+        Test when variables in events are not the same, one variable
+        """
+
+        tlist1 = [(self.X, self.X.domain[0])]
+        tlist2 = [(self.Y, self.Y.domain[0])]
+
+        event1 = Event(tlist=tlist1)
+        event2 = Event(tlist=tlist2)
+
+        assert(event1 != event2)
+
+    def eventNotEqual_test_13(self):
+        """
+        Test when variables in events are not the same, two variables
+        """
+
+        tlist1 = [(self.X, self.X.domain[0]),
+                  (self.Y, self.Y.domain[0])]
+        tlist2 = [(self.X, self.X.domain[0]),
+                  (self.Z, self.Z.domain[0])]
+
+        event1 = Event(tlist=tlist1)
+        event2 = Event(tlist=tlist2)
+
+        assert(event1 != event2)
