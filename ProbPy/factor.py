@@ -22,6 +22,14 @@ class Factor:
     Examples:
         >>> # Assuming X and Y are variables
         >>> XY_factor = Factor([X, Y], [0.2, 0.3, 0.1, 0.4])
+
+    The values list can be a list of lists:
+        >>> # Assuming X, Y and Z are variables
+        >>> XY_factor = Factor([X, Y, Z], [[[0.2, 0.3], [0.1, 0.4]],
+                                           [[0.7, 0.1], [0.1, 0.1]]])
+
+    In here the outer list is indexed by the first variable, the second
+    innermost list is index by the second variable and so on.
     """
 
     def __init__(self, rand_vars, values):
@@ -58,6 +66,19 @@ class Factor:
             raise FactorValuesEx(rand_vars)
 
     def flattenList(self, values):
+        """
+        Receives a list of lists and produces returns its flatten version.
+
+        Supposing the list:
+            >>> l = [[1, 2], [3, 4]]
+
+        The flatten result would be:
+            >>> fl = [1, 2, 3, 4]
+
+        :param values: A list of lists
+        :returns:      The flatten version of values
+        """
+
         if type(values) in [int, float]:
             return [values]
 
