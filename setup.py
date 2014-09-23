@@ -21,7 +21,7 @@ setup(name="ProbPy",
       provides=['ProbPy'],
 
       keywords='probability calculus random variable bayes bayesian network \
-               information theory',
+               information theory markov',
       license="MIT License",
       classifiers=['Development Status :: 4 - Beta',
                    'Environment :: Console',
