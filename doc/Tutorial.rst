@@ -60,7 +60,7 @@ Once the variable is defined, the factor is defined like the following::
 
     fX = Factor(X, [0.8, 0.2])
 
-The line above creates a factor of X, meaning that the value X=True will be mapped to 0.8, and X=False will be mapped to 0.2. Like this the factor represents a probability distribution, but it doesn't necessarily has to. The same line can be used to simply create a factor that mappes the values of X to any other value::
+The line above creates a factor of X, meaning that the value X=True will be mapped to 0.8, and X=False will be mapped to 0.2. Like this the factor represents a probability distribution, but it doesn't necessarily has to. The same line can be used to simply create a factor that maps the values of X to any other value::
 
     fX = Factor(X, [8000, 2000])
 
@@ -82,7 +82,7 @@ This notion can be generalized for more variables, suppose a factor with three v
     X = RandVar("X", ["True", "False"])
     Y = RandVar("Y", ["A", "B", "C"])
     Z = RandVar("Z", ["Up", "Down"])
-    fXY = Factor([X, Y, Z], [[[0.1, 0.9], [0.5, 0.5], [0.9, 0.1]],
+    fXYZ = Factor([X, Y, Z], [[[0.1, 0.9], [0.5, 0.5], [0.9, 0.1]],
                              [[0.4, 0.6], [0.5, 0.5], [0.6, 0.4]]])
 
 In this example the innermost list is indexed by X, followed by the "middle" list indexed by Y, and finally the outermost list index by Z.
@@ -90,7 +90,7 @@ In this example the innermost list is indexed by X, followed by the "middle" lis
 In alternative to having lists of lists the constructor supports a flatten list as argument::
 
     l = [0.1, 0.9, 0.5, 0.5, 0.9, 0.1, 0.4, 0.6, 0.5, 0.5, 0.6, 0.4]
-    fXY = Factor([X, Y, Z], l)
+    fXYZ = Factor([X, Y, Z], l)
 
 Defining a list like this may be more confusing for a user, but it may be better if the list is defined using some computational method. Using any method, the final representation will always be a flatten list.
 
@@ -116,9 +116,9 @@ According to the known rules of probability, the following is true::
 
     P(X, Y) = P(X | Y) P(Y)
 
-Most people will understand this as the simple situation where multiplying a conditional distribution by a marginal distribution will yield the joint distribution. Having the two factors tha represent the distribution it is possible to do the following to get the marginal::
+Most people will understand this as the simple situation where multiplying a conditional distribution by a marginal distribution will yield the joint distribution. Having the two factors the represent the distribution it is possible to do the following to get the marginal::
 
-    fxy = fx_y * fx
+    fxy = fx_y * fy
 
 In the line above ProbPy will take the two factors and calculate a third factor that represents the join distribution. The multiplication is done following the usual definition of factor product.
 
@@ -162,7 +162,7 @@ Note how the operation is not binary. Also note that op_res does not hold the re
 Marginal
 ++++++++
 
-When working with probability distributions it is quite common that at some point a marginal distribution must be calculated. To ilustrate what a marginal is, suppose the following join distribution P(X, Y) with X and Y being binary variables:
+When working with probability distributions it is quite common that at some point a marginal distribution must be calculated. To illustrate what a marginal is, suppose the following join distribution P(X, Y) with X and Y being binary variables:
 
 +---------+--------+---------+
 | P(X, Y) | X=True | X=False |
