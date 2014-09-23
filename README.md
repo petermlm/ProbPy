@@ -86,13 +86,13 @@ Only the following files should go in the repository:
 
 # Contributing
 
-* This project is implemented using Python 3.2. Earlier version of python are not supported.
+* This project is implemented using Python 3.2. Earlier versions of python are not supported.
 
 * The project uses [PEP8](http://legacy.python.org/dev/peps/pep-0008) as a style guide. The tool [autopep8](https://pypi.python.org/pypi/autopep8/) may help in assuring the project follows the standards.
 
-* The code should have tests. Every test is implemented in the `ProbPy/test` directory an [nosetests](https://nose.readthedocs.org/en/latest/) is used run them. The run the tests use `nosetests3 ProbPy/test`.
+* The code should have tests. Every test is implemented in the `ProbPy/test` directory and [nosetests](https://nose.readthedocs.org/en/latest/) is used run them. To run the tests use `nosetests3 ProbPy/test`.
 
-* The code should be documented. Documentation is done using Sphinx or written by hand when needed.
+* The code should be documented. Documentation is done using Sphinx which takes the doc strings of the code and produces the documentation or it is written directly when needed.
 
 # FAQ
 
