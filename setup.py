@@ -16,9 +16,7 @@ setup(name="ProbPy",
 
       url="https://github.com/petermlm/ProbPy",
 
-      package_dir={"": "ProbPy"},
-      py_modules=['ProbPy'],
-      provides=['ProbPy'],
+      packages=["ProbPy"],
 
       keywords='probability calculus random variable bayes bayesian network \
                information theory markov',
@@ -34,6 +32,6 @@ setup(name="ProbPy",
                    'Operating System :: POSIX :: Linux',
                    'Programming Language :: Python :: 3',
                    'Topic :: Scientific/Engineering',
-                   'Topic :: Software Development'
+                   'Topic :: Software Development :: Libraries'
                    ]
       )
