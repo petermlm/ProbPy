@@ -68,7 +68,7 @@ class BayesianNetwork:
         W_factor -- P(W | Y, Z)
     """
 
-    def __init__(self, network):
+    def __init__(self, network=[]):
         # Will have nodes after they are topologically sorted
         self.network = []
 
@@ -406,6 +406,68 @@ class BayesianNetwork:
         # Return the count list normalized
         values = [res[i] for i in query_var.domain]
         return Factor(query_var, values).normalize(query_var)
+
+    def instNode(self, event):
+        """
+        Makes observation over a network creating a new network in which every
+        factor containing one of the observed variables gets instantiated
+
+        Supposing the network:
+
+            X  Y
+            |\ |
+            | A
+            |/ |
+            W  Z
+
+        The factors that describe this network are the following:
+
+            P(X)        = f(X)
+            P(Y)        = f(Y)
+            P(A | X, Y) = f(A, X, Y)
+            P(W | X, A) = f(W, X, A)
+            P(Z | A)    = f(Z, A)
+
+        If the A variable is observed, every factor will have its A variable
+        instantiated and the network will be composed of the following factors,
+        which don't have any A variable:
+
+            f(X)
+            f(Y)
+            f(A=a, X, Y) = f'(X, Y)
+            f(W, X, A=a) = f'(W, X)
+            f(Z, A=a)    = f'(Z)
+
+        Or similarly, if X is instantiated:
+
+            f(X=x)       = scalar
+            f(Y)
+            f(A, X=x, Y) = f'(A, Y)
+            f(W, X=x, A) = f'(W, A)
+            f(Z, A)    = f'(Z, A)
+
+        Note that the node which only contained X will be reduced to a single
+        scalar value.
+        """
+
+        # Resulting network list
+        res_network = []
+
+        # Assure the event argument is an Event object
+        if type(event) != Event:
+            event = Event(event)
+
+        # Take each node and instantiate it's factor according to the event
+        for i in self.network:
+            new_node = BayesianNetworkNode(i.node, i.factor.instVar(event))
+            new_node.parents = i.parents
+            res_network.append(new_node)
+
+        # Create the network and place the new list directly in the
+        # attribute because it is already sorted
+        res = BayesianNetwork()
+        res.network = res_network
+        return res
 
 
 class BayesianNetworkArgEx(Exception):
