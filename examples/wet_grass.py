@@ -1,6 +1,6 @@
 # Not needed if library is installed
 from os import sys, path
-sys.path.insert(0, path.join("..", "ProbPy"))
+sys.path.insert(0, "..")
 
 # Import ProbPy modules
 from ProbPy import RandVar, Factor, Event
@@ -35,11 +35,16 @@ if __name__ == "__main__":
     observed = Event(var=sprinkler, val="True")
 
     # Run Rejection Sample algorithm
-    estimate = BN.rejectionSample(rain, observed, 100)
+    estimate = BN.eliminationAsk(rain, observed)
+    print("P(Rain | Sprinkler=true)")
+    print(estimate)
+
+    # Run Rejection Sample algorithm
+    estimate = BN.rejectionSample(rain, observed, 1000)
     print("P(Rain | Sprinkler=true)")
     print(estimate)
 
     # Run Gibbs Ask algorithm
-    estimate = BN.gibbsAsk(rain, observed, 100)
+    estimate = BN.gibbsAsk(rain, observed, 1000)
     print("P(Rain | Sprinkler=true)")
     print(estimate)

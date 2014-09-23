@@ -6,7 +6,7 @@ are used in the calculation, X and Y.
 
 # Not needed if library is installed
 from os import sys, path
-sys.path.insert(0, path.join("..", "ProbPy"))
+sys.path.insert(0, "..")
 
 # Import ProbPy modules
 from ProbPy import RandVar, Factor
