@@ -1,5 +1,6 @@
 from ProbPy import MarkovNetwork, Event
 
+
 class TreeMarkovNetwork(MarkovNetwork):
     """
     This class is very similar to the MarkovNetwork class but only allows tree

@@ -1,18 +1,10 @@
 ProbPy Package
 ==============
 
-:mod:`ProbPy` Package
----------------------
+:mod:`rand_var` Module
+----------------------
 
-.. automodule:: ProbPy.__init__
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-:mod:`bn` Module
-----------------
-
-.. automodule:: ProbPy.bn
+.. automodule:: ProbPy.rand_var
     :members:
     :undoc-members:
     :show-inheritance:
@@ -33,18 +25,34 @@ ProbPy Package
     :undoc-members:
     :show-inheritance:
 
-:mod:`inf_theory` Module
-------------------------
+:mod:`bn` Module
+----------------
 
-.. automodule:: ProbPy.inf_theory
+.. automodule:: ProbPy.bn
     :members:
     :undoc-members:
     :show-inheritance:
 
-:mod:`rand_var` Module
-----------------------
+:mod:`mn` Module
+----------------
 
-.. automodule:: ProbPy.rand_var
+.. automodule:: ProbPy.mn
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`tmn` Module
+-----------------
+
+.. automodule:: ProbPy.tmn
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`inf_theory` Module
+------------------------
+
+.. automodule:: ProbPy.inf_theory
     :members:
     :undoc-members:
     :show-inheritance:

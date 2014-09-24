@@ -75,32 +75,32 @@ class MarkovNetwork:
     the representing graph are deduced automatically. The variables which make
     up the graph are also deduced automatically.
 
-    Supposing the following Markov Network::
+    Supposing the following Markov Network:::
 
-    A B
-     \|
-      X----Y--C
-      |    |\/|
-      |    |/\|
-      Z----W--D
+        A B
+         \|
+          X----Y--C
+          |    |\/|
+          |    |/\|
+          Z----W--D
 
     Its factor graph would be::
 
-    A B
-     \|
-     f1--X--f2--Y  C
-         |       \ |
-         f3       f5
-         |       / |
-         Z--f4--W  D
+        A B
+         \|
+         f1--X--f2--Y  C
+             |       \ |
+             f3       f5
+             |       / |
+             Z--f4--W  D
 
     Each factor is can be written like the following::
 
-    f1 = f(A, B, X)
-    f2 = f(X, Y)
-    f3 = f(X, Z)
-    f4 = f(Z, W)
-    f5 = f(C, D, Y, W)
+        f1 = f(A, B, X)
+        f2 = f(X, Y)
+        f3 = f(X, Z)
+        f4 = f(Z, W)
+        f5 = f(C, D, Y, W)
 
     The order of factors is not relevant in anyway.
 
