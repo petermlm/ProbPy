@@ -46,7 +46,8 @@ class BayesianNetwork:
                     tuple as a RandVar object. The factor for that variable
                     goes into the second element.
 
-    For example, suppose the following network::
+    For example, suppose the following network, in which every edge would be
+    pointing from left to right::
 
         X --- Y --- W
          \ -- Z -- /
