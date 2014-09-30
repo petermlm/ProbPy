@@ -10,10 +10,18 @@ class TreeMarkovNetwork(MarkovNetwork):
     :param factors: A list of factors that make up the graph.
     """
 
-    def __init__(self, factors):
-        super().__init__(factors)
+    def __init__(self, factors=None, markov_network=None):
+        if factors is not None:
+            super().__init__(factors)
+        else:
+            self.nodes = markov_network.nodes
+            self.factors = markov_network.factors
 
         # TODO, nothing in this class assures that the network is a tree, yet
+
+    def instNode(self, event):
+        res = super().instNode(event)
+        return TreeMarkovNetwork(markov_network=res)
 
     def beliefProp(self):
         # Select any root node

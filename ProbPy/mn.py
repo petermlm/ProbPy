@@ -135,3 +135,11 @@ class MarkovNetwork:
                 self.nodes[j.name].addNeighbor(new_factor_node)
 
             self.factors.append(new_factor_node)
+
+    def instNode(self, event):
+        new_factors = []
+
+        for i in self.factors:
+            new_factors.append(i.factor.instVar(event))
+
+        return MarkovNetwork(new_factors)
