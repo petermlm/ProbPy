@@ -14,6 +14,7 @@ class MarkovNetVar:
     def __init__(self, var):
         self.var = var
         self.neighbors = []
+        self.messages = []
 
         self.marginal = None
 
@@ -51,6 +52,7 @@ class MarkovNetFactor:
     def __init__(self, factor):
         self.factor = factor
         self.neighbors = []
+        self.messages = []
 
     def addNeighbor(self, neighbor):
         """
