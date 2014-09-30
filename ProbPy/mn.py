@@ -1,3 +1,5 @@
+import copy
+
 class MarkovNetVar:
     """
     Represents a variable node in a Markov Network. Each variable node contains
@@ -12,6 +14,8 @@ class MarkovNetVar:
     def __init__(self, var):
         self.var = var
         self.neighbors = []
+
+        self.marginal = None
 
     def addNeighbor(self, neighbor):
         """
@@ -29,7 +33,10 @@ class MarkovNetVar:
         Returns the graphical degree of this node
         """
 
-        len(self.neighbors)
+        return len(self.neighbors)
+
+    def setMarginal(self, marginal):
+        self.marginal = copy.deepcopy(marginal)
 
 
 class MarkovNetFactor:
@@ -61,7 +68,7 @@ class MarkovNetFactor:
         Returns the graphical degree of this node
         """
 
-        len(self.neighbors)
+        return len(self.neighbors)
 
 
 class MarkovNetwork:
@@ -84,7 +91,7 @@ class MarkovNetwork:
           |    |/\|
           Z----W--D
 
-    Its factor graph would be::
+    One factor graph representation could be::
 
         A B
          \|
@@ -94,7 +101,7 @@ class MarkovNetwork:
              |       / |
              Z--f4--W  D
 
-    Each factor is can be written like the following::
+    Each factor can be written like the following::
 
         f1 = f(A, B, X)
         f2 = f(X, Y)

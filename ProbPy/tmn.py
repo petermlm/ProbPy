@@ -1,4 +1,4 @@
-from ProbPy import MarkovNetwork, Event
+from ProbPy import MarkovNetwork, Factor
 
 
 class TreeMarkovNetwork(MarkovNetwork):
@@ -15,56 +15,47 @@ class TreeMarkovNetwork(MarkovNetwork):
 
         # TODO, nothing in this class assures that the network is a tree, yet
 
-    def sumProduct(self, query_var, observed=Event()):
-        """
-        An implementation of the Sum Product algorithms, also known as Belief
-        propagation algorithm. The algorithm is used to infer the distribution
-        of one query variable in a Markov Network
+    def beliefProp(self):
+        # Dictionary from node to list of messages to key node
+        self.msg_node = {}
 
-        :param query_var: RandVar Instance which is going to be inferred
-        :param observed:  An event, instance of Event class, that represents
-                          the observations made to the Markov Network. It may
-                          be empty
-        """
+        # Select any root node
+        root_node = self.nodes[next(iter(self.nodes))]
 
-        # Get node of this var
-        node = self.nodes[query_var.name]
+        # Get messages to this node
+        res = self.factorToVar(root_node.neighbors[0], root_node)
+        self.msg_node[root_node.var.name] = [(res, root_node.neighbors[0].factor)]
+        for i in root_node.neighbors[1:]:
+            msg = self.factorToVar(i, root_node)
+            self.msg_node[root_node.var.name].append((msg, i.factor))
+            res *= msg
 
-        # Get neighboring factor nodes
-        neighbor_factors = node.neighbors
+        # Store the calculated marginal
+        root_node.setMarginal(res)
 
-        # Calculate product of neighboring messages to this node
-        res = self.factorToVar(neighbor_factors[0], node.var, observed)
-        for i in neighbor_factors[1:]:
-            res *= self.factorToVar(i, node.var, observed)
+        # Propagate this message to other nodes
+        for i in root_node.neighbors:
+            new_msg = Factor(root_node.var, [1, 1])
 
-        return res
+            for j in self.msg_node[root_node.var.name]:
+                if j[1] != i.factor:
+                    new_msg *= j[0]
 
-    def factorToVar(self, node, var, observed):
-        """
-        Used by sumProduct, this method is used to calculate the messages that
-        are passed from factor nodes to the variable node in the arguments.
+            self.progMsgVarToFactor(i, root_node, new_msg)
 
-        :param node:     A MarkovNetFactor node. The method will calculate the
-                         message that this node passes to the variable in the
-                         var argument
-        :param var:      Instance of RandVar. The calculated message will pass
-                         to the node representing this variable
-        :param observed: An event sent from the sumProduct method
-        """
-
+    def factorToVar(self, node, prev_var):
         # Get neighboring var nodes
-        neighbor_vars = [i for i in node.neighbors if i.var != var]
+        neighbor_vars = [i for i in node.neighbors if i.var != prev_var.var]
 
-        # Calculate product of neighboring messages to this node
+        # Get messages to this node
         res = None
         for i in neighbor_vars:
-            vf_res = self.varToFactor(i, node.factor, observed)
-            if vf_res is not None:
+            msg = self.varToFactor(i, node)
+            if msg is not None:
                 if res is None:
-                    res = vf_res
+                    res = msg
                 else:
-                    res *= vf_res
+                    res *= msg
 
         # Calculate the product between this factor and the product of the
         # calculated messages
@@ -73,32 +64,60 @@ class TreeMarkovNetwork(MarkovNetwork):
         else:
             res *= node.factor
 
-        # Get marginal and return resulting message
-        return res.instVar(observed).marginal(var)
+        return res.marginal(prev_var.var)
 
-    def varToFactor(self, node, factor, observed):
-        """
-        Used by sumProduct, this method is used to calculate the messages that
-        are passed from variable nodes to the factor node in the arguments.
+    def varToFactor(self, node, prev_factor):
+        # Get neighboring factor nodes
+        neighbor_factors = [i for i in node.neighbors if i.factor != prev_factor.factor]
 
-        :param node:     A MarkovNetVar node. The method will calculate the
-                         message that this node passes to the factor in the
-                         factor argument
-        :param factor:   Instance of Factor. The calculated message will pass
-                         to the node representing this factor
-        :param observed: An event sent from the sumProduct method
-        """
+        # Get messages to this node
+        res = None
+        for i in neighbor_factors:
+            msg = self.factorToVar(i, node)
+            if msg is not None:
+                if node.var.name in self.msg_node:
+                    self.msg_node[node.var.name].append((msg, i))
+                else:
+                    self.msg_node[node.var.name] = [(msg, i)]
 
-        # Get neighboring factor nodes, except for argument node
-        neighbor_factors = [i for i in node.neighbors if i.factor != factor]
+                if res is None:
+                    res = msg
+                else:
+                    res *= msg
 
-        # If the list is empty, there is nothing to calculate in this node
-        if neighbor_factors == []:
-            return None
-
-        # Otherwise, make the necessary products and return
-        res = self.factorToVar(neighbor_factors[0], node.var, observed)
-        for i in neighbor_factors[1:]:
-            res *= self.factorToVar(i, node.var, observed)
-
+        # Return this message
         return res
+
+    def progMsgVarToFactor(self, node, prev_var, msg):
+        # Get neighboring factor nodes
+        neighbor_vars = [i for i in node.neighbors if i.var != prev_var.var]
+
+        # Propagate this message to other nodes
+        for i in neighbor_vars:
+            self.progMsgFactorToVar(i, node, msg)
+
+    def progMsgFactorToVar(self, node, prev_factor, msg):
+        if node.var.name == 'B':
+            print(msg)
+
+        # Calculate the marginal for this node and store it
+        this_msg = (msg * prev_factor.factor).marginal(node.var)
+        res = this_msg
+        if node.var.name in self.msg_node:
+            for i in self.msg_node[node.var.name]:
+                res *= i[0]
+
+        node.setMarginal(res)
+
+        # Get neighboring factor nodes
+        neighbor_factors = [i for i in node.neighbors if i.factor != prev_factor.factor]
+
+        # Propagate this message to other nodes
+        for i in neighbor_factors:
+            new_msg = this_msg
+
+            for j in self.msg_node[node.var.name]:
+                if j[1] != i:
+                    new_msg *= j[0]
+
+            self.progMsgVarToFactor(i, node, new_msg)
