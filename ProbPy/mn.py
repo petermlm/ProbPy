@@ -15,6 +15,7 @@ class MarkovNetVar:
         self.var = var
         self.neighbors = []
         self.messages = []
+        self.obs_factors = []
 
         self.marginal = None
 
@@ -28,6 +29,7 @@ class MarkovNetVar:
 
         if type(neighbor) == MarkovNetFactor:
             self.neighbors.append(neighbor)
+            self.messages.append(None)
 
     def getDegree(self):
         """
@@ -38,6 +40,10 @@ class MarkovNetVar:
 
     def setMarginal(self, marginal):
         self.marginal = copy.deepcopy(marginal)
+
+    def addObsFactor(self, obs_factor):
+        for i in obs_factor:
+            self.obs_factors.append(i)
 
 
 class MarkovNetFactor:
@@ -64,6 +70,7 @@ class MarkovNetFactor:
 
         if type(neighbor) == MarkovNetVar:
             self.neighbors.append(neighbor)
+            self.messages.append(None)
 
     def getDegree(self):
         """
