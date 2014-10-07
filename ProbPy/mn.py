@@ -1,5 +1,6 @@
 import copy
 
+
 class MarkovNetVar:
     """
     Represents a variable node in a Markov Network. Each variable node contains
@@ -39,9 +40,30 @@ class MarkovNetVar:
         return len(self.neighbors)
 
     def setMarginal(self, marginal):
+        """
+        Sets the marginal distribution for this node. Supposing this node
+        represetned a variable X in its network, the marginal should be P(X),
+        or another relevant factor indexed only by X
+
+        :param marginal: Instance of Factor. The marginal indexed by the nodes
+                         variable
+        """
+
+        if len(marginal.rand_vars) != 1 or marginal.rand_vars[0] != self.var:
+            # TODO, make this an exception
+            return
+
         self.marginal = copy.deepcopy(marginal)
 
     def addObsFactor(self, obs_factor):
+        """
+        Adds observation factors. An observation factor is an instance of
+        MarkovNetfactor that contains only a message to this node.
+
+        :param obs_factor: List of Factors that are used as observation to this
+                           node
+        """
+
         for i in obs_factor:
             self.obs_factors.append(i)
 
@@ -91,7 +113,7 @@ class MarkovNetwork:
     the representing graph are deduced automatically. The variables which make
     up the graph are also deduced automatically.
 
-    Supposing the following Markov Network:::
+    Supposing the following Markov Network::
 
         A B
          \|
@@ -144,6 +166,10 @@ class MarkovNetwork:
             self.factors.append(new_factor_node)
 
     def instNode(self, event):
+        """
+        Similar to *instNode()* method of Bayesian Networks.
+        """
+
         new_factors = []
 
         for i in self.factors:

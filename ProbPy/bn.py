@@ -413,7 +413,8 @@ class BayesianNetwork:
         Makes observation over a network creating a new network in which every
         factor containing one of the observed variables gets instantiated
 
-        Supposing the network::
+        Supposing the network (The edges would be "pointing" from top to bottom
+        since this is a Bayesian Network)::
 
             X  Y
             |\ |
@@ -445,7 +446,7 @@ class BayesianNetwork:
             f(Y)
             f(A, X=x, Y) = f'(A, Y)
             f(W, X=x, A) = f'(W, A)
-            f(Z, A)    = f'(Z, A)
+            f(Z, A)      = f'(Z, A)
 
         Note that the node which only contained X will be reduced to a single
         scalar value.

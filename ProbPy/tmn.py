@@ -8,6 +8,12 @@ class TreeMarkovNetwork(MarkovNetwork):
     works in a similar way.
 
     :param factors: A list of factors that make up the graph.
+
+    Alternatively, if the constructor is used with the keyword
+    *markov_network*, it will simply take a MarkovNetwork instance and copy its
+    variable and factor nodes.
+
+    :param markov_network: Instance of MarkovNetwork.
     """
 
     def __init__(self, factors=None, markov_network=None):
@@ -24,9 +30,15 @@ class TreeMarkovNetwork(MarkovNetwork):
         return TreeMarkovNetwork(markov_network=res)
 
     def beliefProp(self):
+        """
+        Belief propagation algorithm, also known as sum-product algorithm. The
+        result of the algorithm is stored in the *marginal* attribute of every
+        variable node which is part of the network. This implementation only
+        works with tree networks.
+        """
+
         # Select any root node
         root_node = self.nodes[next(iter(self.nodes))]
-        print(root_node.var)
 
         # Get messages to this node
         res = self.factorToVar(root_node.neighbors[0], root_node)
@@ -36,7 +48,6 @@ class TreeMarkovNetwork(MarkovNetwork):
             msg = self.factorToVar(neighbor, root_node)
             root_node.messages[i+1] = msg
             res *= msg
-        print("::", root_node.messages)
 
         for i in root_node.obs_factors:
             res *= i
@@ -58,6 +69,15 @@ class TreeMarkovNetwork(MarkovNetwork):
             self.progMsgVarToFactor(neighbor, root_node, new_msg)
 
     def factorToVar(self, node, prev_var):
+        """
+        Calculates initial message sent from every leaf node to the root node
+        recursively. This method call deal with a message from a factor node to
+        a variable node.
+
+        :param node:     Node for which the message is going to be calculated.
+        :param prev_var: Previous variable node in recursion.
+        """
+
         # Get messages to this node
         res = None
         for i, neighbor in enumerate(node.neighbors):
@@ -70,7 +90,6 @@ class TreeMarkovNetwork(MarkovNetwork):
                         res *= msg
 
                 node.messages[i] = msg
-        print(";;", node.factor, node.messages)
 
         # Calculate the product between this factor and the product of the
         # calculated messages
@@ -82,6 +101,16 @@ class TreeMarkovNetwork(MarkovNetwork):
         return res.marginal(prev_var.var)
 
     def varToFactor(self, node, prev_factor):
+        """
+        Calculates initial message sent from every leaf node to the root node
+        recursively. This method call deal with a message from a variable node
+        to a factor node.
+
+        :param node:        Node for which the message is going to be
+                            calculated.
+        :param prev_factor: Previous factor node in recursion.
+        """
+
         # Get messages to this node
         res = None
         for i, neighbor in enumerate(node.neighbors):
@@ -94,7 +123,6 @@ class TreeMarkovNetwork(MarkovNetwork):
                         res *= msg
 
                 node.messages[i] = msg
-        print("--", node.var, node.messages)
 
         if len(node.obs_factors) > 0:
             if res is None:
@@ -109,6 +137,17 @@ class TreeMarkovNetwork(MarkovNetwork):
         return res
 
     def progMsgVarToFactor(self, node, prev_var, msg):
+        """
+        Propagates message from root node to every other node recursively. This
+        method call deals with step from a variable node to a factor node.
+
+        :param node:     Node that receives message. Message is also propagated
+                         from this node to other nodes except for prev_var
+                         node.
+        :param prev_var: Previous variable node during message propagation.
+        :param msg:      Message from previous nodes to this one.
+        """
+
         # Propagate this message to other nodes
         for i, neighbor in enumerate(node.neighbors):
             new_msg = msg
@@ -122,6 +161,17 @@ class TreeMarkovNetwork(MarkovNetwork):
                 self.progMsgFactorToVar(neighbor, node, new_msg)
 
     def progMsgFactorToVar(self, node, prev_factor, msg):
+        """
+        Propagates message from root node to every other node recursively. This
+        method call deals with step from a factor node to variable node.
+
+        :param node:        Node that receives message. Message is also
+                            propagated from this node to other nodes except for
+                            prev_factor node.
+        :param prev_factor: Previous factor node during message propagation.
+        :param msg:         Message from previous nodes to this one.
+        """
+
         marginal = msg
         for i, neighbor in enumerate(node.neighbors):
             if node.messages[i] is not None:
