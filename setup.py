@@ -7,7 +7,7 @@ sys.path.append("ProbPy")
 import ProbPy
 
 setup(name="ProbPy",
-      version="1.0",
+      version="1.1",
       description="Multi Variable Probability Calculus Library",
       long_description="""
         ProbPy is a Python library that aims to simplify calculations with discrete multi variable probabilistic distributions by offering an abstraction over how data is stored and how the operations between distributions are performed.
