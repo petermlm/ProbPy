@@ -2,9 +2,29 @@ A Python library for discrete multi variable probabilistic calculus.
 
 # About ProbPy
 
-ProbPy is a Python library that aims to simplify calculations with discrete multi variable probabilistic distributions by offering an abstraction over how the data is stored and how the operations between distributions are performed.
+ProbPy is a Python library that aims to simplify calculations with discrete multi variable probabilistic distributions by offering an abstraction over how data is stored and how the operations between distributions are performed.
 
 The library can be used in the implementation of many algorithms such as Bayes Theorem, Bayesian Inference algorithms like Variable Elimination, Gibbs Ask (MCMC), HMMs implementations, Information Theory, etc.
+
+Currently, there are implementation for Bayesian and Markov Networks with some inference algorithms implemented.
+
+For more information check the [GitHub page](https://github.com/petermlm/ProbPy).
+
+# Installing
+
+To install ProbPy from the Python Package Index use *pip*:
+
+    pip install ProbPy
+
+Alternatively, download ProbPy from GitHub and install with the following commands:
+
+    git clone https://github.com/petermlm/ProbPy
+    sudo python setup.py install
+
+If you are developing ProbPy, instead of installing the library use the following commands so you don't have to reinstall ProbPy everytime an alteration is made:
+
+    git clone https://github.com/petermlm/ProbPy
+    sudo python setup.py develop
 
 # Example and Features
 
