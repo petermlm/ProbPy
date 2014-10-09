@@ -6,7 +6,19 @@ ProbPy Tutorial
 Install
 -------
 
-TODO
+To install ProbPy from the Python Package Index use *pip*::
+
+    pip install ProbPy
+
+Alternatively, download ProbPy from GitHub and install with the following commands::
+
+    git clone https://github.com/petermlm/ProbPy
+    sudo python setup.py install
+
+If you are developing ProbPy, instead of installing the library use the following commands so you don't have to reinstall ProbPy every time an alteration is made::
+
+    git clone https://github.com/petermlm/ProbPy
+    sudo python setup.py develop
 
 Random Variables
 ----------------
@@ -241,6 +253,9 @@ Bayesian Networks
 -----------------
 
 TODO
+
+Markov Networks
+---------------
 
 Information Theory
 ------------------
