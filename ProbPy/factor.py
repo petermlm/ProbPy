@@ -695,20 +695,26 @@ class Factor:
         return Event(event)
 
     def __repr__(self):
-        var_list = ""
-
-        if len(self.rand_vars) == 1:
-            var_list = self.rand_vars[0].name
+        # If this is a scalar factor, meaning that there are no variables and
+        # only on value, just return that value
+        if len(self.rand_vars) == 0:
+            return str(self.values)
 
         else:
-            var_list = "["
+            var_list = ""
 
-            # Place random variables
-            for i in self.rand_vars[:-1]:
-                var_list += str(i) + ", "
-            var_list += str(self.rand_vars[-1].name) + "]"
+            if len(self.rand_vars) == 1:
+                var_list = self.rand_vars[0].name
 
-        return "(%s, %s)" % (var_list, str(self.values))
+            else:
+                var_list = "["
+
+                # Place random variables
+                for i in self.rand_vars[:-1]:
+                    var_list += str(i) + ", "
+                var_list += str(self.rand_vars[-1].name) + "]"
+
+            return "(%s, %s)" % (var_list, str(self.values))
 
     def __add__(self, other):
         return self.add(other)

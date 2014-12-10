@@ -24,8 +24,10 @@ class TestToString:
         X = RandVar("X", [0, 1])
         Y = RandVar("Y", [0, 1])
 
-        f1 = Factor(X, [0, 1])
-        f2 = Factor([X, Y], [0, 1, 2, 3])
+        f1 = Factor([], [0])
+        f2 = Factor(X, [0, 1])
+        f3 = Factor([X, Y], [0, 1, 2, 3])
 
-        assert(f1.__repr__() == "(X, [0, 1])")
-        assert(f2.__repr__() == "([X, Y], [0, 1, 2, 3])")
+        assert(f1.__repr__() == "[0]")
+        assert(f2.__repr__() == "(X, [0, 1])")
+        assert(f3.__repr__() == "([X, Y], [0, 1, 2, 3])")
