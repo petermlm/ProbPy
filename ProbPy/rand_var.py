@@ -19,26 +19,37 @@ class RandVar:
     even types that are other objects.
 
     :param name:   String or Int with the name of this variable
-    :param domain: List with the domain of this variable. The elements in the
-                   domain should be strings or ints.
+    :param domain: Either a list with the domain of this variable, in which the
+                   elements in the domain should be strings or ints, or an int
+                   number which will be the size of the domain
 
     Examples:
         >>> coin = RandVar("Coin", ["Head", "Tail"])
         >>> ball = RandVar("Ball", ["Red", "Green", "Blue"])
         >>> generic = RandVar(10, list(range(10)))
+        >>> X = RandVar("X", 4)
+
+    In the example, the X variable will have a domain of 4
     """
 
     def __init__(self, name, domain):
+        # Check the name
         if type(name) not in [str, int]:
             raise RandVarNameEx(name)
 
-        if type(domain) != list or len(domain) == 0:
+        # Check the domain
+        if type(domain) == list and len(domain) > 0:
+            for i in domain:
+                if type(i) not in [str, int]:
+                    raise RandVarDomainEx(domain)
+
+        elif type(domain) == int:
+            domain = list(range(domain))
+
+        else:
             raise RandVarDomainEx(domain)
 
-        for i in domain:
-            if type(i) not in [str, int]:
-                raise RandVarDomainEx(domain)
-
+        # Store the attributes
         self.name = name
         self.domain = domain
 
