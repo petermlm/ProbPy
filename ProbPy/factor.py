@@ -37,6 +37,7 @@ class Factor:
         if type(rand_vars) != list:
             rand_vars = [rand_vars]
 
+        # Check if the type of the variables is correct
         for i in rand_vars:
             if type(i) != RandVar:
                 raise FactorRandVarsEx(rand_vars)
@@ -44,6 +45,7 @@ class Factor:
         # Store variables
         self.rand_vars = rand_vars
 
+        # Check the types of the values
         if type(values) == list:
             if type(values[0]) == list:
                 self.values = self.flattenList(values)
@@ -54,9 +56,6 @@ class Factor:
                         raise FactorValuesEx(rand_vars)
 
                 self.values = values
-
-        elif type(values) == int or type(values) == float:
-            self.values = values
 
         elif callable(values):
             self.rand_vars = rand_vars
