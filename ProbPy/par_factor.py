@@ -8,6 +8,10 @@ class ParFactor(Factor):
         super().__init__(rand_vars, values)
         self.max_depth = max_depth
 
+    """
+    Factor Op Stuff
+    """
+
     def factorOp(self, factor, fun):
         """
         Same as factorOp() in Factor class, but implemented using Python's
@@ -151,4 +155,103 @@ class ParFactor(Factor):
                 res_values.append(fun(self.values[index1], factor_values[index2]))
 
             # Put result in queue
+            arg_queue.put((final_index, res_values))
+
+    """
+    Marginal Stuff
+    """
+
+    def marginal(self, arg_rand_vars):
+        res_rand_vars = []
+
+        # If the argument is a single variable
+        if type(arg_rand_vars) != list:
+            rand_vars = [arg_rand_vars]
+        else:
+            rand_vars = arg_rand_vars
+
+        # Get resulting variables
+        for i in self.rand_vars:
+            var_in_self = False
+
+            for j in rand_vars:
+                if i.name == j.name:
+                    var_in_self = True
+                    break
+
+            if var_in_self:
+                res_rand_vars.append(i)
+
+        # Calculate resulting size of factor
+        res_values_size = self.getValuesListSize(res_rand_vars)
+
+        res_values = self.marginalPar(res_values_size, res_rand_vars)
+
+        # Make Factor object and return
+        return Factor(res_rand_vars, res_values)
+
+    def marginalPar(self, res_values_size, res_rand_vars,
+                    arg_queue=None, indexes=(0, 0, -1), depth=0):
+        if depth <= 1:
+            # Divide the work through processes
+            queue = Queue()
+
+            if indexes[2] == -1:
+                len_values = len(self.values)
+            else:
+                len_values = indexes[2] - indexes[1]
+
+            begin_work = indexes[1]
+            mid_index = indexes[1] + len_values // 2
+            end_index = indexes[2] if indexes[2] != -1 else len_values
+
+            p1 = Process(target=ParFactor.marginalPar,
+                         args=(self, res_values_size, res_rand_vars,
+                               queue, (0, begin_work, mid_index), depth+1))
+
+            p2 = Process(target=ParFactor.marginalPar,
+                         args=(self, res_values_size, res_rand_vars,
+                               queue, (1, mid_index, end_index), depth+1))
+
+            p1.start()
+            p2.start()
+
+            # Get results from processes
+            res1 = queue.get()
+            res2 = queue.get()
+
+            final_res = []
+            for i, _ in enumerate(res1[1]):
+                final_res.append(res1[1][i] + res2[1][i])
+
+            if depth > 0:
+                arg_queue.put((indexes[0], final_res))
+            else:
+                return final_res
+
+        else:
+            final_index = indexes[0]
+            begin = indexes[1]
+            end = indexes[2]
+
+            # Calculate marginal
+            res_values = [0] * res_values_size
+            for pre_i, value in enumerate(self.values[begin:end]):
+                i = pre_i + begin
+                index = 0
+                div = 1
+                mult = 1
+                k = 0
+
+                for j in self.rand_vars:
+                    if k < len(res_rand_vars) and j.name == res_rand_vars[k].name:
+                        index += (int(i/div) % len(res_rand_vars[k].domain)) * mult
+                        mult *= len(res_rand_vars[k].domain)
+                        k += 1
+
+                    div *= len(j.domain)
+
+                res_values[index] += value
+
+            # Put results in queue
             arg_queue.put((final_index, res_values))
