@@ -4,6 +4,10 @@ from multiprocessing import Process, Queue
 
 
 class ParFactor(Factor):
+    def __init__(self, rand_vars, values, max_depth=0):
+        super().__init__(rand_vars, values)
+        self.max_depth = max_depth
+
     def factorOp(self, factor, fun):
         """
         Same as factorOp() in Factor class, but implemented using Python's
@@ -44,21 +48,22 @@ class ParFactor(Factor):
         res_values_size = self.getValuesListSize(res_rand_vars)
 
         # Calculate resulting factor
-        res_values = self.calcResFactor(mult, div, dim, factor.rand_vars, factor.values, res_values_size, fun)
+        res_values = self.calcResFactor(mult, div, dim, factor.rand_vars, factor.values, res_rand_vars, res_values_size, fun, indexes=(0, 0, res_values_size))
         return Factor(res_rand_vars, res_values)
 
     def getAuxLists(self, factor_rand_vars, res_rand_vars):
+        # Calculate mult list
         mult = []
-        div = []
-        dim = []
         c_mult = 1
 
         for i in factor_rand_vars:
-            # Mult
             mult.append(c_mult)
             c_mult *= len(i.domain)
 
-            # Div
+        # Calculate div list
+        div = []
+
+        for i in factor_rand_vars:
             c_div = 1
 
             for j in res_rand_vars:
@@ -69,30 +74,81 @@ class ParFactor(Factor):
 
             div.append(c_div)
 
-            # Dim
+        # Calculate dim list
+        dim = []
+
+        for i in factor_rand_vars:
             dim.append(len(i.domain))
 
         return mult, div, dim
 
     def calcResFactor(self, mult, div, dim,
                       factor_rand_vars, factor_values,
-                      res_values_size,
-                      fun):
-        res_values = [0] * res_values_size
-        index1 = 0
-        len_values = len(self.values)
+                      res_rand_vars, res_values_size,
+                      fun,
+                      arg_queue=None, indexes=(0, 0, -1), depth=0):
 
-        for i in range(res_values_size):
-            # Get index 1
-            index1 = i % len_values
+        if depth <= self.max_depth and (depth+1) <= len(div):
+            top_var = res_rand_vars[-(depth+1)]
+            top_var_div = div[-(depth+1)]
 
-            # Get index 2
-            index2 = 0
-            for j, _ in enumerate(factor_rand_vars):
-                index2 += (int(i / div[j]) % dim[j]) * mult[j]
+            # Generate a process for each value of the top variable
+            queue = Queue()
+            procs = []
+            for i, _ in enumerate(top_var.domain):
+                work_begin = i * top_var_div + indexes[1]
+                work_end = work_begin + top_var_div
 
-            # Calculate value
-            res_values.append(fun(self.values[index1], factor_values[index2]))
+                p = Process(target=ParFactor.calcResFactor,
+                            args=(self, mult, div, dim,
+                                  factor_rand_vars, factor_values,
+                                  res_rand_vars, res_values_size,
+                                  fun,
+                                  queue, (i, work_begin, work_end), depth+1))
+                p.start()
+                procs.append(p)
 
-        # Make Factor object and return
-        return res_values
+            # Get results from processes
+            ret_res_values = [0] * (indexes[2] - indexes[1])
+            for i, _ in enumerate(top_var.domain):
+                sub_res = queue.get()
+
+                res_index = sub_res[0]
+                res_list = sub_res[1]
+
+                # Place sub list resulting from parallel processing into values
+                # to return
+                ret_res_values = ret_res_values[:res_index*top_var_div] + \
+                                 res_list + \
+                                 ret_res_values[res_index*top_var_div + top_var_div:]
+
+            # If this is the top process, return results, if not, put results
+            # in queue
+            if depth > 0:
+                arg_queue.put((indexes[0], ret_res_values))
+            else:
+                return ret_res_values
+
+        else:
+            res_values = []
+            len_values = len(self.values)
+
+            final_index = indexes[0]
+            work_begin = indexes[1]
+            work_end = indexes[2] if indexes[2] != -1 else len(factor_values)
+
+            index1 = 0
+            for i in range(work_begin, work_end):
+                # Get index 1
+                index1 = i % len_values
+
+                # Get index 2
+                index2 = 0
+                for j, _ in enumerate(factor_rand_vars):
+                    index2 += (int(i / div[j]) % dim[j]) * mult[j]
+
+                # Calculate value
+                res_values.append(fun(self.values[index1], factor_values[index2]))
+
+            # Put result in queue
+            arg_queue.put((final_index, res_values))
