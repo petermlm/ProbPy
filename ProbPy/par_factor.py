@@ -4,9 +4,16 @@ from multiprocessing import Process, Queue
 
 
 class ParFactor(Factor):
-    def __init__(self, rand_vars, values, max_depth=0):
-        super().__init__(rand_vars, values)
+    def __init__(self, factor=None, rand_vars=None, values=None, max_depth=0):
+        if factor is not None:
+            super().__init__(factor.rand_vars[:], factor.values[:])
+        else:
+            super().__init__(rand_vars, values)
+
         self.max_depth = max_depth
+
+    def setMaxDepth(self, new_max_depth):
+        self.max_depth = new_max_depth
 
     """
     Factor Op Stuff
@@ -48,12 +55,23 @@ class ParFactor(Factor):
         # Calculate mult and div list
         mult, div, dim = self.getAuxLists(factor.rand_vars, res_rand_vars)
 
+        # Get res div
+        res_div = []
+        c_res_div = 1
+        for i in res_rand_vars:
+            res_div.append(c_res_div)
+            c_res_div *= len(i.domain)
+
         # Calculate resulting size of factor
         res_values_size = self.getValuesListSize(res_rand_vars)
 
         # Calculate resulting factor
-        res_values = self.calcResFactor(mult, div, dim, factor.rand_vars, factor.values, res_rand_vars, res_values_size, fun, indexes=(0, 0, res_values_size))
-        return Factor(res_rand_vars, res_values)
+        res_values = self.calcResFactor(mult, div, dim, res_div,
+                                        factor.rand_vars, factor.values,
+                                        res_rand_vars, res_values_size,
+                                        fun,
+                                        indexes=(0, 0, res_values_size))
+        return ParFactor(rand_vars=res_rand_vars, values=res_values)
 
     def getAuxLists(self, factor_rand_vars, res_rand_vars):
         # Calculate mult list
@@ -86,7 +104,7 @@ class ParFactor(Factor):
 
         return mult, div, dim
 
-    def calcResFactor(self, mult, div, dim,
+    def calcResFactor(self, mult, div, dim, res_div,
                       factor_rand_vars, factor_values,
                       res_rand_vars, res_values_size,
                       fun,
@@ -94,7 +112,7 @@ class ParFactor(Factor):
 
         if depth <= self.max_depth and (depth+1) <= len(div):
             top_var = res_rand_vars[-(depth+1)]
-            top_var_div = div[-(depth+1)]
+            top_var_div = res_div[-(depth+1)]
 
             # Generate a process for each value of the top variable
             queue = Queue()
@@ -104,7 +122,7 @@ class ParFactor(Factor):
                 work_end = work_begin + top_var_div
 
                 p = Process(target=ParFactor.calcResFactor,
-                            args=(self, mult, div, dim,
+                            args=(self, mult, div, dim, res_div,
                                   factor_rand_vars, factor_values,
                                   res_rand_vars, res_values_size,
                                   fun,
@@ -122,9 +140,10 @@ class ParFactor(Factor):
 
                 # Place sub list resulting from parallel processing into values
                 # to return
-                ret_res_values = ret_res_values[:res_index*top_var_div] + \
-                                 res_list + \
-                                 ret_res_values[res_index*top_var_div + top_var_div:]
+                ret_res_values = (ret_res_values[:res_index*top_var_div] +
+                                  res_list +
+                                  ret_res_values[res_index*top_var_div +
+                                                 top_var_div:])
 
             # If this is the top process, return results, if not, put results
             # in queue
@@ -152,7 +171,8 @@ class ParFactor(Factor):
                     index2 += (int(i / div[j]) % dim[j]) * mult[j]
 
                 # Calculate value
-                res_values.append(fun(self.values[index1], factor_values[index2]))
+                res_values.append(fun(self.values[index1],
+                                  factor_values[index2]))
 
             # Put result in queue
             arg_queue.put((final_index, res_values))
@@ -188,7 +208,7 @@ class ParFactor(Factor):
         res_values = self.marginalPar(res_values_size, res_rand_vars)
 
         # Make Factor object and return
-        return Factor(res_rand_vars, res_values)
+        return ParFactor(rand_vars=res_rand_vars, values=res_values)
 
     def marginalPar(self, res_values_size, res_rand_vars,
                     arg_queue=None, indexes=(0, 0, -1), depth=0):
@@ -244,8 +264,10 @@ class ParFactor(Factor):
                 k = 0
 
                 for j in self.rand_vars:
-                    if k < len(res_rand_vars) and j.name == res_rand_vars[k].name:
-                        index += (int(i/div) % len(res_rand_vars[k].domain)) * mult
+                    if k < len(res_rand_vars) and \
+                            j.name == res_rand_vars[k].name:
+                        rv_len = len(res_rand_vars[k].domain)
+                        index += (int(i/div) % rv_len) * mult
                         mult *= len(res_rand_vars[k].domain)
                         k += 1
 
