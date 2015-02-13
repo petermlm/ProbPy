@@ -156,7 +156,6 @@ class ParFactor(Factor):
         Only used internally with factorOp.
         """
 
-
         if depth <= self.max_depth and (depth+1) <= len(div):
             top_var = res_rand_vars[-(depth+1)]
             top_var_div = res_div[-(depth+1)]
@@ -230,7 +229,8 @@ class ParFactor(Factor):
 
     def marginal(self, arg_rand_vars):
         """
-        Same as marginal() in Factor class, but implemented using Python's multiprocessing library
+        Same as marginal() in Factor class, but implemented using Python's
+        multiprocessing library
 
         :param arg_rand_vars: List of random variables that will make up the
                               returning factor
