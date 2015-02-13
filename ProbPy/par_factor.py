@@ -1,10 +1,42 @@
+"""
+Implements the Parallel Factor class.
+"""
+
+
 from ProbPy import RandVar, Factor, Event
 
 from multiprocessing import Process, Queue
 
 
 class ParFactor(Factor):
-    def __init__(self, factor=None, rand_vars=None, values=None, max_depth=0):
+    """
+    Parallel factor is a child class of Factor with some operations
+    reimplemented to execute in parallel. The usage of this class is in all
+    similar to the Factor class. The difference is that operations done with
+    this class will execute in parallel.
+
+    :param factor:    Non parallel Factor. New factor will have the exact same
+                      information, but it will now be a parallel class
+    :param rand_vars: List of Random Variables of this factor, or single
+                      variable
+    :param values:    Values of the factor
+    :param max_depth: Maximum recursion depth to which the algorithms can keep
+                      creating processes
+
+    Examples:
+        >>> # Assuming X and Y are variables
+        >>> XY_factor = Factor([X, Y], [0.2, 0.3, 0.1, 0.4])
+        >>> ParFactor(factor=XY_factor)
+
+    The new factor in the example above will the same but it will now execute
+    some operations in parallel.
+
+        >>> XY_factor = ParFactor([X, Y], [0.2, 0.3, 0.1, 0.4])
+
+    The new factor will execute in parallel.
+    """
+
+    def __init__(self, rand_vars=None, values=None, factor=None, max_depth=0):
         if factor is not None:
             super().__init__(factor.rand_vars[:], factor.values[:])
         else:
@@ -13,6 +45,13 @@ class ParFactor(Factor):
         self.max_depth = max_depth
 
     def setMaxDepth(self, new_max_depth):
+        """
+        Maximum recursion depth to which the algorithms can keep creating
+        processes
+
+        :param new_max_depth: new maximum depth
+        """
+
         self.max_depth = new_max_depth
 
     """
@@ -74,6 +113,10 @@ class ParFactor(Factor):
         return ParFactor(rand_vars=res_rand_vars, values=res_values)
 
     def getAuxLists(self, factor_rand_vars, res_rand_vars):
+        """
+        Only used internally with factorOp.
+        """
+
         # Calculate mult list
         mult = []
         c_mult = 1
@@ -109,6 +152,10 @@ class ParFactor(Factor):
                       res_rand_vars, res_values_size,
                       fun,
                       arg_queue=None, indexes=(0, 0, -1), depth=0):
+        """
+        Only used internally with factorOp.
+        """
+
 
         if depth <= self.max_depth and (depth+1) <= len(div):
             top_var = res_rand_vars[-(depth+1)]
@@ -182,6 +229,14 @@ class ParFactor(Factor):
     """
 
     def marginal(self, arg_rand_vars):
+        """
+        Same as marginal() in Factor class, but implemented using Python's multiprocessing library
+
+        :param arg_rand_vars: List of random variables that will make up the
+                              returning factor
+        :returns:             Marginal factor
+        """
+
         res_rand_vars = []
 
         # If the argument is a single variable
@@ -212,6 +267,10 @@ class ParFactor(Factor):
 
     def marginalPar(self, res_values_size, res_rand_vars,
                     arg_queue=None, indexes=(0, 0, -1), depth=0):
+        """
+        Only used internally for marginal.
+        """
+
         if depth <= 1:
             # Divide the work through processes
             queue = Queue()
