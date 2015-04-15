@@ -1,7 +1,50 @@
-import copy
+from ProbPy import Factor
 
 
-class MarkovNetVar:
+class BPMsg:
+    """
+    TODO
+    """
+
+    def __init__(self, factor, cycle=0):
+        self.factor = factor
+        self.cycle = cycle
+
+    def __repr__(self):
+        return "(Msg %s, Cycle: %s)" % (self.factor, self.cycle)
+
+
+class MarkovNode:
+    """
+    TODO
+    """
+
+    def __init__(self):
+        self.neighbors = []
+        self.in_msgs = []
+        self.out_msgs = []
+
+    def addNeighbor(self, neighbor):
+        """
+        Adds a factor neighbor node to the list of neighbors
+
+        :param neighbor: An instance of MarkovNetFactor that is a neighbor to
+                         this node
+        """
+
+        self.neighbors.append(neighbor)
+        self.in_msgs.append(None)
+        self.out_msgs.append(None)
+
+    def getDegree(self):
+        """
+        Returns the graphical degree of this node
+        """
+
+        return len(self.neighbors)
+
+
+class MarkovNetVar(MarkovNode):
     """
     Represents a variable node in a Markov Network. Each variable node contains
     the random variable that the node represents itself and a list of neighbors
@@ -12,63 +55,19 @@ class MarkovNetVar:
                 represented in this node
     """
 
-    def __init__(self, var):
+    def __init__(self, var, node_id=0):
+        super().__init__()
+
         self.var = var
-        self.neighbors = []
-        self.messages = []
-        self.obs_factors = []
+        self.node_id = node_id
 
         self.marginal = None
 
-    def addNeighbor(self, neighbor):
-        """
-        Adds a factor neighbor node to the list of neighbors
-
-        :param neighbor: An instance of MarkovNetFactor that is a neighbor to
-                         this node
-        """
-
-        if type(neighbor) == MarkovNetFactor:
-            self.neighbors.append(neighbor)
-            self.messages.append(None)
-
-    def getDegree(self):
-        """
-        Returns the graphical degree of this node
-        """
-
-        return len(self.neighbors)
-
-    def setMarginal(self, marginal):
-        """
-        Sets the marginal distribution for this node. Supposing this node
-        represetned a variable X in its network, the marginal should be P(X),
-        or another relevant factor indexed only by X
-
-        :param marginal: Instance of Factor. The marginal indexed by the nodes
-                         variable
-        """
-
-        if len(marginal.rand_vars) != 1 or marginal.rand_vars[0] != self.var:
-            # TODO, make this an exception
-            return
-
-        self.marginal = copy.deepcopy(marginal)
-
-    def addObsFactor(self, obs_factor):
-        """
-        Adds observation factors. An observation factor is an instance of
-        MarkovNetfactor that contains only a message to this node.
-
-        :param obs_factor: List of Factors that are used as observation to this
-                           node
-        """
-
-        for i in obs_factor:
-            self.obs_factors.append(i)
+    def __repr__(self):
+        return "{Variable Node: %s}" % (self.var.name)
 
 
-class MarkovNetFactor:
+class MarkovNetFactor(MarkovNode):
     """
     Represents a factor node in a Markov Network. Each factor node contains the
     factor that the node represents itself and a list of neighbors which are
@@ -77,29 +76,14 @@ class MarkovNetFactor:
     :param factor: Factor instance, which will be the factor that is
                    represented in this node
     """
-    def __init__(self, factor):
+    def __init__(self, factor, node_id=0):
+        super().__init__()
+
         self.factor = factor
-        self.neighbors = []
-        self.messages = []
+        self.node_id = node_id
 
-    def addNeighbor(self, neighbor):
-        """
-        Adds a variable neighbor node to the list of neighbors
-
-        :param neighbor: An instance of MarkovNetVar that is a neighbor to this
-                         node
-        """
-
-        if type(neighbor) == MarkovNetVar:
-            self.neighbors.append(neighbor)
-            self.messages.append(None)
-
-    def getDegree(self):
-        """
-        Returns the graphical degree of this node
-        """
-
-        return len(self.neighbors)
+    def __repr__(self):
+        return "{Factor Node: %s}" % (self.factor)
 
 
 class MarkovNetwork:
@@ -146,33 +130,61 @@ class MarkovNetwork:
     """
 
     def __init__(self, factors):
-        self.nodes = {}
-        self.factors = []
+        self.var_nodes = {}
+        self.factor_nodes = []
 
-        # Make dictionary with nodes
+        node_id = 0
+
+        # Make dictionary with variable nodes
         for i in factors:
             for j in i.rand_vars:
-                if j.name not in self.nodes:
-                    self.nodes[j.name] = MarkovNetVar(j)
+                if j.name not in self.var_nodes:
+                    self.var_nodes[j.name] = MarkovNetVar(j, node_id)
+                    node_id += 1
 
-        # Make factors list
+        # Make list with factor nodes
         for i in factors:
-            # Node for factor
-            new_factor_node = MarkovNetFactor(i)
+            new_factor_node = MarkovNetFactor(i, node_id)
+            node_id += 1
+
             for j in i.rand_vars:
-                new_factor_node.addNeighbor(self.nodes[j.name])
-                self.nodes[j.name].addNeighbor(new_factor_node)
+                neighboring_var = self.var_nodes[j.name]
 
-            self.factors.append(new_factor_node)
+                new_factor_node.addNeighbor(neighboring_var)
+                neighboring_var.addNeighbor(new_factor_node)
 
-    def instNode(self, event):
-        """
-        Similar to *instNode()* method of Bayesian Networks.
-        """
+            self.factor_nodes.append(new_factor_node)
 
-        new_factors = []
+    def BeliefPropagation(self):
+        # Calculate an initial outgoing message from every factor node
+        for i, factor in enumerate(self.factor_nodes):
+            msgs = []
 
-        for i in self.factors:
-            new_factors.append(i.factor.instVar(event))
+            for j, neighbor in enumerate(factor.neighbors):
+                fac = factor.factor.marginal(neighbor.var)
+                msgs.out_msgs[j] = BPMsg(fac)
 
-        return MarkovNetwork(new_factors)
+        # Propagate
+        var_or_cycle = True
+        cycle = 1
+        for i in range(10):
+            # Variable nodes cycle
+            if var_or_cycle:
+                self.BP_var(cycle)
+
+            # Factor nodes cycle
+            else:
+                self.BP_factor(cycle)
+                return
+
+            # Change cycle
+            var_or_cycle = not var_or_cycle
+            cycle += 1
+
+        # Calculate marginals
+
+    def BP_factor(self, cycle):
+        pass
+
+    def BP_var(self, cycle):
+        pass
