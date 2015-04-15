@@ -158,8 +158,8 @@ class MarkovNetFactor(MarkovNode):
                             if k == i or k == j:
                                 continue
 
-                            msg *= self.in_msgs[k].factor
-                            some_new = True
+                            if self.in_msgs[k] is not None:
+                                msg *= self.in_msgs[k].factor
 
                         msg = (self.factor * msg).marginal(nei_j.var)
                         self.out_msgs[j] = BPMsg(msg, self.node_id, nei_j.node_id, cycle)
