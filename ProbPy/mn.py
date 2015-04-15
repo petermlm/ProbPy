@@ -6,12 +6,14 @@ class BPMsg:
     TODO
     """
 
-    def __init__(self, factor, cycle=0):
+    def __init__(self, factor, sender, receiver, cycle=0):
         self.factor = factor
+        self.sender = sender
+        self.receiver = receiver
         self.cycle = cycle
 
     def __repr__(self):
-        return "(Msg %s, Cycle: %s)" % (self.factor, self.cycle)
+        return "(Msg %s, (%s -> %s) , Cycle: %s)" % (self.factor, self.sender, self.receiver, self.cycle)
 
 
 class MarkovNode:
@@ -19,7 +21,8 @@ class MarkovNode:
     TODO
     """
 
-    def __init__(self):
+    def __init__(self, node_id):
+        self.node_id = node_id
         self.neighbors = []
         self.in_msgs = []
         self.out_msgs = []
@@ -56,12 +59,48 @@ class MarkovNetVar(MarkovNode):
     """
 
     def __init__(self, var, node_id=0):
-        super().__init__()
+        super().__init__(node_id)
 
         self.var = var
-        self.node_id = node_id
-
         self.marginal = None
+
+    def putIn(self, msg, sender):
+        for i, nei in enumerate(self.neighbors):
+            if nei.node_id == sender:
+                self.in_msgs[i] = msg
+                break
+
+    def calcOut(self, cycle):
+        print("Var calc out")
+        for i, nei in enumerate(self.neighbors):
+            # If this neighbor has a message from this cycle, propagate it
+            if self.in_msgs[i].cycle == cycle:
+                # Send to node j
+                for j, nei_j in enumerate(self.neighbors):
+                    if i == j:
+                        continue
+
+                    msg = self.in_msgs[i].factor
+
+                    for k, nei_k in enumerate(self.neighbors):
+                        # Don't propagate to the same node, or the node where
+                        # message is sent too
+                        if k == i or k == j:
+                            continue
+
+                        msg *= self.in_msgs[k].factor
+                        some_new = True
+
+                    self.out_msgs[j] = BPMsg(msg, self.node_id, nei_j.node_id, cycle)
+                    nei_j.putIn(self.out_msgs[j], self.node_id)
+                    print("Message out: %s" % (self.out_msgs[j]))
+
+    def getOutMsg(self, receiver):
+        for i in self.out_msg:
+            if i.receiver == receiver:
+                return i
+
+        return None
 
     def __repr__(self):
         return "{Variable Node: %s}" % (self.var.name)
@@ -76,11 +115,63 @@ class MarkovNetFactor(MarkovNode):
     :param factor: Factor instance, which will be the factor that is
                    represented in this node
     """
+
     def __init__(self, factor, node_id=0):
-        super().__init__()
+        super().__init__(node_id)
 
         self.factor = factor
-        self.node_id = node_id
+
+    def putIn(self, msg, sender):
+        for i, nei in enumerate(self.neighbors):
+            if nei.node_id == sender:
+                self.in_msgs[i] = msg
+                break
+
+    def calcOut(self, cycle):
+        print("Factor calc out")
+        # If this is the first cycle, factor sends every message in every
+        # direction
+        if cycle == 0:
+            for i, nei in enumerate(self.neighbors):
+                msg_factor = self.factor.marginal(nei.var)
+                out_msg = BPMsg(msg_factor, self.node_id, nei.node_id, cycle)
+
+                self.out_msgs[i] = out_msg
+                nei.putIn(out_msg, self.node_id)
+                print("Message out (init): %s" % (self.out_msgs[i]))
+
+        # Normal cycle
+        else:
+            for i, nei in enumerate(self.neighbors):
+                # If this neighbor has a message from this cycle, propagate it
+                if self.in_msgs[i] is not None and self.in_msgs[i].cycle == cycle-1:
+                    # Send to node j
+                    for j, nei_j in enumerate(self.neighbors):
+                        if i == j:
+                            continue
+
+                        msg = self.in_msgs[i].factor
+
+                        for k, nei_k in enumerate(self.neighbors):
+                            # Don't propagate to the same node, or the node
+                            # where message is sent too
+                            if k == i or k == j:
+                                continue
+
+                            msg *= self.in_msgs[k].factor
+                            some_new = True
+
+                        msg = (self.factor * msg).marginal(nei_j.var)
+                        self.out_msgs[j] = BPMsg(msg, self.node_id, nei_j.node_id, cycle)
+                        nei_j.putIn(self.out_msgs[j], self.node_id)
+                        print("Message out: %s" % (self.out_msgs[j]))
+
+    def getOutMsg(self, receiver):
+        for i in self.out_msgs:
+            if i.receiver == receiver:
+                return i
+
+        return None
 
     def __repr__(self):
         return "{Factor Node: %s}" % (self.factor)
@@ -156,35 +247,36 @@ class MarkovNetwork:
             self.factor_nodes.append(new_factor_node)
 
     def BeliefPropagation(self):
-        # Calculate an initial outgoing message from every factor node
-        for i, factor in enumerate(self.factor_nodes):
-            msgs = []
-
-            for j, neighbor in enumerate(factor.neighbors):
-                fac = factor.factor.marginal(neighbor.var)
-                msgs.out_msgs[j] = BPMsg(fac)
-
         # Propagate
         var_or_cycle = True
-        cycle = 1
-        for i in range(10):
-            # Variable nodes cycle
-            if var_or_cycle:
-                self.BP_var(cycle)
-
-            # Factor nodes cycle
-            else:
-                self.BP_factor(cycle)
-                return
+        cycle = 0
+        for i in range(2):
+            print("-----")
+            self.BP_factor(cycle)
+            print("-----")
+            self.BP_var(cycle)
 
             # Change cycle
             var_or_cycle = not var_or_cycle
             cycle += 1
 
         # Calculate marginals
+        self.calcMarginals()
 
     def BP_factor(self, cycle):
-        pass
+        for i in self.factor_nodes:
+            i.calcOut(cycle)
 
     def BP_var(self, cycle):
-        pass
+        for i in self.var_nodes:
+            self.var_nodes[i].calcOut(cycle)
+
+    def calcMarginals(self):
+        for i in self.var_nodes:
+            var = self.var_nodes[i]
+
+            msg = var.in_msgs[0].factor
+            for j in var.in_msgs[1:]:
+                msg *= j.factor
+
+            var.marginal = msg
