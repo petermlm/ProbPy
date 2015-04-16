@@ -406,7 +406,7 @@ class Factor:
 
             >>> # Assuming fac to be a factor with an arbitrary number of
             >>> # variables, the following will make all values of the factor
-            >>> # sum to 1
+            >>> # sum to a single scalar
             >>> fac.normalize()
         """
 
@@ -624,6 +624,15 @@ class Factor:
                 return False
 
         return True
+
+    def euclideanDist(self, factor):
+        """
+        TODO
+        """
+
+        dist = lambda x, y: (x - y) ** 2
+        diff = self.factorOp(factor, dist)
+        return math.sqrt(diff.normalize().values[0])
 
     def max(self):
         """
