@@ -108,10 +108,6 @@ class TestFactorMult(ParTestBase):
 
             res = self.XY_factor.mult(self.X_factor)
             par_res = self.XY_par_factor.mult(self.X_par_factor)
-            print(i)
-            print(res)
-            print(par_res)
-            print("----")
             assert(res.rand_vars == par_res.rand_vars and
                    res.values == par_res.values)
 
@@ -168,10 +164,6 @@ class TestFactorMult(ParTestBase):
 
             res = self.XY_factor.mult(self.XZ_factor)
             par_res = self.XY_par_factor.mult(self.XZ_par_factor)
-            print(i)
-            print(res)
-            print(par_res)
-            print("----")
             assert(res.rand_vars == par_res.rand_vars and
                    res.values == par_res.values)
 
@@ -214,10 +206,6 @@ class TestFactorMult(ParTestBase):
 
             res = self.XYZ_factor.mult(self.XYW_factor)
             par_res = self.XYZ_par_factor.mult(self.XYW_par_factor)
-            print(i)
-            print(res)
-            print(par_res)
-            print("----")
             assert(res.rand_vars == par_res.rand_vars and
                    res.values == par_res.values)
 
@@ -232,10 +220,6 @@ class TestFactorMult(ParTestBase):
 
             res = self.XYZ_factor.mult(self.XKW_factor)
             par_res = self.XYZ_par_factor.mult(self.XKW_par_factor)
-            print(i)
-            print(res)
-            print(par_res)
-            print("----")
             assert(res.rand_vars == par_res.rand_vars and
                    res.values == par_res.values)
 

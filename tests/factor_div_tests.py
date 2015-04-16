@@ -113,7 +113,6 @@ class TestFactorMult(TestBase):
         """
 
         res = self.XY_factor.div(self.XZ_factor)
-        print(res)
         assert(res.rand_vars == [self.X, self.Y, self.Z] and
                res.values == [1/5, 2/6, 3/5, 4/6,
                               1/7, 2/8, 3/7, 4/8])
