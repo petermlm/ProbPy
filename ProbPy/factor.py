@@ -52,7 +52,7 @@ class Factor:
 
             else:
                 for i in values:
-                    if type(i) != int and type(i) != float:
+                    if type(i) not in [int, float, bool]:
                         raise FactorValuesEx(rand_vars)
 
                 self.values = values
@@ -572,7 +572,7 @@ class Factor:
         """
 
         # Check if self and the function factor have the same variables
-        if self != fun:
+        if not self.sameVariables(fun):
             return None
 
         # Make the multiplication
@@ -632,7 +632,7 @@ class Factor:
 
         dist = lambda x, y: (x - y) ** 2
         diff = self.factorOp(factor, dist)
-        return math.sqrt(diff.normalize().values[0])
+        return math.sqrt(sum(diff.values))
 
     def max(self):
         """
@@ -737,10 +737,17 @@ class Factor:
         return self.div(other)
 
     def __eq__(self, other):
-        return self.sameVariables(other)
+        dist = lambda x, y: x == y
+        diff = self.factorOp(other, dist)
+
+        for i in diff.values:
+            if not i:
+                return False
+
+        return True
 
     def __ne__(self, other):
-        return not self.sameVariables(other)
+        return not self.__eq__(other)
 
 
 class FactorRandVarsEx(Exception):

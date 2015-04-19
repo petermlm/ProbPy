@@ -16,7 +16,7 @@ class BPMsg:
         self.cycle = cycle
 
     def normalize(self):
-        self.factor.normalize()
+        self.factor = self.factor.normalize()
 
     def __repr__(self):
         return "(Msg %s, (%s -> %s) , Cycle: %s)" % (self.factor, self.sender, self.receiver, self.cycle)
@@ -117,23 +117,34 @@ class MarkovNetVar(MarkovNode):
         return None
 
     def stopBPTree(self):
-        """
-        for i, msg in enumerate(self.out_msgs):
-            if msg.factor != last_out_msgs[i]:
+        for msg in self.out_msgs:
+            if msg is not None:
                 return False
-            copy.deepcopy(self.last_out_msgs, self.msg)
 
-        return True
-        """
         return True
 
     def stopBPLoop(self, ep):
         for i, msg in enumerate(self.out_msgs):
-            if self.last_out_msgs[i] is not None and msg.factor.euclideanDist(self.last_out_msgs[i].factor) > ep:
+            if msg is None and self.last_out_msgs[i] is None:
+                continue
+
+            elif (msg is None) != (self.last_out_msgs[i] is None):
                 return False
-            self.last_out_msgs[i] = copy.deepcopy(msg)
+
+            dist = msg.factor.euclideanDist(self.last_out_msgs[i].factor)
+            if not (dist < ep):
+                return False
 
         return True
+
+    def clearOutMsgsTree(self):
+        nei_num = len(self.neighbors)
+        self.out_msgs = [None] * nei_num
+
+    def clearOutMsgsLoop(self):
+        self.last_out_msgs = self.out_msgs
+        nei_num = len(self.neighbors)
+        self.out_msgs = [None] * nei_num
 
     def __repr__(self):
         return "{Variable Node: %s}" % (self.var.name)
@@ -276,7 +287,7 @@ class MarkovNetwork:
 
             self.factor_nodes.append(new_factor_node)
 
-    def BeliefPropagation(self, tree=False, ep=0.001):
+    def BeliefPropagation(self, tree=False, ep=0.01):
         # Clear any values from previous execution of BP
         self.clearBP()
 
@@ -285,12 +296,12 @@ class MarkovNetwork:
         while True:
             self.BP_factor(cycle)
             self.BP_var(cycle)
+            self.BP_normalize()
 
-            if tree and self.stopBPTree() or \
-                    self.stopBPLoop(ep):
+            if cycle > 0 and self.checkBreak(tree, ep):
                 break
 
-            self.BP_marginal()
+            self.BP_prepareNextCycle(tree)
             cycle += 1
 
         # Calculate marginals
@@ -311,6 +322,10 @@ class MarkovNetwork:
         for i in self.var_nodes:
             self.var_nodes[i].calcOut(cycle)
 
+    def checkBreak(self, tree, ep):
+        return tree and self.stopBPTree() or \
+                not tree and self.stopBPLoop(ep)
+
     def stopBPTree(self):
         for i in self.var_nodes:
             if not self.var_nodes[i].stopBPTree():
@@ -325,9 +340,18 @@ class MarkovNetwork:
 
         return True
 
-    def BP_marginal(self):
+    def BP_prepareNextCycle(self, tree):
+        for node in self.var_nodes:
+            cnode = self.var_nodes[node]
+
+            if tree:
+                cnode.clearOutMsgsTree()
+            else:
+                cnode.clearOutMsgsLoop()
+
+    def BP_normalize(self):
         for node in self.factor_nodes:
-            for msg in node.in_msgs:
+            for i, msg in enumerate(node.in_msgs):
                 if msg is not None:
                     msg.normalize()
 
@@ -339,4 +363,4 @@ class MarkovNetwork:
             for j in var.in_msgs[1:]:
                 msg *= j.factor
 
-            var.marginal = msg
+            var.marginal = msg.normalize()

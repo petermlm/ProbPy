@@ -5,6 +5,8 @@ from ProbPy import RandVar, Factor, MarkovNetwork
 
 class TestMarkovNetwork:
     def __init__(self):
+        self.ep = 0.01
+
         # Variables
         self.v1 = RandVar("V1", [0, 1])
         self.v2 = RandVar("V2", [0, 1])
@@ -31,19 +33,27 @@ class TestMarkovNetwork:
                                  list(range(1, 9)))
         self.f_v3_v4_v5 = Factor([self.v3, self.v4, self.v5],
                                  list(range(1, 9)))
+        self.f_v4_v5_v6 = Factor([self.v3, self.v4, self.v5],
+                                 list(range(1, 9)))
         self.f_v6_v7_v8 = Factor([self.v6, self.v7, self.v8],
                                  list(range(1, 9)))
 
+        self.f_v1_v2_v3_v4 = Factor([self.v1, self.v2, self.v3, self.v4],
+                                    list(range(1, 17)))
         self.f_v3_v4_v5_v6 = Factor([self.v3, self.v4, self.v5, self.v6],
                                     list(range(1, 17)))
 
-    def compare_results(self, bf, MN):
+    def compare_tree_results(self, bf, MN):
         for i in bf.rand_vars:
-            assert_almost_equal(bf.marginal(i), MN.var_nodes[i.name].marginal)
+            bf_res = bf.marginal(i).normalize()
+            mn_res = MN.var_nodes[i.name].marginal
+            assert(bf_res.euclideanDist(mn_res) < self.ep)
 
     def compare_loop_results(self, bf, MN):
         for i in bf.rand_vars:
-            assert_almost_equal(bf.marginal(i), MN.var_nodes[i.name].marginal)
+            bf_res = bf.marginal(i).normalize()
+            mn_res = MN.var_nodes[i.name].marginal
+            assert(bf_res.euclideanDist(mn_res) < self.ep)
 
     def mn_tree_test_0(self):
         """
@@ -58,7 +68,7 @@ class TestMarkovNetwork:
         bf = self.f_v1_v2
 
         # Compare results
-        self.compare_results(bf, MN)
+        self.compare_tree_results(bf, MN)
 
     def mn_tree_test_1(self):
         """
@@ -73,7 +83,7 @@ class TestMarkovNetwork:
         bf = self.f_v1_v2 * self.f_v2_v3
 
         # Compare results
-        self.compare_results(bf, MN)
+        self.compare_tree_results(bf, MN)
 
     def mn_tree_test_2(self):
         """
@@ -88,7 +98,7 @@ class TestMarkovNetwork:
         bf = self.f_v1_v2 * self.f_v2_v3 * self.f_v3_v4
 
         # Compare results
-        self.compare_results(bf, MN)
+        self.compare_tree_results(bf, MN)
 
     def mn_tree_test_3(self):
         """
@@ -109,7 +119,7 @@ class TestMarkovNetwork:
         bf = self.f_v1_v2 * self.f_v2_v3 * self.f_v2_v4
 
         # Compare results
-        self.compare_results(bf, MN)
+        self.compare_tree_results(bf, MN)
 
     def mn_tree_test_4(self):
         """
@@ -131,7 +141,7 @@ class TestMarkovNetwork:
         bf = self.f_v1_v2 * self.f_v2_v3 * self.f_v3_v4 * self.f_v2_v5
 
         # Compare results
-        self.compare_results(bf, MN)
+        self.compare_tree_results(bf, MN)
 
     def mn_tree_test_5(self):
         """
@@ -149,7 +159,7 @@ class TestMarkovNetwork:
         bf = self.f_v1_v2_v3
 
         # Compare results
-        self.compare_results(bf, MN)
+        self.compare_tree_results(bf, MN)
 
     def mn_tree_test_6(self):
         """
@@ -170,7 +180,7 @@ class TestMarkovNetwork:
         bf = self.f_v1_v2_v3 * self.f_v3_v4_v5
 
         # Compare results
-        self.compare_results(bf, MN)
+        self.compare_tree_results(bf, MN)
 
     def mn_tree_test_7(self):
         """
@@ -190,15 +200,15 @@ class TestMarkovNetwork:
         """
 
         # Make belief propagation
-        MN = MarkovNetwork([self.f_v3_v4_v5, self.f_v3_v4_v5_v6,
+        MN = MarkovNetwork([self.f_v1_v2_v3, self.f_v3_v4_v5_v6,
                             self.f_v6_v7_v8])
         MN.BeliefPropagation(tree=True)
 
         # Make brute force
-        bf = self.f_v3_v4_v5 * self.f_v3_v4_v5_v6 * self.f_v6_v7_v8
+        bf = self.f_v1_v2_v3 * self.f_v3_v4_v5_v6 * self.f_v6_v7_v8
 
         # Compare results
-        self.compare_results(bf, MN)
+        self.compare_tree_results(bf, MN)
 
     def mn_loop_test_0(self):
         """
@@ -212,7 +222,7 @@ class TestMarkovNetwork:
 
         # Make belief propagation
         MN = MarkovNetwork([self.f_v1_v2, self.f_v2_v3, self.f_v1_v3])
-        MN.BeliefPropagation(ep=0.001)
+        MN.BeliefPropagation(ep=self.ep)
 
         # Make brute force
         bf = self.f_v1_v2 * self.f_v2_v3 * self.f_v1_v3
@@ -234,7 +244,7 @@ class TestMarkovNetwork:
         # Make belief propagation
         MN = MarkovNetwork([self.f_v1_v2, self.f_v1_v3, self.f_v2_v4,
                             self.f_v3_v4])
-        MN.BeliefPropagation(ep=0.001)
+        MN.BeliefPropagation(ep=self.ep)
 
         # Make brute force
         bf = self.f_v1_v2 * self.f_v1_v3 * self.f_v2_v4 * self.f_v3_v4
@@ -242,7 +252,7 @@ class TestMarkovNetwork:
         # Compare results
         self.compare_loop_results(bf, MN)
 
-    def mn_loop_test_1(self):
+    def mn_loop_test_2(self):
         """
         v1 -- f(v1, v2) -- v2 -- f(v2, v3) -- v3
         |                  |                   |
@@ -257,11 +267,31 @@ class TestMarkovNetwork:
         MN = MarkovNetwork([self.f_v1_v2, self.f_v2_v3, self.f_v1_v4,
                             self.f_v2_v5, self.f_v3_v6, self.f_v4_v5,
                             self.f_v5_v6])
-        MN.BeliefPropagation(ep=0.001)
+        MN.BeliefPropagation(ep=self.ep)
 
         # Make brute force
         bf = self.f_v1_v2 * self.f_v2_v3 * self.f_v1_v4 * self.f_v2_v5 * \
             self.f_v3_v6 * self.f_v4_v5 * self.f_v5_v6
+
+        # Compare results
+        self.compare_loop_results(bf, MN)
+
+    def mn_loop_test_3(self):
+        """
+                        ------ v1                         v5
+                      /        |                          |
+        f(v1, v2, v3) -- V2 -- f(v1, v2, v3, v4) -- v4 -- f(v4, v5, v6)
+                      \        |                          |
+                        ------ v3                         v6
+        """
+
+        # Make belief propagation
+        MN = MarkovNetwork([self.f_v1_v2_v3, self.f_v1_v2_v3_v4,
+                            self.f_v4_v5_v6])
+        MN.BeliefPropagation(ep=self.ep)
+
+        # Make brute force
+        bf = self.f_v1_v2_v3 * self.f_v1_v2_v3_v4 * self.f_v4_v5_v6
 
         # Compare results
         self.compare_loop_results(bf, MN)
