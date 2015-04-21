@@ -467,12 +467,14 @@ class TestMarkovNetwork:
         """
 
         # Make belief propagation
-        MN = MarkovNetwork([self.f_v1_v2, self.f_v1_v3, self.f_v2_v4, self.f_v3_v4])
+        MN = MarkovNetwork([self.f_v1_v2, self.f_v1_v3,
+                            self.f_v2_v4, self.f_v3_v4])
         MN.addFactors(self.f_v1_v2_v3_v4)
         MN.BeliefPropagation()
 
         # Make brute force
-        bf = self.f_v1_v2 * self.f_v1_v3 * self.f_v2_v4 * self.f_v3_v4 * self.f_v1_v2_v3_v4
+        bf = self.f_v1_v2 * self.f_v1_v3 * self.f_v2_v4 * self.f_v3_v4 * \
+            self.f_v1_v2_v3_v4
 
         # Compare results
         self.compare_results(bf, MN)
@@ -505,7 +507,8 @@ class TestMarkovNetwork:
         MN.BeliefPropagation()
 
         # Make brute force
-        bf = self.f_v1_v2 * self.f_v1_v3 * self.f_v2_v4 * self.f_v3_v5 * self.f_v4_v5
+        bf = self.f_v1_v2 * self.f_v1_v3 * self.f_v2_v4 * self.f_v3_v5 * \
+            self.f_v4_v5
 
         # Compare results
         self.compare_results(bf, MN)

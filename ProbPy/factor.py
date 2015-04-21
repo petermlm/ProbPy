@@ -627,8 +627,15 @@ class Factor:
 
     def euclideanDist(self, factor):
         """
-        TODO
+        Calculates the euclidean distance between two factors. They need to
+        have the same number of variables.
+
+        :param factor: The other factor for the calculation
+        :returns:      The euclidean distance
         """
+
+        if not self.sameVariables(factor):
+            return None
 
         dist = lambda x, y: (x - y) ** 2
         diff = self.factorOp(factor, dist)
