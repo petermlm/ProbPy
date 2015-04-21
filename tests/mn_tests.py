@@ -65,7 +65,7 @@ class TestMarkovNetwork:
         """
 
         # Make belief propagation
-        MN = MarkovNetwork([self.f_v1_v2])
+        MN = MarkovNetwork(self.f_v1_v2)
         MN.BeliefPropagation(tree=True)
 
         # Make brute force
@@ -156,7 +156,7 @@ class TestMarkovNetwork:
         """
 
         # Make belief propagation
-        MN = MarkovNetwork([self.f_v1_v2_v3])
+        MN = MarkovNetwork(self.f_v1_v2_v3)
         MN.BeliefPropagation(tree=True)
 
         # Make brute force
@@ -319,7 +319,7 @@ class TestMarkovNetwork:
         """
 
         # Make belief propagation
-        MN = MarkovNetwork([self.f_v1_v2])
+        MN = MarkovNetwork(self.f_v1_v2)
         MN.addFactors(self.f_v1)
         MN.BeliefPropagation(tree=True)
 
@@ -344,7 +344,7 @@ class TestMarkovNetwork:
         """
 
         # Make belief propagation
-        MN = MarkovNetwork([self.f_v1_v2])
+        MN = MarkovNetwork(self.f_v1_v2)
         MN.addFactors([self.f_v1, self.f2_v1, self.f3_v1])
         MN.BeliefPropagation(tree=True)
 
@@ -369,7 +369,7 @@ class TestMarkovNetwork:
         """
 
         # Make belief propagation
-        MN = MarkovNetwork([self.f_v1_v2])
+        MN = MarkovNetwork(self.f_v1_v2)
         MN.addFactors([self.f2_v1_v2, self.f3_v1_v2])
         MN.BeliefPropagation()
 
@@ -399,7 +399,7 @@ class TestMarkovNetwork:
         """
 
         # Make belief propagation
-        MN = MarkovNetwork([self.f_v1_v2])
+        MN = MarkovNetwork(self.f_v1_v2)
         MN.addFactors(self.f_v2_v3)
         MN.BeliefPropagation(tree=True)
 

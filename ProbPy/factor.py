@@ -756,6 +756,9 @@ class Factor:
     def __ne__(self, other):
         return not self.__eq__(other)
 
+    def __getitem__(self, index):
+        return self.values[index]
+
 
 class FactorRandVarsEx(Exception):
     """

@@ -350,10 +350,14 @@ class MarkovNetwork:
 
     The order of factors is not relevant in anyway.
 
-    :param factors: A list of factors that make up the graph.
+    :param factors: A list of factors that make up the graph. May also be a
+                    single factor
     """
 
     def __init__(self, factors):
+        if type(factors) != list:
+            factors = [factors]
+
         self.var_nodes = {}
         self.factor_nodes = []
 
@@ -569,3 +573,6 @@ class MarkovNetwork:
                 msg *= j.factor
 
             var.marginal = msg.normalize()
+
+    def __getitem__(self, index):
+        return self.var_nodes[index].marginal
