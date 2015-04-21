@@ -265,27 +265,58 @@ class MarkovNetwork:
         self.var_nodes = {}
         self.factor_nodes = []
 
-        node_id = 0
+        self.node_id = 0
 
         # Make dictionary with variable nodes
         for i in factors:
-            for j in i.rand_vars:
-                if j.name not in self.var_nodes:
-                    self.var_nodes[j.name] = MarkovNetVar(j, node_id)
-                    node_id += 1
+            self.addVariables(i.rand_vars)
 
         # Make list with factor nodes
         for i in factors:
-            new_factor_node = MarkovNetFactor(i, node_id)
-            node_id += 1
+            self.addFactor(i)
 
-            for j in i.rand_vars:
-                neighboring_var = self.var_nodes[j.name]
+    def addVariables(self, variables):
+        """
+        TODO
+        """
+    
+        for i in variables:
+            if i.name not in self.var_nodes:
+                self.var_nodes[i.name] = MarkovNetVar(i, self.node_id)
+                self.node_id += 1
 
-                new_factor_node.addNeighbor(neighboring_var)
-                neighboring_var.addNeighbor(new_factor_node)
+    def addFactor(self, factor):
+        """
+        TODO
+        """
 
-            self.factor_nodes.append(new_factor_node)
+        new_factor_node = MarkovNetFactor(factor, self.node_id)
+        self.node_id += 1
+
+        for i in factor.rand_vars:
+            neighboring_var = self.var_nodes[i.name]
+
+            new_factor_node.addNeighbor(neighboring_var)
+            neighboring_var.addNeighbor(new_factor_node)
+
+        self.factor_nodes.append(new_factor_node)
+
+    def addFactors(self, factors):
+        """
+        TODO
+        """
+
+        if type(factors) != list:
+            factors = [factors]
+
+        # Check if the variables in the factor are in the dictionary, add the
+        # ones that aren't
+        for i in factors:
+            self.addVariables(i.rand_vars)
+
+        # Add the factor
+        for i in factors:
+            self.addFactor(i)
 
     def BeliefPropagation(self, tree=False, ep=0.01):
         # Clear any values from previous execution of BP
