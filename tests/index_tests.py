@@ -2,6 +2,7 @@ from nose.tools import with_setup, nottest, assert_almost_equal
 
 from ProbPy import RandVar, Factor, MarkovNetwork
 
+
 class TestIndex:
     def __init__(self):
         # Variables
