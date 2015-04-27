@@ -126,11 +126,14 @@ class MarkovNetVar(MarkovNode):
         :param cycle: Cycle of the algorithm
         """
 
+        # Send message to node i, if needed
         for i, nei_i in enumerate(self.neighbors):
+            # If there is a message in node j, calculate message to i
             for j, nei_j in enumerate(self.neighbors):
                 if i == j or self.in_msgs[j].cycle != cycle:
                     continue
 
+                # Take message from j, multiply it with all messages k
                 msg = self.in_msgs[j].factor
                 for k, nei_k in enumerate(self.neighbors):
                     if i == k or j == k:
@@ -138,6 +141,7 @@ class MarkovNetVar(MarkovNode):
 
                     msg *= self.in_msgs[k].factor
 
+                # Send message to i, and go to next i
                 self.out_msgs[i] = BPMsg(msg, self.node_id,
                                          nei_i.node_id, cycle)
                 nei_i.putIn(self.out_msgs[i], self.node_id)
@@ -244,50 +248,40 @@ class MarkovNetFactor(MarkovNode):
         # If this is the first cycle, factor sends every message in every
         # direction
         if cycle == 0:
-            for i, nei in enumerate(self.neighbors):
-                msg_factor = self.factor.marginal(nei.var)
-                out_msg = BPMsg(msg_factor, self.node_id, nei.node_id, cycle)
+            for i, nei_i in enumerate(self.neighbors):
+                msg_factor = self.factor.marginal(nei_i.var)
+                out_msg = BPMsg(msg_factor, self.node_id, nei_i.node_id, cycle)
 
                 self.out_msgs[i] = out_msg
-                nei.putIn(out_msg, self.node_id)
+                nei_i.putIn(out_msg, self.node_id)
 
         # Normal cycle
         else:
-            for i, nei in enumerate(self.neighbors):
-                # If this neighbor has a message from this cycle, propagate it
-                if self.in_msgs[i] is not None and \
-                        self.in_msgs[i].cycle == cycle-1:
-                    # Send to node j
-                    for j, nei_j in enumerate(self.neighbors):
-                        if i == j:
+            # Send message to node i, if needed
+            for i, nei_i in enumerate(self.neighbors):
+                # If there is a message in node j, calculate message to i
+                for j, nei_j in enumerate(self.neighbors):
+                    if i == j or self.in_msgs[j] is None or \
+                            self.in_msgs[j].cycle != cycle-1:
+                        continue
+
+                    # Take message from j, multiply it with all messages k
+                    msg = self.in_msgs[j].factor
+                    for k, nei_k in enumerate(self.neighbors):
+                        if i == k or j == k:
+                            break
+
+                        if self.in_msgs[k] is None:
                             continue
 
-                        msg = self.in_msgs[i].factor
+                        msg *= self.in_msgs[k].factor
 
-                        for k, nei_k in enumerate(self.neighbors):
-                            # Don't propagate to the same node, or the node
-                            # where message is sent too
-                            if k == i or k == j:
-                                continue
-
-                            if self.in_msgs[k] is not None:
-                                msg *= self.in_msgs[k].factor
-
-                        msg = (self.factor * msg).marginal(nei_j.var)
-                        self.out_msgs[j] = BPMsg(msg, self.node_id,
-                                                 nei_j.node_id, cycle)
-                        nei_j.putIn(self.out_msgs[j], self.node_id)
-
-    def getOutMsg(self, receiver):
-        """
-        DEPRECATED
-        """
-
-        for i in self.out_msgs:
-            if i.receiver == receiver:
-                return i
-
-        return None
+                    # Send message to i, and go to next i
+                    msg = (self.factor * msg).marginal(nei_i.var)
+                    self.out_msgs[i] = BPMsg(msg, self.node_id,
+                                             nei_i.node_id, cycle)
+                    nei_i.putIn(self.out_msgs[i], self.node_id)
+                    break
 
     def __repr__(self):
         return "{Factor Node: %s}" % (self.factor)
