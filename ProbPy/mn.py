@@ -126,39 +126,22 @@ class MarkovNetVar(MarkovNode):
         :param cycle: Cycle of the algorithm
         """
 
-        for i, nei in enumerate(self.neighbors):
-            # If this neighbor has a message from this cycle, propagate it
-            if self.in_msgs[i].cycle == cycle:
-                # Send to node j
-                for j, nei_j in enumerate(self.neighbors):
-                    if i == j:
-                        continue
+        for i, nei_i in enumerate(self.neighbors):
+            for j, nei_j in enumerate(self.neighbors):
+                if i == j or self.in_msgs[j].cycle != cycle:
+                    continue
 
-                    msg = self.in_msgs[i].factor
+                msg = self.in_msgs[j].factor
+                for k, nei_k in enumerate(self.neighbors):
+                    if i == k or j == k:
+                        break
 
-                    for k, nei_k in enumerate(self.neighbors):
-                        # Don't propagate to the same node, or the node where
-                        # message is sent too
-                        if k == i or k == j:
-                            continue
+                    msg *= self.in_msgs[k].factor
 
-                        msg *= self.in_msgs[k].factor
-                        some_new = True
-
-                    self.out_msgs[j] = BPMsg(msg, self.node_id,
-                                             nei_j.node_id, cycle)
-                    nei_j.putIn(self.out_msgs[j], self.node_id)
-
-    def getOutMsg(self, receiver):
-        """
-        DEPRECATED
-        """
-
-        for i in self.out_msgs:
-            if i.receiver == receiver:
-                return i
-
-        return None
+                self.out_msgs[i] = BPMsg(msg, self.node_id,
+                                         nei_i.node_id, cycle)
+                nei_i.putIn(self.out_msgs[i], self.node_id)
+                break
 
     def haltBPTree(self):
         """

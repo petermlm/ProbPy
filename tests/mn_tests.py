@@ -5,7 +5,7 @@ from ProbPy import RandVar, Factor, MarkovNetwork
 
 class TestMarkovNetwork:
     def __init__(self):
-        self.ep = 0.01
+        self.ep = 0.1
 
         # Variables
         self.v1 = RandVar("V1", [0, 1])
@@ -53,6 +53,7 @@ class TestMarkovNetwork:
         for i in bf.rand_vars:
             bf_res = bf.marginal(i).normalize()
             mn_res = MN.var_nodes[i.name].marginal
+            print(bf_res, mn_res, bf_res.euclideanDist(mn_res))
             assert(bf_res.euclideanDist(mn_res) < self.ep)
 
     """
