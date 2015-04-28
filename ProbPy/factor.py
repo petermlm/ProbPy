@@ -25,14 +25,21 @@ class Factor:
 
     The values list can be a list of lists:
         >>> # Assuming X, Y and Z are variables
-        >>> XY_factor = Factor([X, Y, Z], [[[0.2, 0.3], [0.1, 0.4]],
-                                           [[0.7, 0.1], [0.1, 0.1]]])
+        >>> XYZ_factor = Factor([X, Y, Z], [[[0.2, 0.3], [0.1, 0.4]],
+                                            [[0.7, 0.1], [0.1, 0.1]]])
 
     In here the outer list is indexed by the first variable, the second
     innermost list is index by the second variable and so on.
+
+    If values is None, the factor will have default initialization values
+        >>> AB_factor([A, B])
+
+    If A has domain of 4 and B has domain of 6, for example, the factor will
+    have domain like
+        >>> list(range(4*6))
     """
 
-    def __init__(self, rand_vars, values):
+    def __init__(self, rand_vars, values=None):
         # Assure the rand_vars argument is always a list
         if type(rand_vars) != list:
             rand_vars = [rand_vars]
@@ -58,8 +65,13 @@ class Factor:
                 self.values = values
 
         elif callable(values):
-            self.rand_vars = rand_vars
             self.values = self.makeValuesFromFunction(values)
+
+        elif values is None:
+            size = 1
+            for i in self.rand_vars:
+                size *= len(i.domain)
+            self.values = list(range(size))
 
         else:
             raise FactorValuesEx(rand_vars)

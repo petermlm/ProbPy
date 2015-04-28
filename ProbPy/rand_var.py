@@ -28,11 +28,13 @@ class RandVar:
         >>> ball = RandVar("Ball", ["Red", "Green", "Blue"])
         >>> generic = RandVar(10, list(range(10)))
         >>> X = RandVar("X", 4)
+        >>> Y = RandVar("Y")
 
-    In the example, the X variable will have a domain of 4
+    In the example, the X variable will have a domain like [0, 1, 2, 3]
+    The Y variable will be a binary variable by default
     """
 
-    def __init__(self, name, domain):
+    def __init__(self, name, domain=None):
         # Check the name
         if type(name) not in [str, int]:
             raise RandVarNameEx(name)
@@ -45,6 +47,9 @@ class RandVar:
 
         elif type(domain) == int:
             domain = list(range(domain))
+
+        elif domain is None:
+            domain = [0, 1]
 
         else:
             raise RandVarDomainEx(domain)
