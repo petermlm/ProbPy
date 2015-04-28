@@ -37,3 +37,7 @@ python3 examples/wet_grass.py
 echo ""
 echo "Channel Capacity Example:"
 python3 examples/channel_capacity.py
+
+echo ""
+echo "Variables and Factors Example:"
+python3 examples/vars_factors_example.py

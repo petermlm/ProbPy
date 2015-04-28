@@ -15,28 +15,31 @@ class Factor:
     with an array of values. The array of values is a vectorization of the
     multi dimensional matrix that represents the factor.
 
-    :param rand_vars: List of Random Variables of this factor, or single
+    :param rand_vars: List of Random Variables of this factor, or a single
                       variable
     :param values:    Values of the factor
 
     Examples:
-        >>> # Assuming X and Y are variables
+        >>> # Assuming X, Y, Z, A, B are variables
+        >>> X_factor = Factor(X, [0.3, 0.7])
         >>> XY_factor = Factor([X, Y], [0.2, 0.3, 0.1, 0.4])
-
-    The values list can be a list of lists:
-        >>> # Assuming X, Y and Z are variables
         >>> XYZ_factor = Factor([X, Y, Z], [[[0.2, 0.3], [0.1, 0.4]],
                                             [[0.7, 0.1], [0.1, 0.1]]])
+        >>> AB_factor = Factor([A, B])
+        >>> scalar = Factor([], 10)
 
-    In here the outer list is indexed by the first variable, the second
-    innermost list is index by the second variable and so on.
+    In the first two cases the factor is created with the variables in the
+    first argument and the valeus given by a list. The third case uses a list
+    of lists. In here the outer list is indexed by the first variable, the
+    second innermost list is index by the second variable and so on.
 
-    If values is None, the factor will have default initialization values
-        >>> AB_factor([A, B])
-
-    If A has domain of 4 and B has domain of 6, for example, the factor will
-    have domain like
+    If no values are given, like in the fourth example, the values are built
+    from the domain of the variables. For example if A has domain of 4 and B
+    has domain of 6, the factor will have values:
         >>> list(range(4*6))
+
+    Lastly, if the factor is a scalar factor, like the last example, the values
+    may have a single integer.
     """
 
     def __init__(self, rand_vars, values=None):
@@ -64,6 +67,9 @@ class Factor:
 
                 self.values = values
 
+        elif type(values) == int:
+            self.values = [values]
+
         elif callable(values):
             self.values = self.makeValuesFromFunction(values)
 
@@ -74,6 +80,14 @@ class Factor:
             self.values = list(range(size))
 
         else:
+            raise FactorValuesEx(rand_vars)
+
+        # Check if the size of the values is the
+        size = 1
+        for i in self.rand_vars:
+            size *= len(i.domain)
+
+        if size != len(self.values):
             raise FactorValuesEx(rand_vars)
 
     def flattenList(self, values):
@@ -756,6 +770,10 @@ class Factor:
         return self.div(other)
 
     def __eq__(self, other):
+        # Check variables
+        self.sameVariables(other)
+
+        # Check values
         dist = lambda x, y: x == y
         diff = self.factorOp(other, dist)
 

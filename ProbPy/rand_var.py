@@ -20,8 +20,8 @@ class RandVar:
 
     :param name:   String or Int with the name of this variable
     :param domain: Either a list with the domain of this variable, in which the
-                   elements in the domain should be strings or ints, or an int
-                   number which will be the size of the domain
+                   elements in the domain should be strings, ints or booleans,
+                   or an int number which will be the size of the domain
 
     Examples:
         >>> coin = RandVar("Coin", ["Head", "Tail"])
@@ -31,10 +31,18 @@ class RandVar:
         >>> Y = RandVar("Y")
 
     In the example, the X variable will have a domain like [0, 1, 2, 3]
-    The Y variable will be a binary variable by default
+    The Y variable will be a binary variable by default, with domain:
+
+        >>> [True, False]
+
+    Variables which name start with "_" are anonymous. They will always be
+    different from other anonymous variables and from non anonymous variables.
+    To create an anonymous the following two methods are valid:
+        >>> Anon1 = RandVar("_anonymous", [True, False])
+        >>> Anon2 = RandVar(domain=[True, False])
     """
 
-    def __init__(self, name, domain=None):
+    def __init__(self, name="_", domain=None):
         # Check the name
         if type(name) not in [str, int]:
             raise RandVarNameEx(name)
@@ -42,14 +50,14 @@ class RandVar:
         # Check the domain
         if type(domain) == list and len(domain) > 0:
             for i in domain:
-                if type(i) not in [str, int]:
+                if type(i) not in [str, int, bool]:
                     raise RandVarDomainEx(domain)
 
         elif type(domain) == int:
             domain = list(range(domain))
 
         elif domain is None:
-            domain = [0, 1]
+            domain = [True, False]
 
         else:
             raise RandVarDomainEx(domain)
@@ -63,12 +71,16 @@ class RandVar:
         Checks if the Random Variable in var is equal to self
         """
 
+        # If this is an anonymous variable, they will always be different
+        if self.name is None or self.name[0] == "_":
+            return False
+
         # Check the name
-        if self.name != var.name:
+        elif self.name != var.name:
             return False
 
         # Check the domain
-        if self.domain != var.domain:
+        elif self.domain != var.domain:
             return False
 
         return True
