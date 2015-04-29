@@ -137,7 +137,7 @@ class MarkovNetVar(MarkovNode):
                 msg = self.in_msgs[j].factor
                 for k, nei_k in enumerate(self.neighbors):
                     if i == k or j == k:
-                        break
+                        continue
 
                     msg *= self.in_msgs[k].factor
 
@@ -250,10 +250,9 @@ class MarkovNetFactor(MarkovNode):
         if cycle == 0:
             for i, nei_i in enumerate(self.neighbors):
                 msg_factor = self.factor.marginal(nei_i.var)
-                out_msg = BPMsg(msg_factor, self.node_id, nei_i.node_id, cycle)
-
-                self.out_msgs[i] = out_msg
-                nei_i.putIn(out_msg, self.node_id)
+                self.out_msgs[i] = BPMsg(msg_factor, self.node_id,
+                                         nei_i.node_id, cycle)
+                nei_i.putIn(self.out_msgs[i], self.node_id)
 
         # Normal cycle
         else:
@@ -269,7 +268,7 @@ class MarkovNetFactor(MarkovNode):
                     msg = self.in_msgs[j].factor
                     for k, nei_k in enumerate(self.neighbors):
                         if i == k or j == k:
-                            break
+                            continue
 
                         if self.in_msgs[k] is None:
                             continue
