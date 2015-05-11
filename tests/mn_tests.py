@@ -733,3 +733,155 @@ class TestMarkovNetwork:
 
         # Compare results
         self.compare_networks(True, MN_all, MN_update)
+
+    def mn_update_belief_test_5(self):
+        """
+        |-- f2(v1, v2) --|
+        |                |
+        v1              v2
+        |                |
+        |-- f3(v1, v2) --|
+
+        ||
+        \/
+
+                 |-- f2(v1, v2) --|
+                 |                |
+        f(v1) -- v1              v2
+                 |                |
+                 |-- f3(v1, v2) --|
+        """
+
+        # Make belief propagation
+        MN_all = MarkovNetwork([self.f2_v1_v2, self.f3_v1_v2,
+                                self.f_v1])
+        MN_update = MarkovNetwork([self.f2_v1_v2, self.f3_v1_v2])
+
+        MN_all.BeliefPropagation(ep=self.ep_loop_calc)
+        MN_update.BeliefPropagation(ep=self.ep_loop_calc)
+        MN_update.updateBelief(self.f_v1, ep=self.ep_loop_calc)
+
+        # Compare results
+        self.compare_networks(False, MN_all, MN_update)
+
+    def mn_update_belief_test_6(self):
+        """
+        |-- f2(v1, v2) --|
+        |                |
+        v1              v2
+        |                |
+        |-- f3(v1, v2) --|
+
+        ||
+        \/
+
+                 |-- f2(v1, v2) --|
+                 |                |
+        f(v1) -- v1              v2 -- f(v2)
+                 |                |
+                 |-- f3(v1, v2) --|
+        """
+
+        # Make belief propagation
+        MN_all = MarkovNetwork([self.f2_v1_v2, self.f3_v1_v2,
+                                self.f_v1, self.f_v2])
+        MN_update = MarkovNetwork([self.f2_v1_v2, self.f3_v1_v2])
+
+        MN_all.BeliefPropagation(ep=self.ep_loop_calc)
+        MN_update.BeliefPropagation(ep=self.ep_loop_calc)
+        MN_update.updateBelief(self.f_v1, ep=self.ep_loop_calc)
+        MN_update.updateBelief(self.f_v2, ep=self.ep_loop_calc)
+
+        # Compare results
+        self.compare_networks(False, MN_all, MN_update)
+
+    def mn_update_belief_test_7(self):
+        """
+        v1 -- f(v1, v2) -- v2
+        |                   |
+        |                   |
+        f(v1, v3)   f(v2, v4)
+        |                   |
+        |                   |
+        v3 -- f(v3, v4) -- v4
+
+        ||
+        \/
+
+        f(v1)           f(v2)
+        |                   |
+        v1 -- f(v1, v2) -- v2
+        |                   |
+        |                   |
+        f(v1, v3)   f(v2, v4)
+        |                   |
+        |                   |
+        v3 -- f(v3, v4) -- v4
+        |                   |
+        f(v3)           f(v4)
+        """
+
+        # Make belief propagation
+        MN_all = MarkovNetwork([self.f_v1_v2, self.f_v1_v3,
+                                self.f_v2_v4, self.f_v3_v4,
+                                self.f_v1, self.f_v2, self.f_v3, self.f_v4])
+        MN_update = MarkovNetwork([self.f_v1_v2, self.f_v1_v3,
+                                   self.f_v2_v4, self.f_v3_v4])
+
+        MN_all.BeliefPropagation(ep=self.ep_loop_calc)
+        MN_update.BeliefPropagation(ep=self.ep_loop_calc)
+        MN_update.updateBelief(self.f_v1, ep=self.ep_loop_calc)
+        MN_update.updateBelief(self.f_v2, ep=self.ep_loop_calc)
+        MN_update.updateBelief(self.f_v3, ep=self.ep_loop_calc)
+        MN_update.updateBelief(self.f_v4, ep=self.ep_loop_calc)
+
+        # Compare results
+        self.compare_networks(False, MN_all, MN_update)
+
+    def mn_update_belief_test_8(self):
+        """
+        v1 -- f(v1, v2) -- v2 -- f(v2, v3) -- v3
+        |                  |                   |
+        |                  |                   |
+        f(v1, v4)      f(v2, v5)       f(v3, v6)
+        |                  |                   |
+        |                  |                   |
+        v4 -- f(v4, v5) -- v5 -- f(v5, v6) -- v6
+
+        ||
+        \/
+
+        f(v1)             f(v2)            f(v3)
+        |                  |                   |
+        v1 -- f(v1, v2) -- v2 -- f(v2, v3) -- v3
+        |                  |                   |
+        |                  |                   |
+        f(v1, v4)      f(v2, v5)       f(v3, v6)
+        |                  |                   |
+        |                  |                   |
+        v4 -- f(v4, v5) -- v5 -- f(v5, v6) -- v6
+        |                  |                   |
+        f(v4)             f(v5)            f(v6)
+        """
+
+        # Make belief propagation
+        MN_all = MarkovNetwork([self.f_v1_v2, self.f_v2_v3, self.f_v1_v4,
+                                self.f_v2_v5, self.f_v3_v6, self.f_v4_v5,
+                                self.f_v5_v6,
+                                self.f_v1, self.f_v2, self.f_v3,
+                                self.f_v4, self.f_v5, self.f_v6])
+        MN_update = MarkovNetwork([self.f_v1_v2, self.f_v2_v3, self.f_v1_v4,
+                                   self.f_v2_v5, self.f_v3_v6, self.f_v4_v5,
+                                   self.f_v5_v6])
+
+        MN_all.BeliefPropagation(ep=self.ep_loop_calc)
+        MN_update.BeliefPropagation(ep=self.ep_loop_calc)
+        MN_update.updateBelief(self.f_v1, ep=self.ep_loop_calc)
+        MN_update.updateBelief(self.f_v2, ep=self.ep_loop_calc)
+        MN_update.updateBelief(self.f_v3, ep=self.ep_loop_calc)
+        MN_update.updateBelief(self.f_v4, ep=self.ep_loop_calc)
+        MN_update.updateBelief(self.f_v5, ep=self.ep_loop_calc)
+        MN_update.updateBelief(self.f_v6, ep=self.ep_loop_calc)
+
+        # Compare results
+        self.compare_networks(False, MN_all, MN_update)
