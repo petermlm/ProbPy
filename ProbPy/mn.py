@@ -29,8 +29,8 @@ class BPMsg:
         self.factor = self.factor.normalize()
 
     def __repr__(self):
-        return "(Msg %s, (%s -> %s) , Cycle: %s)" % (self.factor, self.sender,
-                                                     self.receiver, self.cycle)
+        return "{Msg %s, (%s -> %s), Cycle: %s}" % (self.factor, self.sender,
+                                                    self.receiver, self.cycle)
 
 
 class MarkovNode:
@@ -95,6 +95,17 @@ class MarkovNetVar(MarkovNode):
         self.last_out_msgs = [None] * len(self.neighbors)
         self.marginal = None
 
+    def addNeighbor(self, neighbor):
+        """
+        Adds a factor neighbor node to the list of neighbors
+
+        :param neighbor: An instance of MarkovNetFactor that is a neighbor to
+                         this node
+        """
+
+        super().addNeighbor(neighbor)
+        self.last_out_msgs.append(None)
+
     def clearBP(self):
         """
         Clears any internal values used while executing the Belief Propagation
@@ -130,7 +141,8 @@ class MarkovNetVar(MarkovNode):
         for i, nei_i in enumerate(self.neighbors):
             # If there is a message in node j, calculate message to i
             for j, nei_j in enumerate(self.neighbors):
-                if i == j or self.in_msgs[j].cycle != cycle:
+                if i == j or self.in_msgs[j] is None or \
+                        self.in_msgs[j].cycle != cycle:
                     continue
 
                 # Take message from j, multiply it with all messages k
@@ -168,19 +180,47 @@ class MarkovNetVar(MarkovNode):
         :param ep: Epsilon value, maximum distance to which previous message
                    should be before being considered a different message and
                    not the same message
-        :returns:  True if all messages in this loop are the same and, hence,
+        :returns:  True if all messages in this cycle are the same and, hence,
                    the algorithm should halt according to this node
         """
 
         for i, msg in enumerate(self.out_msgs):
-            if msg is None and self.last_out_msgs[i] is None:
+            # Should actually happen because the only time both messages are
+            # None is in the first cycle of BP, where this method isn't even
+            # called
+            if (msg is None) and (self.last_out_msgs[i] is None):
                 continue
 
+            # XOR, if one of the messages is None but the other isn't
             elif (msg is None) != (self.last_out_msgs[i] is None):
                 return False
 
+            # Decide based on a distance and an error value
             dist = msg.factor.euclideanDist(self.last_out_msgs[i].factor)
-            if not (dist < ep):
+            if dist > ep:
+                return False
+
+        return True
+
+    def haltLoopUpdate(self, ep):
+        """
+        Used to check if Update algorithm should halt, when Network is a loop
+
+        :param ep: Epsilon value, maximum distance to which previous message
+                   should be before being considered a different message and
+                   not the same message
+        :returns:  True if all messages in this cycle are the same and, hence,
+                   the algorithm should halt according to this node
+        """
+
+        for i, msg in enumerate(self.out_msgs):
+            # While there are no messages to actually compare, just don't stop
+            if (msg is None) or (self.last_out_msgs[i] is None):
+                return False
+
+            # Decide based on a distance and an error value
+            dist = msg.factor.euclideanDist(self.last_out_msgs[i].factor)
+            if dist > ep:
                 return False
 
         return True
@@ -223,6 +263,22 @@ class MarkovNetFactor(MarkovNode):
         super().__init__(node_id)
 
         self.factor = factor
+        self.visited_in_update = False
+
+    def clearBP(self):
+        """
+        TODO
+        """
+
+        super().clearBP()
+        self.new = False
+
+    def clearUB(self):
+        """
+        TODO
+        """
+
+        self.visited_in_update = False
 
     def putIn(self, msg, sender):
         """
@@ -238,6 +294,13 @@ class MarkovNetFactor(MarkovNode):
                 self.in_msgs[i] = msg
                 break
 
+    def clacOutfirst(self, cycle):
+        for i, nei_i in enumerate(self.neighbors):
+            msg_factor = self.factor.marginal(nei_i.var)
+            self.out_msgs[i] = BPMsg(msg_factor, self.node_id,
+                                     nei_i.node_id, cycle)
+            nei_i.putIn(self.out_msgs[i], self.node_id)
+
     def calcOut(self, cycle):
         """
         Calculates a message for each of the neighbors, if necessary
@@ -248,11 +311,7 @@ class MarkovNetFactor(MarkovNode):
         # If this is the first cycle, factor sends every message in every
         # direction
         if cycle == 0:
-            for i, nei_i in enumerate(self.neighbors):
-                msg_factor = self.factor.marginal(nei_i.var)
-                self.out_msgs[i] = BPMsg(msg_factor, self.node_id,
-                                         nei_i.node_id, cycle)
-                nei_i.putIn(self.out_msgs[i], self.node_id)
+            self.clacOutfirst(cycle)
 
         # Normal cycle
         else:
@@ -366,9 +425,11 @@ class MarkovNetwork:
         :param factor: Factor to be added
         """
 
+        # Creates the node
         new_factor_node = MarkovNetFactor(factor, self.node_id)
         self.node_id += 1
 
+        # Set new node as neighbor of every neighboring variable node
         for i in factor.rand_vars:
             neighboring_var = self.var_nodes[i.name]
 
@@ -376,13 +437,14 @@ class MarkovNetwork:
             neighboring_var.addNeighbor(new_factor_node)
 
         self.factor_nodes.append(new_factor_node)
+        return new_factor_node
 
     def addFactors(self, factors):
         """
         Adds new factors to an already existing network.
 
         :param factors: List of factors to be added. May also be an individual
-        instance of Factor
+                        instance of Factor
         """
 
         if type(factors) != list:
@@ -420,20 +482,22 @@ class MarkovNetwork:
         self.clearBP()
 
         # Propagate
-        cycle = 0
+        self.cycle = 0
         while True:
-            self.BP_factor(cycle)
-            self.BP_var(cycle)
+            self.BP_factor()
+            self.BP_var()
             self.BP_normalize()
 
-            if cycle > 0 and self.checkHalt(tree, ep):
+            if self.cycle > 0 and self.checkHalt(tree, ep):
                 break
 
             self.BP_prepareNextCycle(tree)
-            cycle += 1
+            self.cycle += 1
 
         # Calculate marginals
         self.calcVarMarginals()
+
+        return self.cycle
 
     def clearBP(self):
         """
@@ -447,7 +511,7 @@ class MarkovNetwork:
         for i in self.var_nodes:
             self.var_nodes[i].clearBP()
 
-    def BP_factor(self, cycle):
+    def BP_factor(self):
         """
         Cycle for factor node in BP algorithm
 
@@ -455,9 +519,9 @@ class MarkovNetwork:
         """
 
         for i in self.factor_nodes:
-            i.calcOut(cycle)
+            i.calcOut(self.cycle)
 
-    def BP_var(self, cycle):
+    def BP_var(self):
         """
         Cycle for variable node in BP algorithm
 
@@ -465,7 +529,7 @@ class MarkovNetwork:
         """
 
         for i in self.var_nodes:
-            self.var_nodes[i].calcOut(cycle)
+            self.var_nodes[i].calcOut(self.cycle)
 
     def checkHalt(self, tree, ep):
         """
@@ -549,6 +613,74 @@ class MarkovNetwork:
                 msg *= j.factor
 
             var.marginal = msg.normalize()
+
+    def updateBelief(self, new_factor, tree=False, ep=0.01):
+        """
+        TODO
+        """
+
+        # Clear UB in factor nodes
+        for i in self.factor_nodes:
+            i.clearUB()
+
+        # Add new factor
+        ini_factor = self.addFactor(new_factor)
+
+        # Make the update
+        self.updateBeliefFactor(ini_factor, tree, ep)
+
+        # Calculate the marginals
+        self.calcVarMarginals()
+
+    def updateBeliefFactor(self, ini_factor, tree, ep):
+        """
+        TODO
+        """
+
+        # First step, calculations only for the initial factor
+        ini_factor.clacOutfirst(self.cycle)
+        ini_factor.visited_in_update = True
+
+        # Propagate every message from variable nodes
+        factor_stack = []
+        for i in ini_factor.neighbors:
+            i.calcOut(self.cycle)
+            factor_stack += i.neighbors
+
+        self.BP_normalize()
+        self.cycle += 1
+
+        FactorMark = True
+        factor_stack.append(FactorMark)
+
+        # Rest of the steps
+        while len(factor_stack) > 0:
+            # Get a node from stack
+            factor_node = factor_stack[0]
+            factor_stack = factor_stack[1:]
+
+            if type(factor_node) == bool:
+                self.cycle += 1
+                if len(factor_stack) == 0:
+                    break
+                factor_node = factor_stack[0]
+                factor_stack = factor_stack[1:]
+                factor_stack.append(FactorMark)
+
+            # If the node as been visited, skip it
+            if factor_node.visited_in_update:
+                continue
+
+            # Calculate out messages for this factor node
+            factor_node.calcOut(self.cycle)
+            factor_node.visited_in_update = True
+
+            # Propagate every message from variable nodes
+            for i in factor_node.neighbors:
+                i.calcOut(self.cycle)
+                factor_stack += i.neighbors
+
+            self.BP_normalize()
 
     def __getitem__(self, index):
         return self.var_nodes[index].marginal
