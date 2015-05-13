@@ -26,7 +26,7 @@ setup(name="ProbPy",
                        "algorithms implemented.\n"
                        "\n" +
                        "For more information check the GitHub page at:" +
-                       "https://github.com/petermlm/ProbPy."
+                       "https://github.com/petermlm/ProbPy.",
 
       author="Pedro Melgueira",
       author_email="pedromelgueira@gmail.com",
