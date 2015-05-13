@@ -2,6 +2,7 @@ import copy
 
 
 from ProbPy import Factor
+from ProbPy.inf_theory import *
 
 
 class BPMsg:
@@ -196,7 +197,7 @@ class MarkovNetVar(MarkovNode):
                 return False
 
             # Decide based on a distance and an error value
-            dist = msg.factor.euclideanDist(self.last_out_msgs[i].factor)
+            dist = kullbackLeiblerDistance(msg.factor, self.last_out_msgs[i].factor)
             if dist > ep:
                 return False
 
@@ -219,7 +220,7 @@ class MarkovNetVar(MarkovNode):
                 return False
 
             # Decide based on a distance and an error value
-            dist = msg.factor.euclideanDist(self.last_out_msgs[i].factor)
+            dist = kullbackLeiblerDistance(msg.factor, self.last_out_msgs[i].factor)
             if dist > ep:
                 return False
 
