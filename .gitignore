@@ -1,2 +1,5 @@
 *.pyc
 build
+ProbPy.egg-info
+dist
+doc/_build
