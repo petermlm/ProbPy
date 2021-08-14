@@ -11,8 +11,7 @@ class TestParMarginalMult(ParTestBase):
 
         res = self.X_factor.marginal(self.X)
         par_res = self.X_par_factor.marginal(self.X)
-        assert(res.rand_vars == par_res.rand_vars and
-               res.values == par_res.values)
+        assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
 
     def marginal_test_1(self):
         """
@@ -21,8 +20,7 @@ class TestParMarginalMult(ParTestBase):
 
         res = self.X_factor.marginal(self.X)
         par_res = self.X_par_factor.marginal(self.X)
-        assert(res.rand_vars == par_res.rand_vars and
-               res.values == par_res.values)
+        assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
 
     def marginal_test_2(self):
         """
@@ -31,8 +29,7 @@ class TestParMarginalMult(ParTestBase):
 
         res = self.XY_factor.marginal(self.X)
         par_res = self.XY_par_factor.marginal(self.X)
-        assert(res.rand_vars == par_res.rand_vars and
-               res.values == par_res.values)
+        assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
 
     def marginal_test_3(self):
         """
@@ -41,8 +38,7 @@ class TestParMarginalMult(ParTestBase):
 
         res = self.XY_factor.marginal(self.Y)
         par_res = self.XY_par_factor.marginal(self.Y)
-        assert(res.rand_vars == par_res.rand_vars and
-               res.values == par_res.values)
+        assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
 
     def marginal_test_4(self):
         """
@@ -51,8 +47,7 @@ class TestParMarginalMult(ParTestBase):
 
         res = self.XY_factor.marginal([self.X, self.Y])
         par_res = self.XY_par_factor.marginal([self.X, self.Y])
-        assert(res.rand_vars == par_res.rand_vars and
-               res.values == par_res.values)
+        assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
 
     def marginal_test_5(self):
         """
@@ -61,8 +56,7 @@ class TestParMarginalMult(ParTestBase):
 
         res = self.XY_factor.marginal([self.X, self.Y])
         par_res = self.XY_par_factor.marginal([self.X, self.Y])
-        assert(res.rand_vars == par_res.rand_vars and
-               res.values == par_res.values)
+        assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
 
     def marginal_test_6(self):
         """
@@ -71,8 +65,7 @@ class TestParMarginalMult(ParTestBase):
 
         res = self.XYZ_factor.marginal(self.X)
         par_res = self.XYZ_par_factor.marginal(self.X)
-        assert(res.rand_vars == par_res.rand_vars and
-               res.values == par_res.values)
+        assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
 
     def marginal_test_7(self):
         """
@@ -81,8 +74,7 @@ class TestParMarginalMult(ParTestBase):
 
         res = self.XYZ_factor.marginal(self.Y)
         par_res = self.XYZ_par_factor.marginal(self.Y)
-        assert(res.rand_vars == par_res.rand_vars and
-               res.values == par_res.values)
+        assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
 
     def marginal_test_8(self):
         """
@@ -91,8 +83,7 @@ class TestParMarginalMult(ParTestBase):
 
         res = self.XYZ_factor.marginal(self.Z)
         par_res = self.XYZ_par_factor.marginal(self.Z)
-        assert(res.rand_vars == par_res.rand_vars and
-               res.values == par_res.values)
+        assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
 
     def marginal_test_9(self):
         """
@@ -101,8 +92,7 @@ class TestParMarginalMult(ParTestBase):
 
         res = self.XYZ_factor.marginal([self.X, self.Y])
         par_res = self.XYZ_par_factor.marginal([self.X, self.Y])
-        assert(res.rand_vars == par_res.rand_vars and
-               res.values == par_res.values)
+        assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
 
     def marginal_test_10(self):
         """
@@ -111,8 +101,7 @@ class TestParMarginalMult(ParTestBase):
 
         res = self.XYZ_factor.marginal([self.X, self.Z])
         par_res = self.XYZ_par_factor.marginal([self.X, self.Z])
-        assert(res.rand_vars == par_res.rand_vars and
-               res.values == par_res.values)
+        assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
 
     def marginal_test_11(self):
         """
@@ -121,8 +110,7 @@ class TestParMarginalMult(ParTestBase):
 
         res = self.XYZ_factor.marginal([self.Y, self.Z])
         par_res = self.XYZ_par_factor.marginal([self.Y, self.Z])
-        assert(res.rand_vars == par_res.rand_vars and
-               res.values == par_res.values)
+        assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
 
     def marginal_test_12(self):
         """
@@ -131,5 +119,4 @@ class TestParMarginalMult(ParTestBase):
 
         res = self.XYZ_factor.marginal([self.X, self.Y, self.Z])
         par_res = self.XYZ_par_factor.marginal([self.X, self.Y, self.Z])
-        assert(res.rand_vars == par_res.rand_vars and
-               res.values == par_res.values)
+        assert res.rand_vars == par_res.rand_vars and res.values == par_res.values

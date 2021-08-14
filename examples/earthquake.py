@@ -21,6 +21,7 @@ Their distributions are bellow.
 
 # Not needed if library is installed
 from os import sys, path
+
 sys.path.insert(0, path.join("..", "ProbPy"))
 
 # Import ProbPy modules
@@ -41,9 +42,9 @@ if __name__ == "__main__":
     # the values in the distribution
     factor_burglary = Factor([burglary], [0.001, 0.999])
     factor_earthq = Factor([earthq], [0.002, 0.998])
-    factor_alarm = Factor([alarm, earthq, burglary], [
-        0.95, 0.05, 0.94, 0.06, 0.29, 0.71, 0.001, 0.999
-    ])
+    factor_alarm = Factor(
+        [alarm, earthq, burglary], [0.95, 0.05, 0.94, 0.06, 0.29, 0.71, 0.001, 0.999]
+    )
     factor_john = Factor([john, alarm], [0.90, 0.10, 0.05, 0.95])
     factor_mary = Factor([mary, alarm], [0.70, 0.30, 0.01, 0.99])
 
@@ -51,11 +52,11 @@ if __name__ == "__main__":
     # tuple, the first argument is the variable of that node, the second is the
     # distribution. Note that the nodes were place in the list at random
     network = [
-        (earthq,   factor_earthq),
-        (alarm,    factor_alarm),
-        (john,     factor_john),
+        (earthq, factor_earthq),
+        (alarm, factor_alarm),
+        (john, factor_john),
         (burglary, factor_burglary),
-        (mary,     factor_mary)
+        (mary, factor_mary),
     ]
 
     # The network object

@@ -46,7 +46,7 @@ class TreeMarkovNetwork(MarkovNetwork):
 
         for i, neighbor in enumerate(root_node.neighbors[1:]):
             msg = self.factorToVar(neighbor, root_node)
-            root_node.messages[i+1] = msg
+            root_node.messages[i + 1] = msg
             res *= msg
 
         for i in root_node.obs_factors:

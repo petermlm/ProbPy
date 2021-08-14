@@ -3,6 +3,7 @@ from nose.tools import with_setup, nottest, assert_almost_equal
 from ProbPy import RandVar, Factor, bn
 
 
+# fmt: off
 class TestTextBook:
     def sprinkler_test_0(self):
         '''

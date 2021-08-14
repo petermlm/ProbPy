@@ -17,7 +17,7 @@ class TestMarkovNetwork:
 
     def __init__(self):
         self.ep_tree_res = 0.0000001
-        self.ep_loop_res = 0.01
+        self.ep_loop_res = 0.1
         self.ep_loop_calc = 0.00001
 
         # Variables
@@ -56,19 +56,17 @@ class TestMarkovNetwork:
         self.f_v4_v5 = Factor([self.v4, self.v5], list(range(1, 5)))
         self.f_v5_v6 = Factor([self.v5, self.v6], list(range(1, 5)))
 
-        self.f_v1_v2_v3 = Factor([self.v1, self.v2, self.v3],
-                                 list(range(1, 9)))
-        self.f_v3_v4_v5 = Factor([self.v3, self.v4, self.v5],
-                                 list(range(1, 9)))
-        self.f_v4_v5_v6 = Factor([self.v3, self.v4, self.v5],
-                                 list(range(1, 9)))
-        self.f_v6_v7_v8 = Factor([self.v6, self.v7, self.v8],
-                                 list(range(1, 9)))
+        self.f_v1_v2_v3 = Factor([self.v1, self.v2, self.v3], list(range(1, 9)))
+        self.f_v3_v4_v5 = Factor([self.v3, self.v4, self.v5], list(range(1, 9)))
+        self.f_v4_v5_v6 = Factor([self.v3, self.v4, self.v5], list(range(1, 9)))
+        self.f_v6_v7_v8 = Factor([self.v6, self.v7, self.v8], list(range(1, 9)))
 
-        self.f_v1_v2_v3_v4 = Factor([self.v1, self.v2, self.v3, self.v4],
-                                    list(range(1, 17)))
-        self.f_v3_v4_v5_v6 = Factor([self.v3, self.v4, self.v5, self.v6],
-                                    list(range(1, 17)))
+        self.f_v1_v2_v3_v4 = Factor(
+            [self.v1, self.v2, self.v3, self.v4], list(range(1, 17))
+        )
+        self.f_v3_v4_v5_v6 = Factor(
+            [self.v3, self.v4, self.v5, self.v6], list(range(1, 17))
+        )
 
     def compare_results(self, tree, bf, MN):
         for i in bf.rand_vars:
@@ -77,9 +75,9 @@ class TestMarkovNetwork:
             dist = bf_res.euclideanDist(mn_res)
             print(bf_res, mn_res, dist)
             if tree:
-                assert(dist < self.ep_tree_res)
+                assert dist < self.ep_tree_res
             else:
-                assert(dist < self.ep_loop_res)
+                assert dist < self.ep_loop_res
 
     def compare_networks(self, tree, net1, net2):
         for i in net1.var_nodes:
@@ -88,9 +86,9 @@ class TestMarkovNetwork:
             dist = f1.euclideanDist(f2)
             print(f1, f2, dist)
             if tree:
-                assert(dist < self.ep_tree_res)
+                assert dist < self.ep_tree_res
             else:
-                assert(dist < self.ep_loop_res)
+                assert dist < self.ep_loop_res
 
     """
     Tree networks
@@ -174,8 +172,7 @@ class TestMarkovNetwork:
         """
 
         # Make belief propagation
-        MN = MarkovNetwork([self.f_v1_v2, self.f_v2_v3,
-                            self.f_v3_v4, self.f_v2_v5])
+        MN = MarkovNetwork([self.f_v1_v2, self.f_v2_v3, self.f_v3_v4, self.f_v2_v5])
         MN.BeliefPropagation(tree=True)
 
         # Make brute force
@@ -241,8 +238,7 @@ class TestMarkovNetwork:
         """
 
         # Make belief propagation
-        MN = MarkovNetwork([self.f_v1_v2_v3, self.f_v3_v4_v5_v6,
-                            self.f_v6_v7_v8])
+        MN = MarkovNetwork([self.f_v1_v2_v3, self.f_v3_v4_v5_v6, self.f_v6_v7_v8])
         MN.BeliefPropagation(tree=True)
 
         # Make brute force
@@ -287,8 +283,7 @@ class TestMarkovNetwork:
         """
 
         # Make belief propagation
-        MN = MarkovNetwork([self.f_v1_v2, self.f_v1_v3, self.f_v2_v4,
-                            self.f_v3_v4])
+        MN = MarkovNetwork([self.f_v1_v2, self.f_v1_v3, self.f_v2_v4, self.f_v3_v4])
         MN.BeliefPropagation(ep=self.ep_loop_calc)
 
         # Make brute force
@@ -309,14 +304,29 @@ class TestMarkovNetwork:
         """
 
         # Make belief propagation
-        MN = MarkovNetwork([self.f_v1_v2, self.f_v2_v3, self.f_v1_v4,
-                            self.f_v2_v5, self.f_v3_v6, self.f_v4_v5,
-                            self.f_v5_v6])
+        MN = MarkovNetwork(
+            [
+                self.f_v1_v2,
+                self.f_v2_v3,
+                self.f_v1_v4,
+                self.f_v2_v5,
+                self.f_v3_v6,
+                self.f_v4_v5,
+                self.f_v5_v6,
+            ]
+        )
         MN.BeliefPropagation(ep=self.ep_loop_calc)
 
         # Make brute force
-        bf = self.f_v1_v2 * self.f_v2_v3 * self.f_v1_v4 * self.f_v2_v5 * \
-            self.f_v3_v6 * self.f_v4_v5 * self.f_v5_v6
+        bf = (
+            self.f_v1_v2
+            * self.f_v2_v3
+            * self.f_v1_v4
+            * self.f_v2_v5
+            * self.f_v3_v6
+            * self.f_v4_v5
+            * self.f_v5_v6
+        )
 
         # Compare results
         self.compare_results(False, bf, MN)
@@ -331,8 +341,7 @@ class TestMarkovNetwork:
         """
 
         # Make belief propagation
-        MN = MarkovNetwork([self.f_v1_v2_v3, self.f_v1_v2_v3_v4,
-                            self.f_v4_v5_v6])
+        MN = MarkovNetwork([self.f_v1_v2_v3, self.f_v1_v2_v3_v4, self.f_v4_v5_v6])
         MN.BeliefPropagation(ep=self.ep_loop_calc)
 
         # Make brute force
@@ -504,14 +513,18 @@ class TestMarkovNetwork:
         """
 
         # Make belief propagation
-        MN = MarkovNetwork([self.f_v1_v2, self.f_v1_v3,
-                            self.f_v2_v4, self.f_v3_v4])
+        MN = MarkovNetwork([self.f_v1_v2, self.f_v1_v3, self.f_v2_v4, self.f_v3_v4])
         MN.addFactors(self.f_v1_v2_v3_v4)
         MN.BeliefPropagation(ep=self.ep_loop_calc)
 
         # Make brute force
-        bf = self.f_v1_v2 * self.f_v1_v3 * self.f_v2_v4 * self.f_v3_v4 * \
-            self.f_v1_v2_v3_v4
+        bf = (
+            self.f_v1_v2
+            * self.f_v1_v3
+            * self.f_v2_v4
+            * self.f_v3_v4
+            * self.f_v1_v2_v3_v4
+        )
 
         # Compare results
         self.compare_results(False, bf, MN)
@@ -544,8 +557,7 @@ class TestMarkovNetwork:
         MN.BeliefPropagation(ep=self.ep_loop_calc)
 
         # Make brute force
-        bf = self.f_v1_v2 * self.f_v1_v3 * self.f_v2_v4 * self.f_v3_v5 * \
-            self.f_v4_v5
+        bf = self.f_v1_v2 * self.f_v1_v3 * self.f_v2_v4 * self.f_v3_v5 * self.f_v4_v5
 
         # Compare results
         self.compare_results(False, bf, MN)
@@ -614,8 +626,7 @@ class TestMarkovNetwork:
         """
 
         # Make belief propagation
-        MN_all = MarkovNetwork([self.f_v1_v2, self.f_v1, self.f2_v1,
-                                self.f3_v1])
+        MN_all = MarkovNetwork([self.f_v1_v2, self.f_v1, self.f2_v1, self.f3_v1])
         MN_update = MarkovNetwork(self.f_v1_v2)
 
         MN_all.BeliefPropagation(tree=True)
@@ -642,8 +653,7 @@ class TestMarkovNetwork:
         """
 
         # Make belief propagation
-        MN_all = MarkovNetwork([self.f_v1_v2, self.f_v1, self.f2_v1,
-                                self.f3_v1])
+        MN_all = MarkovNetwork([self.f_v1_v2, self.f_v1, self.f2_v1, self.f3_v1])
         MN_update = MarkovNetwork([self.f_v1_v2, self.f_v1])
 
         MN_all.BeliefPropagation(tree=True)
@@ -665,8 +675,7 @@ class TestMarkovNetwork:
         """
 
         # Make belief propagation
-        MN_all = MarkovNetwork([self.f_v1, self.f_v1_v2, self.f_v2_v3,
-                                self.f_v3])
+        MN_all = MarkovNetwork([self.f_v1, self.f_v1_v2, self.f_v2_v3, self.f_v3])
         MN_update = MarkovNetwork([self.f_v1, self.f_v1_v2, self.f_v2_v3])
 
         MN_all.BeliefPropagation(tree=True)
@@ -713,12 +722,24 @@ class TestMarkovNetwork:
         """
 
         # Make belief propagation
-        MN_all = MarkovNetwork([self.f_v1_v2_v3, self.f_v3_v4_v5_v6,
-                                self.f_v6_v7_v8,
-                                self.f_v1, self.f_v2, self.f_v3, self.f_v4,
-                                self.f_v5, self.f_v6, self.f_v7, self.f_v8])
-        MN_update = MarkovNetwork([self.f_v1_v2_v3, self.f_v3_v4_v5_v6,
-                                   self.f_v6_v7_v8])
+        MN_all = MarkovNetwork(
+            [
+                self.f_v1_v2_v3,
+                self.f_v3_v4_v5_v6,
+                self.f_v6_v7_v8,
+                self.f_v1,
+                self.f_v2,
+                self.f_v3,
+                self.f_v4,
+                self.f_v5,
+                self.f_v6,
+                self.f_v7,
+                self.f_v8,
+            ]
+        )
+        MN_update = MarkovNetwork(
+            [self.f_v1_v2_v3, self.f_v3_v4_v5_v6, self.f_v6_v7_v8]
+        )
 
         MN_all.BeliefPropagation(tree=True)
         MN_update.BeliefPropagation(tree=True)
@@ -753,8 +774,7 @@ class TestMarkovNetwork:
         """
 
         # Make belief propagation
-        MN_all = MarkovNetwork([self.f2_v1_v2, self.f3_v1_v2,
-                                self.f_v1])
+        MN_all = MarkovNetwork([self.f2_v1_v2, self.f3_v1_v2, self.f_v1])
         MN_update = MarkovNetwork([self.f2_v1_v2, self.f3_v1_v2])
 
         MN_all.BeliefPropagation(ep=self.ep_loop_calc)
@@ -783,8 +803,7 @@ class TestMarkovNetwork:
         """
 
         # Make belief propagation
-        MN_all = MarkovNetwork([self.f2_v1_v2, self.f3_v1_v2,
-                                self.f_v1, self.f_v2])
+        MN_all = MarkovNetwork([self.f2_v1_v2, self.f3_v1_v2, self.f_v1, self.f_v2])
         MN_update = MarkovNetwork([self.f2_v1_v2, self.f3_v1_v2])
 
         MN_all.BeliefPropagation(ep=self.ep_loop_calc)
@@ -822,11 +841,21 @@ class TestMarkovNetwork:
         """
 
         # Make belief propagation
-        MN_all = MarkovNetwork([self.f_v1_v2, self.f_v1_v3,
-                                self.f_v2_v4, self.f_v3_v4,
-                                self.f_v1, self.f_v2, self.f_v3, self.f_v4])
-        MN_update = MarkovNetwork([self.f_v1_v2, self.f_v1_v3,
-                                   self.f_v2_v4, self.f_v3_v4])
+        MN_all = MarkovNetwork(
+            [
+                self.f_v1_v2,
+                self.f_v1_v3,
+                self.f_v2_v4,
+                self.f_v3_v4,
+                self.f_v1,
+                self.f_v2,
+                self.f_v3,
+                self.f_v4,
+            ]
+        )
+        MN_update = MarkovNetwork(
+            [self.f_v1_v2, self.f_v1_v3, self.f_v2_v4, self.f_v3_v4]
+        )
 
         MN_all.BeliefPropagation(ep=self.ep_loop_calc)
         MN_update.BeliefPropagation(ep=self.ep_loop_calc)
@@ -865,14 +894,34 @@ class TestMarkovNetwork:
         """
 
         # Make belief propagation
-        MN_all = MarkovNetwork([self.f_v1_v2, self.f_v2_v3, self.f_v1_v4,
-                                self.f_v2_v5, self.f_v3_v6, self.f_v4_v5,
-                                self.f_v5_v6,
-                                self.f_v1, self.f_v2, self.f_v3,
-                                self.f_v4, self.f_v5, self.f_v6])
-        MN_update = MarkovNetwork([self.f_v1_v2, self.f_v2_v3, self.f_v1_v4,
-                                   self.f_v2_v5, self.f_v3_v6, self.f_v4_v5,
-                                   self.f_v5_v6])
+        MN_all = MarkovNetwork(
+            [
+                self.f_v1_v2,
+                self.f_v2_v3,
+                self.f_v1_v4,
+                self.f_v2_v5,
+                self.f_v3_v6,
+                self.f_v4_v5,
+                self.f_v5_v6,
+                self.f_v1,
+                self.f_v2,
+                self.f_v3,
+                self.f_v4,
+                self.f_v5,
+                self.f_v6,
+            ]
+        )
+        MN_update = MarkovNetwork(
+            [
+                self.f_v1_v2,
+                self.f_v2_v3,
+                self.f_v1_v4,
+                self.f_v2_v5,
+                self.f_v3_v6,
+                self.f_v4_v5,
+                self.f_v5_v6,
+            ]
+        )
 
         MN_all.BeliefPropagation(ep=self.ep_loop_calc)
         MN_update.BeliefPropagation(ep=self.ep_loop_calc)

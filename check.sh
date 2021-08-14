@@ -4,20 +4,17 @@
 # If anything is wrong after running this script, you should probably not
 # commit your code.
 
+# Black
+echo "Running Python Black:"
+make black
+echo "Done"
+
+echo ""
+echo ""
+
 # Unit tests
 echo "Unit Testing:"
-nosetests3
-
-echo ""
-echo ""
-
-# PEP8
-echo "PEP8 Checking:"
-pep8 ProbPy/*.py
-pep8 tests/*.py
-pep8 examples/*.py
-pep8 setup.py
-echo "Done"
+make tests
 
 echo ""
 echo ""

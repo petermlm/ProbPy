@@ -108,7 +108,7 @@ class BayesianNetwork:
                 visit(i)
 
     def nodeInGraph(self, node):
-        """ Look for the node, if the node was not found, return None """
+        """Look for the node, if the node was not found, return None"""
 
         # Look for the node
         for i in self.network:
@@ -265,8 +265,7 @@ class BayesianNetwork:
                 val = pre_inst.value(i.node)
 
             if pre_inst is None or val is None:
-                val = self.pickRandomValue(var.domain, insted.values,
-                                           random.random())
+                val = self.pickRandomValue(var.domain, insted.values, random.random())
 
             inst_vars.setValue(var, val)
 
@@ -356,8 +355,9 @@ class BayesianNetwork:
         # Get children's parents
         child_parents = []
         for i in children:
-            child_parents += [j for j in i.parents
-                              if j != node and j not in parents+children]
+            child_parents += [
+                j for j in i.parents if j != node and j not in parents + children
+            ]
 
         return parents + children + child_parents
 
@@ -372,8 +372,7 @@ class BayesianNetwork:
 
         # Create non evidence variable list, which are all the variables not
         # present in the observations
-        non_evidence_vars = [i for i in self.network
-                             if not observed.varInEvent(i.node)]
+        non_evidence_vars = [i for i in self.network if not observed.varInEvent(i.node)]
 
         # Get markov blankets for each non evidence variable
         mbs = dict()
@@ -397,8 +396,9 @@ class BayesianNetwork:
                 dist = dist.instVar(sample)
 
                 # Set new random value of current variable in sample
-                rvalue = self.pickRandomValue(dist.rand_vars[0].domain,
-                                              dist.values, random.random())
+                rvalue = self.pickRandomValue(
+                    dist.rand_vars[0].domain, dist.values, random.random()
+                )
                 sample.setValue(j.node, rvalue)
 
                 # Increment count
@@ -478,6 +478,8 @@ class BayesianNetworkArgEx(Exception):
     """
 
     def __str__(self):
-        s = ("Nodes for the construction of the Bayesian Network don't form a"
-             "Direct Acyclic Graph")
+        s = (
+            "Nodes for the construction of the Bayesian Network don't form a"
+            "Direct Acyclic Graph"
+        )
         return s

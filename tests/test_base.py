@@ -46,8 +46,7 @@ class TestBase:
         # Factors for normalization
         self.X_factor_n = Factor(self.X, [1, 2])
         self.XY_factor_n = Factor([self.X, self.Y], [1, 1, 2, 2])
-        self.XYZ_factor_n = Factor([self.X, self.Y, self.Z],
-                                   [1, 1, 2, 2, 3, 3, 4, 4])
+        self.XYZ_factor_n = Factor([self.X, self.Y, self.Z], [1, 1, 2, 2, 3, 3, 4, 4])
 
         # Distributions for expected value
         self.X_dist = Factor(self.X, [0.8, 0.2])

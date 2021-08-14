@@ -20,7 +20,9 @@ def entropy(factor, base=2):
     :returns:      Returns the entropy
     """
 
-    ent = lambda x: x * log(x) / log(base) if x != 0 else 0
+    def ent(x):
+        return x * log(x) / log(base) if x != 0 else 0
+
     return -sum(factor.map(ent).values)
 
 
@@ -36,13 +38,14 @@ def kullbackLeiblerDistance(fac1, fac2, base=2):
     :returns:    The Kullback-Leibler Distance
     """
 
-    kld = lambda f1, f2: f1 * log(f1/f2) / log(base)
+    def kld(f1, f2):
+        return f1 * log(f1 / f2) / log(base)
+
     return sum(Factor.factorOp(fac1, fac2, kld).values)
 
 
 def mutualInformation(joint, fac1, fac2, base=2):
-    """
-    """
+    """ """
 
     denom = fac1 * fac2
     return kullbackLeiblerDistance(joint, denom, base)

@@ -1,3 +1,7 @@
+# Not needed if library is installed
+from os import sys, path
+
+sys.path.insert(0, path.join("..", "ProbPy"))
 from ProbPy import *
 
 
@@ -29,8 +33,7 @@ B = RandVar("B", 6)
 # Also, various ways to declare factors
 X_factor = Factor(X, [0.3, 0.7])
 XY_factor = Factor([X, Y], [0.2, 0.3, 0.1, 0.4])
-XYZ_factor = Factor([X, Y, Z], [[[0.2, 0.3], [0.1, 0.4]],
-                                [[0.7, 0.1], [0.1, 0.1]]])
+XYZ_factor = Factor([X, Y, Z], [[[0.2, 0.3], [0.1, 0.4]], [[0.7, 0.1], [0.1, 0.1]]])
 AB_factor = Factor([A, B])
 scalar = Factor([], 10)
 

@@ -117,8 +117,10 @@ class Event:
 
         # Check if each variable is the same
         for i in self.event:
-            if i not in other_event.event.keys() or\
-                    self.event[i] != other_event.event[i]:
+            if (
+                i not in other_event.event.keys()
+                or self.event[i] != other_event.event[i]
+            ):
                 return False
 
         return True

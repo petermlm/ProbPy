@@ -14,7 +14,7 @@ class TestFactorMaxMin(TestBase):
             fac = Factor(self.X, [1, 2])
             fac.values[i] = 10
 
-            assert(fac.max() == 10)
+            assert fac.max() == 10
 
     def max_test_1(self):
         """
@@ -24,9 +24,9 @@ class TestFactorMaxMin(TestBase):
         for i, domainx in enumerate(self.X.domain):
             for j, domainy in enumerate(self.Y.domain):
                 fac = Factor([self.X, self.Y], [1, 2, 3, 4])
-                fac.values[i + j*2] = 10
+                fac.values[i + j * 2] = 10
 
-                assert(fac.max() == 10)
+                assert fac.max() == 10
 
     def min_test_2(self):
         """
@@ -37,7 +37,7 @@ class TestFactorMaxMin(TestBase):
             fac = Factor(self.X, [1, 2])
             fac.values[i] = -10
 
-            assert(fac.min() == -10)
+            assert fac.min() == -10
 
     def min_test_3(self):
         """
@@ -47,9 +47,9 @@ class TestFactorMaxMin(TestBase):
         for i, domainx in enumerate(self.X.domain):
             for j, domainy in enumerate(self.Y.domain):
                 fac = Factor([self.X, self.Y], [1, 2, 3, 4])
-                fac.values[i + j*2] = -10
+                fac.values[i + j * 2] = -10
 
-                assert(fac.min() == -10)
+                assert fac.min() == -10
 
     def argmax_test_4(self):
         """
@@ -61,7 +61,7 @@ class TestFactorMaxMin(TestBase):
             fac.values[i] = 10
 
             event = Event([(self.X, domain)])
-            assert(fac.argmax() == event)
+            assert fac.argmax() == event
 
     def argmax_test_5(self):
         """
@@ -71,10 +71,10 @@ class TestFactorMaxMin(TestBase):
         for i, domainx in enumerate(self.X.domain):
             for j, domainy in enumerate(self.Y.domain):
                 fac = Factor([self.X, self.Y], [1, 2, 3, 4])
-                fac.values[i + j*2] = 10
+                fac.values[i + j * 2] = 10
 
                 event = Event([(self.X, domainx), (self.Y, domainy)])
-                assert(fac.argmax() == event)
+                assert fac.argmax() == event
 
     def argmin_test_6(self):
         """
@@ -86,7 +86,7 @@ class TestFactorMaxMin(TestBase):
             fac.values[i] = -10
 
             event = Event([(self.X, domain)])
-            assert(fac.argmin() == event)
+            assert fac.argmin() == event
 
     def argmin_test_7(self):
         """
@@ -96,7 +96,7 @@ class TestFactorMaxMin(TestBase):
         for i, domainx in enumerate(self.X.domain):
             for j, domainy in enumerate(self.Y.domain):
                 fac = Factor([self.X, self.Y], [1, 2, 3, 4])
-                fac.values[i + j*2] = -10
+                fac.values[i + j * 2] = -10
 
                 event = Event([(self.X, domainx), (self.Y, domainy)])
-                assert(fac.argmin() == event)
+                assert fac.argmin() == event

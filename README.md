@@ -2,29 +2,11 @@ A Python library for discrete multi variable probabilistic calculus.
 
 # About ProbPy
 
-ProbPy is a Python library that aims to simplify calculations with discrete multi variable probabilistic distributions by offering an abstraction over how data is stored and how the operations between distributions are performed.
+ProbPy is a Python library that aims at simplifying calculations with discrete multi variable probabilistic distributions by offering an abstraction over how data is stored and how the operations between distributions are performed.
 
 The library can be used in the implementation of many algorithms such as Bayes Theorem, Bayesian Inference algorithms like Variable Elimination, Gibbs Ask (MCMC), HMMs implementations, Information Theory, etc.
 
-Currently, there are implementation for Bayesian and Markov Networks with some inference algorithms implemented.
-
-For more information check the [GitHub page](https://github.com/petermlm/ProbPy).
-
-# Installing
-
-To install ProbPy from the Python Package Index use *pip*:
-
-    pip install ProbPy
-
-Alternatively, download ProbPy from GitHub and install with the following commands:
-
-    git clone https://github.com/petermlm/ProbPy
-    sudo python setup.py install
-
-If you are developing ProbPy, instead of installing the library use the following commands so you don't have to reinstall ProbPy every time an alteration is made:
-
-    git clone https://github.com/petermlm/ProbPy
-    sudo python setup.py develop
+Hosted at [GitHub](https://github.com/petermlm/ProbPy).
 
 # Example and Features
 
@@ -86,6 +68,41 @@ The library has the `RandVar` and `Factor` classes as seen above. It also has th
 **To see examples check the examples directory. To get a full list of features of this library check the documentation provided in this repository. Remeber to execute the examples from the parent directory if ProbPy is not installed, like the following:**
 
     python3 examples/earthquake.py
+
+# Installing
+
+To install ProbPy from the Python Package Index use *pip*:
+
+    pip install ProbPy
+
+Alternatively, download ProbPy from GitHub and install with the following commands:
+
+    git clone https://github.com/petermlm/ProbPy
+    python setup.py install
+
+If you are developing ProbPy, instead of installing the library use the following commands so you don't have to reinstall ProbPy every time an alteration is made:
+
+    git clone https://github.com/petermlm/ProbPy
+    python setup.py develop
+
+# Tests
+
+ProbPy uses nose for testing. Install nose either in a virtual env or globally and run:
+
+    nosetests
+
+# Style
+
+ProbPy uses [Python Black](https://github.com/psf/black) for auto formatting.
+However, several lines in the examples and tests will have a comment so black
+doesn't format lines like this:
+
+   values == [9, 18, 27, 36,
+              10, 20, 30, 40,
+              11, 22, 33, 44,
+              12, 24, 36, 48]
+
+Since it is useful to see matrices in such a form.
 
 # Documentation
 
@@ -155,8 +172,6 @@ If execution time and resource consumption is crucial for your project, you migh
 * Implement Likelihood Weighting algorithm.
 
 * Implement Undirected Graphical Models and inference algorithms.
-
-* Implement fuzzy logic operations.
 
 * Missing documentation that is anything other then what comes out of docstrings.
 

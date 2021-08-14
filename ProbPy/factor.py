@@ -134,7 +134,7 @@ class Factor:
             if cind[inc] == ind[inc]:
                 cind[inc] = 0
                 cval[inc] = self.rand_vars[inc].domain[0]
-                return doInd(inc+1)
+                return doInd(inc + 1)
 
             # Also move the cval index
             cval[inc] = self.rand_vars[inc].domain[cind[inc]]
@@ -156,8 +156,7 @@ class Factor:
         :returns: Result of operation
         """
 
-        fun = lambda x, y: x*y
-        return self.factorOp(factor, fun)
+        return self.factorOp(factor, lambda x, y: x * y)
 
     def div(self, factor):
         """
@@ -167,8 +166,7 @@ class Factor:
         :returns:      Result of operation
         """
 
-        fun = lambda x, y: x/y
-        return self.factorOp(factor, fun)
+        return self.factorOp(factor, lambda x, y: x / y)
 
     def add(self, factor):
         """
@@ -178,8 +176,7 @@ class Factor:
         :returns:      Result of operation
         """
 
-        fun = lambda x, y: x+y
-        return self.factorOp(factor, fun)
+        return self.factorOp(factor, lambda x, y: x + y)
 
     def sub(self, factor):
         """
@@ -189,8 +186,7 @@ class Factor:
         :returns:      Result of operation
         """
 
-        fun = lambda x, y: x-y
-        return self.factorOp(factor, fun)
+        return self.factorOp(factor, lambda x, y: x - y)
 
     def factorOp(self, factor, fun):
         """
@@ -287,8 +283,7 @@ class Factor:
                              using fun
         """
 
-        fun2 = lambda x: fun(x, scalar_value)
-        return self.map(fun2)
+        return self.map(lambda x: fun(x, scalar_value))
 
     def log(self, base):
         """
@@ -300,8 +295,7 @@ class Factor:
                      to the values of self
         """
 
-        fun = lambda x: math.log(x, base)
-        return self.map(fun)
+        return self.map(lambda x: math.log(x, base))
 
     def pow(self, p):
         """
@@ -311,8 +305,7 @@ class Factor:
         :returns: Power of the elements in the factor by p
         """
 
-        fun = lambda x: x**p
-        return self.map(fun)
+        return self.map(lambda x: x ** p)
 
     def exp(self, base=None):
         """
@@ -324,10 +317,10 @@ class Factor:
         :returns:    Exp function to the factor
         """
 
-        if base is None:
-            fun = lambda x: math.exp(x)
-        else:
-            fun = lambda x: base ** x
+        def fun(x):
+            if base is None:
+                return math.exp(x)
+            return base ** x
 
         return self.map(fun)
 
@@ -396,7 +389,7 @@ class Factor:
 
             for j in self.rand_vars:
                 if k < len(res_rand_vars) and j.name == res_rand_vars[k].name:
-                    index += (int(i/div) % len(res_rand_vars[k].domain)) * mult
+                    index += (int(i / div) % len(res_rand_vars[k].domain)) * mult
                     mult *= len(res_rand_vars[k].domain)
                     k += 1
 
@@ -541,7 +534,7 @@ class Factor:
             # variables
             if rv.name == rand_var.name:
                 var_index = i
-                res_rand_vars += self.rand_vars[i+1:]
+                res_rand_vars += self.rand_vars[i + 1 :]
                 break
 
             # Add current variable to list
@@ -573,7 +566,7 @@ class Factor:
         res_values = []
         len_domain = len(self.rand_vars[var_index].domain)
         for i, val in enumerate(self.values):
-            if int(i/div) % len_domain == inst_index:
+            if int(i / div) % len_domain == inst_index:
                 res_values.append(val)
 
         # Make Factor object and return
@@ -663,8 +656,7 @@ class Factor:
         if not self.sameVariables(factor):
             return None
 
-        dist = lambda x, y: (x - y) ** 2
-        diff = self.factorOp(factor, dist)
+        diff = self.factorOp(factor, lambda x, y: (x - y) ** 2)
         return math.sqrt(sum(diff.values))
 
     def max(self):
@@ -695,7 +687,7 @@ class Factor:
         for i, value in enumerate(self.values, 1):
             if value > maxval:
                 maxval = value
-                index = i-1
+                index = i - 1
 
         # Make the event
         event = []
@@ -722,7 +714,7 @@ class Factor:
         for i, value in enumerate(self.values, 1):
             if value < minval:
                 minval = value
-                index = i-1
+                index = i - 1
 
         # Make the event
         event = []
@@ -774,8 +766,7 @@ class Factor:
         self.sameVariables(other)
 
         # Check values
-        dist = lambda x, y: x == y
-        diff = self.factorOp(other, dist)
+        diff = self.factorOp(other, lambda x, y: x == y)
 
         for i in diff.values:
             if not i:

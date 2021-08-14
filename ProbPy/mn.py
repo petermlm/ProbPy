@@ -30,8 +30,12 @@ class BPMsg:
         self.factor = self.factor.normalize()
 
     def __repr__(self):
-        return "{Msg %s, (%s -> %s), Cycle: %s}" % (self.factor, self.sender,
-                                                    self.receiver, self.cycle)
+        return "{Msg %s, (%s -> %s), Cycle: %s}" % (
+            self.factor,
+            self.sender,
+            self.receiver,
+            self.cycle,
+        )
 
 
 class MarkovNode:
@@ -142,8 +146,7 @@ class MarkovNetVar(MarkovNode):
         for i, nei_i in enumerate(self.neighbors):
             # If there is a message in node j, calculate message to i
             for j, nei_j in enumerate(self.neighbors):
-                if i == j or self.in_msgs[j] is None or \
-                        self.in_msgs[j].cycle != cycle:
+                if i == j or self.in_msgs[j] is None or self.in_msgs[j].cycle != cycle:
                     continue
 
                 # Take message from j, multiply it with all messages k
@@ -155,8 +158,7 @@ class MarkovNetVar(MarkovNode):
                     msg *= self.in_msgs[k].factor
 
                 # Send message to i, and go to next i
-                self.out_msgs[i] = BPMsg(msg, self.node_id,
-                                         nei_i.node_id, cycle)
+                self.out_msgs[i] = BPMsg(msg, self.node_id, nei_i.node_id, cycle)
                 nei_i.putIn(self.out_msgs[i], self.node_id)
                 break
 
@@ -298,8 +300,7 @@ class MarkovNetFactor(MarkovNode):
     def clacOutfirst(self, cycle):
         for i, nei_i in enumerate(self.neighbors):
             msg_factor = self.factor.marginal(nei_i.var)
-            self.out_msgs[i] = BPMsg(msg_factor, self.node_id,
-                                     nei_i.node_id, cycle)
+            self.out_msgs[i] = BPMsg(msg_factor, self.node_id, nei_i.node_id, cycle)
             nei_i.putIn(self.out_msgs[i], self.node_id)
 
     def calcOut(self, cycle):
@@ -320,8 +321,11 @@ class MarkovNetFactor(MarkovNode):
             for i, nei_i in enumerate(self.neighbors):
                 # If there is a message in node j, calculate message to i
                 for j, nei_j in enumerate(self.neighbors):
-                    if i == j or self.in_msgs[j] is None or \
-                            self.in_msgs[j].cycle != cycle-1:
+                    if (
+                        i == j
+                        or self.in_msgs[j] is None
+                        or self.in_msgs[j].cycle != cycle - 1
+                    ):
                         continue
 
                     # Take message from j, multiply it with all messages k
@@ -337,8 +341,7 @@ class MarkovNetFactor(MarkovNode):
 
                     # Send message to i, and go to next i
                     msg = (self.factor * msg).marginal(nei_i.var)
-                    self.out_msgs[i] = BPMsg(msg, self.node_id,
-                                             nei_i.node_id, cycle)
+                    self.out_msgs[i] = BPMsg(msg, self.node_id, nei_i.node_id, cycle)
                     nei_i.putIn(self.out_msgs[i], self.node_id)
                     break
 
@@ -540,8 +543,7 @@ class MarkovNetwork:
         :param ep:   Epsilon value
         """
 
-        return tree and self.haltBPTree() or \
-            not tree and self.haltBPLoop(ep)
+        return tree and self.haltBPTree() or not tree and self.haltBPLoop(ep)
 
     def haltBPTree(self):
         """

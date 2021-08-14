@@ -1,5 +1,6 @@
 # Not needed if library is installed
 from os import sys, path
+
 sys.path.insert(0, path.join("..", "ProbPy"))
 
 # Import ProbPy modules
@@ -17,15 +18,16 @@ if __name__ == "__main__":
     factor_cloudy = Factor(cloudy, [0.5, 0.5])
     factor_sprinkler = Factor([sprinkler, cloudy], [0.1, 0.9, 0.5, 0.5])
     factor_rain = Factor([rain, cloudy], [0.8, 0.2, 0.2, 0.8])
-    factor_wet_grass = Factor([wet_grass, rain, sprinkler],
-                              [0.99, 0.01, 0.9, 0.1, 0.9, 0.1, 0.0, 1.0])
+    factor_wet_grass = Factor(
+        [wet_grass, rain, sprinkler], [0.99, 0.01, 0.9, 0.1, 0.9, 0.1, 0.0, 1.0]
+    )
 
     # Actual network representation
     network = [
-        (cloudy,    factor_cloudy),
+        (cloudy, factor_cloudy),
         (sprinkler, factor_sprinkler),
-        (rain,      factor_rain),
-        (wet_grass, factor_wet_grass)
+        (rain, factor_rain),
+        (wet_grass, factor_wet_grass),
     ]
 
     # Create a Bayesian Network

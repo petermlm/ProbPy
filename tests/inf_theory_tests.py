@@ -66,9 +66,11 @@ class TestInfTheoryValue(TestBase):
         KLD(P1 | Q1)
         """
 
-        res = [kullbackLeiblerDistance(self.P1, self.Q1),
-               kullbackLeiblerDistance(self.P1, self.Q1, 10),
-               kullbackLeiblerDistance(self.P1, self.Q1, math.e)]
+        res = [
+            kullbackLeiblerDistance(self.P1, self.Q1),
+            kullbackLeiblerDistance(self.P1, self.Q1, 10),
+            kullbackLeiblerDistance(self.P1, self.Q1, math.e),
+        ]
 
         assert_almost_equal(res[0], 0.73697, places=4)
         assert_almost_equal(res[1], 0.22185, places=4)
@@ -79,9 +81,11 @@ class TestInfTheoryValue(TestBase):
         KLD(P2 | Q2)
         """
 
-        res = [kullbackLeiblerDistance(self.P2, self.Q2),
-               kullbackLeiblerDistance(self.P2, self.Q2, 10),
-               kullbackLeiblerDistance(self.P2, self.Q2, math.e)]
+        res = [
+            kullbackLeiblerDistance(self.P2, self.Q2),
+            kullbackLeiblerDistance(self.P2, self.Q2, 10),
+            kullbackLeiblerDistance(self.P2, self.Q2, math.e),
+        ]
 
         assert_almost_equal(res[0], 0.32193, places=4)
         assert_almost_equal(res[1], 0.09691, places=4)
@@ -92,9 +96,11 @@ class TestInfTheoryValue(TestBase):
         KLD(Q1 | P1)
         """
 
-        res = [kullbackLeiblerDistance(self.Q1, self.P1),
-               kullbackLeiblerDistance(self.Q1, self.P1, 10),
-               kullbackLeiblerDistance(self.Q1, self.P1, math.e)]
+        res = [
+            kullbackLeiblerDistance(self.Q1, self.P1),
+            kullbackLeiblerDistance(self.Q1, self.P1, 10),
+            kullbackLeiblerDistance(self.Q1, self.P1, math.e),
+        ]
 
         assert_almost_equal(res[0], 0.53100, places=5)
         assert_almost_equal(res[1], 0.15985, places=5)
@@ -105,9 +111,11 @@ class TestInfTheoryValue(TestBase):
         KLD(Q2 | P2)
         """
 
-        res = [kullbackLeiblerDistance(self.Q2, self.P2),
-               kullbackLeiblerDistance(self.Q2, self.P2, 10),
-               kullbackLeiblerDistance(self.Q2, self.P2, math.e)]
+        res = [
+            kullbackLeiblerDistance(self.Q2, self.P2),
+            kullbackLeiblerDistance(self.Q2, self.P2, 10),
+            kullbackLeiblerDistance(self.Q2, self.P2, math.e),
+        ]
 
         assert_almost_equal(res[0], 2.4527, places=4)
         assert_almost_equal(res[1], 0.73834, places=5)
@@ -121,9 +129,11 @@ class TestInfTheoryValue(TestBase):
         fac1 = self.fXY1.marginal(self.X)
         fac2 = self.fXY1.marginal(self.Y)
 
-        res = [mutualInformation(self.fXY1, fac1, fac2),
-               mutualInformation(self.fXY1, fac1, fac2, 10),
-               mutualInformation(self.fXY1, fac1, fac2, math.e)]
+        res = [
+            mutualInformation(self.fXY1, fac1, fac2),
+            mutualInformation(self.fXY1, fac1, fac2, 10),
+            mutualInformation(self.fXY1, fac1, fac2, math.e),
+        ]
 
         assert_almost_equal(res[0], 0.0, places=1)
         assert_almost_equal(res[1], 0.0, places=1)
@@ -138,9 +148,11 @@ class TestInfTheoryValue(TestBase):
         fac1 = self.fXY1.marginal(self.X)
         fac2 = self.fXY1.marginal(self.Y)
 
-        res = [mutualInformation(joint, fac1, fac2),
-               mutualInformation(joint, fac1, fac2, 10),
-               mutualInformation(joint, fac1, fac2, math.e)]
+        res = [
+            mutualInformation(joint, fac1, fac2),
+            mutualInformation(joint, fac1, fac2, 10),
+            mutualInformation(joint, fac1, fac2, math.e),
+        ]
 
         assert_almost_equal(res[0], 2.4527, places=4)
         assert_almost_equal(res[1], 0.73834, places=5)

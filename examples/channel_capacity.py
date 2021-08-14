@@ -6,6 +6,7 @@ implemented using ProbPy
 
 # Not needed if library is installed
 from os import sys, path
+
 sys.path.insert(0, path.join("..", "ProbPy"))
 
 # Import ProbPy modules
@@ -43,7 +44,7 @@ def ChannelCapacity(Input, Output, Prior, Channel, base=2, delta=0.01):
         iu = math.log(max(cj.values), 2)
 
         # Check if the algorithm should stop
-        if iu-il.values[0] < delta:
+        if iu - il.values[0] < delta:
             break
 
         # Prepare for next step
@@ -80,10 +81,10 @@ def ex1():
     Output = RandVar("Output", ["T", "F"])
 
     Prior = Factor(Input, [0.5, 0.5])
-    Channel = Factor([Input, Output], [p, 1-p, 1-p, p])
+    Channel = Factor([Input, Output], [p, 1 - p, 1 - p, p])
 
     cc = ChannelCapacity(Input, Output, Prior, Channel)
-    explicit = 1 - entropy(Factor(Input, [p, 1-p]))
+    explicit = 1 - entropy(Factor(Input, [p, 1 - p]))
 
     print("Channel Capacity of a binary symmetric channel")
     print("Blahut-Arimoto:", cc)

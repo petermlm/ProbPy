@@ -16,17 +16,23 @@ class TestFactorMult(ParTestBase):
         for i in range(4):
             self.X_par_factor.setMaxDepth(i)
 
-            res = [self.X_factor.mult(self.scalar),
-                   self.X_factor.mult(self.scalarf),
-                   self.scalarf.mult(self.X_factor)]
+            res = [
+                self.X_factor.mult(self.scalar),
+                self.X_factor.mult(self.scalarf),
+                self.scalarf.mult(self.X_factor),
+            ]
 
-            par_res = [self.X_par_factor.mult(self.scalar),
-                       self.X_par_factor.mult(self.par_scalarf),
-                       self.par_scalarf.mult(self.X_par_factor)]
+            par_res = [
+                self.X_par_factor.mult(self.scalar),
+                self.X_par_factor.mult(self.par_scalarf),
+                self.par_scalarf.mult(self.X_par_factor),
+            ]
 
             for i, ele in enumerate(res):
-                assert(ele.rand_vars == par_res[i].rand_vars and
-                       ele.values == par_res[i].values)
+                assert (
+                    ele.rand_vars == par_res[i].rand_vars
+                    and ele.values == par_res[i].values
+                )
 
     def par_test_1(self):
         """
@@ -37,17 +43,23 @@ class TestFactorMult(ParTestBase):
             self.XY_par_factor.setMaxDepth(i)
             self.XY_par_factor.setMaxDepth(i)
 
-            res = [self.XY_factor.mult(self.scalar),
-                   self.XY_factor.mult(self.scalarf),
-                   self.scalarf.mult(self.XY_factor)]
+            res = [
+                self.XY_factor.mult(self.scalar),
+                self.XY_factor.mult(self.scalarf),
+                self.scalarf.mult(self.XY_factor),
+            ]
 
-            par_res = [self.XY_par_factor.mult(self.scalar),
-                       self.XY_par_factor.mult(self.par_scalarf),
-                       self.par_scalarf.mult(self.XY_par_factor)]
+            par_res = [
+                self.XY_par_factor.mult(self.scalar),
+                self.XY_par_factor.mult(self.par_scalarf),
+                self.par_scalarf.mult(self.XY_par_factor),
+            ]
 
             for i, ele in enumerate(res):
-                assert(ele.rand_vars == par_res[i].rand_vars and
-                       ele.values == par_res[i].values)
+                assert (
+                    ele.rand_vars == par_res[i].rand_vars
+                    and ele.values == par_res[i].values
+                )
 
     def par_test_2(self):
         """
@@ -58,17 +70,23 @@ class TestFactorMult(ParTestBase):
             self.XYZ_par_factor.setMaxDepth(i)
             self.XYZ_par_factor.setMaxDepth(i)
 
-            res = [self.XYZ_factor.mult(self.scalar),
-                   self.XYZ_factor.mult(self.scalarf),
-                   self.scalarf.mult(self.XYZ_factor)]
+            res = [
+                self.XYZ_factor.mult(self.scalar),
+                self.XYZ_factor.mult(self.scalarf),
+                self.scalarf.mult(self.XYZ_factor),
+            ]
 
-            par_res = [self.XYZ_par_factor.mult(self.scalar),
-                       self.XYZ_par_factor.mult(self.par_scalarf),
-                       self.par_scalarf.mult(self.XYZ_par_factor)]
+            par_res = [
+                self.XYZ_par_factor.mult(self.scalar),
+                self.XYZ_par_factor.mult(self.par_scalarf),
+                self.par_scalarf.mult(self.XYZ_par_factor),
+            ]
 
             for i, ele in enumerate(res):
-                assert(ele.rand_vars == par_res[i].rand_vars and
-                       ele.values == par_res[i].values)
+                assert (
+                    ele.rand_vars == par_res[i].rand_vars
+                    and ele.values == par_res[i].values
+                )
 
     def par_test_3(self):
         """
@@ -80,8 +98,7 @@ class TestFactorMult(ParTestBase):
 
             res = self.X_factor.mult(self.X_factor)
             par_res = self.X_par_factor.mult(self.X_par_factor)
-            assert(res.rand_vars == par_res.rand_vars and
-                   res.values == par_res.values)
+            assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
 
     def par_test_4(self):
         """
@@ -94,8 +111,7 @@ class TestFactorMult(ParTestBase):
 
             res = self.X_factor.mult(self.Y_factor)
             par_res = self.X_par_factor.mult(self.Y_par_factor)
-            assert(res.rand_vars == par_res.rand_vars and
-                   res.values == par_res.values)
+            assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
 
     def par_test_5(self):
         """
@@ -108,8 +124,7 @@ class TestFactorMult(ParTestBase):
 
             res = self.XY_factor.mult(self.X_factor)
             par_res = self.XY_par_factor.mult(self.X_par_factor)
-            assert(res.rand_vars == par_res.rand_vars and
-                   res.values == par_res.values)
+            assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
 
     def par_test_6(self):
         """
@@ -122,8 +137,7 @@ class TestFactorMult(ParTestBase):
 
             res = self.XY_factor.mult(self.Y_factor)
             par_res = self.XY_par_factor.mult(self.Y_par_factor)
-            assert(res.rand_vars == par_res.rand_vars and
-                   res.values == par_res.values)
+            assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
 
     def par_test_7(self):
         """
@@ -136,8 +150,7 @@ class TestFactorMult(ParTestBase):
 
             res = self.XY_factor.mult(self.Z_factor)
             par_res = self.XY_par_factor.mult(self.Z_par_factor)
-            assert(res.rand_vars == par_res.rand_vars and
-                   res.values == par_res.values)
+            assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
 
     def par_test_8(self):
         """
@@ -150,8 +163,7 @@ class TestFactorMult(ParTestBase):
 
             res = self.XY_factor.mult(self.XY_factor)
             par_res = self.XY_par_factor.mult(self.XY_par_factor)
-            assert(res.rand_vars == par_res.rand_vars and
-                   res.values == par_res.values)
+            assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
 
     def par_test_9(self):
         """
@@ -164,8 +176,7 @@ class TestFactorMult(ParTestBase):
 
             res = self.XY_factor.mult(self.XZ_factor)
             par_res = self.XY_par_factor.mult(self.XZ_par_factor)
-            assert(res.rand_vars == par_res.rand_vars and
-                   res.values == par_res.values)
+            assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
 
     def par_test_10(self):
         """
@@ -178,8 +189,7 @@ class TestFactorMult(ParTestBase):
 
             res = self.XY_factor.mult(self.ZW_factor)
             par_res = self.XY_par_factor.mult(self.ZW_par_factor)
-            assert(res.rand_vars == par_res.rand_vars and
-                   res.values == par_res.values)
+            assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
 
     def par_test_11(self):
         """
@@ -192,8 +202,7 @@ class TestFactorMult(ParTestBase):
 
             res = self.XYZ_factor.mult(self.XYZ_factor)
             par_res = self.XYZ_par_factor.mult(self.XYZ_par_factor)
-            assert(res.rand_vars == par_res.rand_vars and
-                   res.values == par_res.values)
+            assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
 
     def par_test_12(self):
         """
@@ -206,8 +215,7 @@ class TestFactorMult(ParTestBase):
 
             res = self.XYZ_factor.mult(self.XYW_factor)
             par_res = self.XYZ_par_factor.mult(self.XYW_par_factor)
-            assert(res.rand_vars == par_res.rand_vars and
-                   res.values == par_res.values)
+            assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
 
     def par_test_13(self):
         """
@@ -220,8 +228,7 @@ class TestFactorMult(ParTestBase):
 
             res = self.XYZ_factor.mult(self.XKW_factor)
             par_res = self.XYZ_par_factor.mult(self.XKW_par_factor)
-            assert(res.rand_vars == par_res.rand_vars and
-                   res.values == par_res.values)
+            assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
 
     def par_test_14(self):
         """
@@ -234,5 +241,4 @@ class TestFactorMult(ParTestBase):
 
             res = self.XYZ_factor.mult(self.TKW_factor)
             par_res = self.XYZ_par_factor.mult(self.TKW_par_factor)
-            assert(res.rand_vars == par_res.rand_vars and
-                   res.values == par_res.values)
+            assert res.rand_vars == par_res.rand_vars and res.values == par_res.values
