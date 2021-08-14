@@ -97,10 +97,10 @@ ProbPy uses [Python Black](https://github.com/psf/black) for auto formatting.
 However, several lines in the examples and tests will have a comment so black
 doesn't format lines like this:
 
-   values == [9, 18, 27, 36,
-              10, 20, 30, 40,
-              11, 22, 33, 44,
-              12, 24, 36, 48]
+    values == [9, 18, 27, 36,
+               10, 20, 30, 40,
+               11, 22, 33, 44,
+               12, 24, 36, 48]
 
 Since it is useful to see matrices in such a form.
 
